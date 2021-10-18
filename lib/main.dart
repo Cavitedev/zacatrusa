@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zacatrusa/constants/app_constants.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/game_list.dart';
+import 'package:zacatrusa/game_board/presentation/game_list/game_browse.dart';
 
 void main() {
   runApp(const MyApp());

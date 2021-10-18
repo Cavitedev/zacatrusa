@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zacatrusa/constants/app_constants.dart';
+import 'package:zacatrusa/constants/app_margins.dart';
+import 'package:zacatrusa/game_board/presentation/game_list/widgets/game_browse_sliver_grid.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 
 class GameList extends StatelessWidget {
@@ -9,6 +11,7 @@ class GameList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             title: const Text(appName),
@@ -26,11 +29,10 @@ class GameList extends StatelessWidget {
               onViewChange: (listOrGrid) {},
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return const Placeholder();
-            }, childCount: 36),
-          )
+          const SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: listPadding),
+              sliver: GameBrowseSliverGrid())
+
         ],
       ),
     );
