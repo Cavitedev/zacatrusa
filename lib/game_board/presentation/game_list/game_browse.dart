@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zacatrusa/constants/app_constants.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
+import 'package:zacatrusa/game_board/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/game_browse_sliver_grid.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 
@@ -29,10 +30,20 @@ class GameList extends StatelessWidget {
               onViewChange: (listOrGrid) {},
             ),
           ),
-          const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: listPadding),
-              sliver: GameBrowseSliverGrid())
-
+          SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: listPadding),
+              sliver: GameBrowseSliverGrid(
+                games: List.generate(
+                    36,
+                    (index) => const GameOverview(
+                          name: "Unánimo",
+                          imageUrl:
+                              "https://media.zacatrus.es/catalog/product/cache/5c1c4c2791f7788f78d4202f3db7adfa/u/n/unanimo_enviogratis.jpg",
+                          price: 9.95,
+                          numberOfComments: 12,
+                          stars: 4.85,
+                        )),
+              ))
         ],
       ),
     );

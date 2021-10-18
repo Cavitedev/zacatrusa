@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
+import 'package:zacatrusa/game_board/domain/game_overview.dart';
 
 class GameBrowseSliverGrid extends StatelessWidget {
   const GameBrowseSliverGrid({
+    required this.games,
     Key? key,
   }) : super(key: key);
+
+  final List<GameOverview> games;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +21,9 @@ class GameBrowseSliverGrid extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           return const Placeholder();
+        //TODO render data
         },
-        childCount: 36,
+        childCount: games.length,
       ),
     );
   }
