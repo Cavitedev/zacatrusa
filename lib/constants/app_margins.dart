@@ -1,0 +1,1 @@
+const double listMargin = 12;
