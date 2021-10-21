@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_constants.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/game_browse.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,5 +21,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
