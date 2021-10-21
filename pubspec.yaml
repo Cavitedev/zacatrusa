@@ -29,6 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_riverpod: ^1.0.0-dev.11
 
 
 dev_dependencies:
