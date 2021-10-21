@@ -4,8 +4,8 @@ import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_gr
 
 import 'list_grid_switcher.dart';
 
-class SortChangeListRow extends StatelessWidget {
-  const SortChangeListRow({
+class SortListGridSwitcherRow extends StatelessWidget {
+  const SortListGridSwitcherRow({
     Key? key,
     required this.onViewChange,
   }) : super(key: key);

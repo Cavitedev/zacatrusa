@@ -5,8 +5,8 @@ import 'package:zacatrusa/game_board/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/game_browse_sliver_grid.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 
-class GameList extends StatelessWidget {
-  const GameList({Key? key}) : super(key: key);
+class GameBrowse extends StatelessWidget {
+  const GameBrowse({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class GameList extends StatelessWidget {
             ],
           ),
           SliverToBoxAdapter(
-            child: SortChangeListRow(
+            child: SortListGridSwitcherRow(
               onViewChange: (listOrGrid) {},
             ),
           ),
