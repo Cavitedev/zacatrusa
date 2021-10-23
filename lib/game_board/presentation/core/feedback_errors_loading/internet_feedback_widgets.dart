@@ -24,6 +24,10 @@ compruebe su conexión""";
 No estás conectado a ninguna red.
 Activa la wifi, cable ethernet o datos móviles.
 La conexión con $url se repetirá automáticamente""";
+      } else if (feedback is StatusCodeInternetFailure) {
+        final statusfeedback = feedback as StatusCodeInternetFailure;
+        txt = """
+Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}""";
       }
 
       return Text(txt);

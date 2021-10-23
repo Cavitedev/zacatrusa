@@ -16,7 +16,9 @@ final Provider<Connectivity> connectivityProvider =
 
 final httpLoaderProvider = Provider((ref) {
   final loader = HttpLoader(ref: ref, client: RetryClient(http.Client()));
-  ref.onDispose(() {loader.client.close();});
+  ref.onDispose(() {
+    loader.client.close();
+  });
   return loader;
 });
 
@@ -27,9 +29,9 @@ class HttpLoader {
   });
 
   final ProviderRef ref;
-  final http.Client client ;
+  final http.Client client;
 
-  void onDispose(){
+  void onDispose() {
     client.close();
   }
 
@@ -38,24 +40,26 @@ class HttpLoader {
   }) async* {
     try {
       http.Response response = await client.get(Uri.parse(url));
-
-      yield Success(_decodeResponse(response));
+      if (response.statusCode == 200) {
+        yield Success(_decodeResponse(response));
+      } else {
+        yield Error(StatusCodeInternetFailure(
+            url: url, statusCode: response.statusCode));
+      }
     } on SocketException {
+      final Connectivity connectivity = ref.read(connectivityProvider);
+      final ConnectivityResult connectivityResult =
+          await connectivity.checkConnectivity();
 
-        final Connectivity connectivity = ref.read(connectivityProvider);
-        final ConnectivityResult connectivityResult =
-            await connectivity.checkConnectivity();
-
-        if (connectivityResult != ConnectivityResult.none) {
-          yield Error(NoInternetFailure(url: url));
-        } else {
-          yield* _retryWhenConnected(url, connectivity);
-        }
-
+      if (connectivityResult != ConnectivityResult.none) {
+        yield Error(NoInternetFailure(url: url));
+      } else {
+        yield* _retryWhenConnected(url, connectivity);
+      }
     }
   }
 
-  Stream<Result<InternetFeedback,  dom.Document>> _retryWhenConnected(
+  Stream<Result<InternetFeedback, dom.Document>> _retryWhenConnected(
       String url, Connectivity connectivity) async* {
     yield Error(NoInternetRetryFailure(url: url));
 
@@ -65,9 +69,14 @@ class HttpLoader {
 
       final response = await client.get(Uri.parse(url));
 
-      yield Success(_decodeResponse(response));
+      if (response.statusCode == 200) {
+        yield Success(_decodeResponse(response));
+      } else {
+        yield Error(StatusCodeInternetFailure(
+            url: url, statusCode: response.statusCode));
+      }
     } on SocketException {
-        yield Error(NoInternetFailure(url: url));
+      yield Error(NoInternetFailure(url: url));
     }
   }
 
@@ -76,5 +85,4 @@ class HttpLoader {
     final dom.Document document = parser.parse(body);
     return document;
   }
-
 }
