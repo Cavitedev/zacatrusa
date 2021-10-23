@@ -52,13 +52,8 @@ void main() {
       final docStream = httpLoader.getPage(url: url);
 
       // Assert
-      expect(docStream.map((result) {
-        if (result.isRight()) {
-          return (result.get() as dom.Document).outerHtml;
-        } else {
-          return result;
-        }
-      }),
+      expect(
+          _streamDocumentToString(docStream),
           emits(
             fakeDom.outerHtml,
           ));
@@ -87,6 +82,147 @@ void main() {
             Left(NoInternetFailure(url: url)),
           ));
     });
+
+    test("Calling get with error code 404 returns StatusCodeFailure", () {
+      // Arrange
+      const int statusCode = 404;
+
+      when(() => mockClient.get(Uri.parse(url))).thenAnswer(
+        (_) => Future.value(http.Response(pageContent, statusCode)),
+      );
+
+      final HttpLoader httpLoader =
+          HttpLoader(ref: mockWidgetRef, client: mockClient);
+
+      // Act
+      final docStream = httpLoader.getPage(url: url);
+
+      // Assert
+      expect(
+          docStream,
+          emitsInOrder([
+            Left(StatusCodeInternetFailure(url: url, statusCode: statusCode)),
+            emitsDone
+          ]));
+    });
+
+    test("Retrying get with error code 404 returns StatusCodeFailure", () {
+      // Arrange
+      const int statusCode = 404;
+
+      when(() => mockConnectivity.checkConnectivity())
+          .thenAnswer((_) => Future.value(ConnectivityResult.none));
+
+      when(() => mockConnectivity.onConnectivityChanged).thenAnswer((_) async* {
+        yield ConnectivityResult.wifi;
+      });
+
+      final List<Future<http.Response> Function(Invocation)> answers = [
+        (_) => throw noInternetSocketException,
+        (_) => Future.value(http.Response(pageContent, statusCode))
+      ];
+
+      when(() => mockClient.get(Uri.parse(url))).thenAnswer(
+        (_) => answers.removeAt(0)(_),
+      );
+
+      final HttpLoader httpLoader =
+          HttpLoader(ref: mockWidgetRef, client: mockClient);
+
+      // Act
+      final docStream = httpLoader.getPage(url: url);
+
+      // Assert
+      expect(
+          docStream,
+          emitsInOrder([
+            Left(NoInternetRetryFailure(url: url)),
+            Left(InternetLoading(url: url)),
+            Left(StatusCodeInternetFailure(url: url, statusCode: statusCode)),
+            emitsDone
+          ]));
+    });
+
+    test(
+        "Loading page with SocketException and none connectivity streams Error(noInternetRetryFailure), on reconnect with internet loads it",
+        () {
+      // Arrange
+      when(() => mockConnectivity.checkConnectivity())
+          .thenAnswer((_) => Future.value(ConnectivityResult.none));
+
+      when(() => mockConnectivity.onConnectivityChanged).thenAnswer((_) async* {
+        yield ConnectivityResult.wifi;
+      });
+
+      final List<Future<http.Response> Function(Invocation)> answers = [
+        (_) => throw noInternetSocketException,
+        (_) => Future.delayed(
+              const Duration(milliseconds: 20),
+              () => Future.value(http.Response(pageContent, 200)),
+            )
+      ];
+
+      when(() => mockClient.get(Uri.parse(url)))
+          .thenAnswer((_) => answers.removeAt(0)(_));
+
+      final HttpLoader httpLoader =
+          HttpLoader(ref: mockWidgetRef, client: mockClient);
+
+      // Act
+      final docStream = httpLoader.getPage(url: url);
+
+      // Assert
+      expect(
+          _streamDocumentToString(docStream),
+          emitsInOrder([
+            Left(NoInternetRetryFailure(url: url)),
+            Left(InternetLoading(url: url)),
+            fakeDom.outerHtml,
+            emitsDone
+          ]));
+    });
+
+    test(
+        "Loading page with SocketException and none connectivity streams Error(noInternetRetryFailure), on reconnect without internet fails again",
+        () {
+      // Arrange
+      when(() => mockConnectivity.checkConnectivity())
+          .thenAnswer((_) => Future.value(ConnectivityResult.none));
+
+      when(() => mockConnectivity.onConnectivityChanged).thenAnswer((_) async* {
+        yield ConnectivityResult.wifi;
+      });
+
+      when(() => mockClient.get(Uri.parse(url))).thenThrow(
+        noInternetSocketException,
+      );
+      final HttpLoader httpLoader =
+          HttpLoader(ref: mockWidgetRef, client: mockClient);
+
+      // Act
+      final docStream = httpLoader.getPage(url: url);
+
+      // Assert
+      expect(
+          docStream,
+          emitsInOrder([
+            Left(NoInternetRetryFailure(url: url)),
+            Left(InternetLoading(url: url)),
+            Left(NoInternetFailure(url: url)),
+            emitsDone
+          ]));
+    });
+  });
+}
+
+Stream<Object> _streamDocumentToString(
+    Stream<Either<InternetFeedback, dom.Document>> docStream) {
+  return docStream.map((result) {
+    if (result.isRight()) {
+      return (result.get() as dom.Document).outerHtml;
+    } else {
+      return result;
+    }
   });
 }
 
