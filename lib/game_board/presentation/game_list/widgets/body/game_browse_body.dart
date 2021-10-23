@@ -57,7 +57,7 @@ class GameBrowseBody extends ConsumerWidget {
   List<GameOverview> _getGames() {
     return List.generate(
         36,
-        (index) => const GameOverview(
+        (index) => GameOverview(
               name: "Unánimo",
               imageUrl:
                   "https://media.zacatrus.es/catalog/product/cache/5c1c4c2791f7788f78d4202f3db7adfa/u/n/unanimo_enviogratis.jpg",

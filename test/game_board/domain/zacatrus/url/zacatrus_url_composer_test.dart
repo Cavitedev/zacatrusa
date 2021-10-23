@@ -3,32 +3,32 @@ import 'package:zacatrusa/game_board/domain/zacatrus/url/zacatrus_url_composer.d
 
 void main() {
   group("Build urls", () {
-    test("Initial class returns default page with 36 elements", () {
+    test("Initial class returns default page with 24 elements", () {
       final urlComposer = ZacatrusUrlBrowserComposer();
 
-      final output = urlComposer.buildUri();
+      final output = urlComposer.buildUrl();
 
       expect(output,
-          "https://zacatrus.es/juegos-de-mesa.html?product_list_limit=36");
+          "https://zacatrus.es/juegos-de-mesa.html");
     });
 
-    test("Initial class with next page returns default page with 36 elements",
+    test("Initial class with next page returns default page with 24 elements",
         () {
       final urlComposer = ZacatrusUrlBrowserComposer();
       urlComposer.nextPage();
 
-      final output = urlComposer.buildUri();
+      final output = urlComposer.buildUrl();
 
       expect(output,
-          "https://zacatrus.es/juegos-de-mesa.html?p=2&product_list_limit=36");
+          "https://zacatrus.es/juegos-de-mesa.html?p=2");
     });
 
-    test("Initial class with 24 elements returns basic url", () {
-      final urlComposer = ZacatrusUrlBrowserComposer(productsPerPage: 24);
+    test("Initial class with 36 elements returns basic url", () {
+      final urlComposer = ZacatrusUrlBrowserComposer(productsPerPage: 36);
 
-      final output = urlComposer.buildUri();
+      final output = urlComposer.buildUrl();
 
-      expect(output, "https://zacatrus.es/juegos-de-mesa.html");
+      expect(output, "https://zacatrus.es/juegos-de-mesa.html?product_list_limit=36");
     });
   });
 }

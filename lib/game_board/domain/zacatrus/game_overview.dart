@@ -1,16 +1,18 @@
 class GameOverview{
 
-  const GameOverview({
-    required this.name,
+  GameOverview({
+    this.name = "Error retrieving game",
+    this.link,
     this.imageUrl,
     this.numberOfComments,
     this.stars,
     this.price,
   });
 
-  final String name;
-  final String? imageUrl;
-  final int? numberOfComments;
-  final double? stars;
-  final double? price;
+  String name;
+  String? link;
+  String? imageUrl;
+  int? numberOfComments;
+  double? stars;
+  double? price;
 }

@@ -13,7 +13,7 @@ import 'package:zacatrusa/game_board/infrastructure/http_loader.dart';
 
 class MockClient extends Mock implements http.Client {}
 
-class MockWidgetRef extends Mock implements ProviderRef {}
+class MockProviderRef extends Mock implements ProviderRef {}
 
 class MockConnectivity extends Mock implements Connectivity {}
 
@@ -25,7 +25,7 @@ void main() {
   final dom.Document fakeDom = parser.parse(pageContent);
 
   MockConnectivity mockConnectivity = MockConnectivity();
-  MockWidgetRef mockWidgetRef = MockWidgetRef();
+  MockProviderRef mockProviderRef = MockProviderRef();
 
   const SocketException noInternetSocketException = SocketException(
       "Failed host lookup: $url",
@@ -33,9 +33,9 @@ void main() {
 
   setUp(() {
     mockConnectivity = MockConnectivity();
-    mockWidgetRef = MockWidgetRef();
+    mockProviderRef = MockProviderRef();
     mockClient = MockClient();
-    when(() => mockWidgetRef.read(connectivityProvider))
+    when(() => mockProviderRef.read(connectivityProvider))
         .thenReturn(mockConnectivity);
   });
 
@@ -46,7 +46,7 @@ void main() {
       _onMockClientGet(statusCode: 200);
 
       final HttpLoader httpLoader =
-          HttpLoader(ref: mockWidgetRef, client: mockClient);
+          HttpLoader(ref: mockProviderRef, client: mockClient);
 
       // Act
       final docStream = httpLoader.getPage(url: url);
@@ -70,7 +70,7 @@ void main() {
         noInternetSocketException,
       );
       final HttpLoader httpLoader =
-          HttpLoader(ref: mockWidgetRef, client: mockClient);
+          HttpLoader(ref: mockProviderRef, client: mockClient);
 
       // Act
       final docStream = httpLoader.getPage(url: url);
@@ -92,7 +92,7 @@ void main() {
       );
 
       final HttpLoader httpLoader =
-          HttpLoader(ref: mockWidgetRef, client: mockClient);
+          HttpLoader(ref: mockProviderRef, client: mockClient);
 
       // Act
       final docStream = httpLoader.getPage(url: url);
@@ -127,7 +127,7 @@ void main() {
       );
 
       final HttpLoader httpLoader =
-          HttpLoader(ref: mockWidgetRef, client: mockClient);
+          HttpLoader(ref: mockProviderRef, client: mockClient);
 
       // Act
       final docStream = httpLoader.getPage(url: url);
@@ -166,7 +166,7 @@ void main() {
           .thenAnswer((_) => answers.removeAt(0)(_));
 
       final HttpLoader httpLoader =
-          HttpLoader(ref: mockWidgetRef, client: mockClient);
+          HttpLoader(ref: mockProviderRef, client: mockClient);
 
       // Act
       final docStream = httpLoader.getPage(url: url);
@@ -197,7 +197,7 @@ void main() {
         noInternetSocketException,
       );
       final HttpLoader httpLoader =
-          HttpLoader(ref: mockWidgetRef, client: mockClient);
+          HttpLoader(ref: mockProviderRef, client: mockClient);
 
       // Act
       final docStream = httpLoader.getPage(url: url);

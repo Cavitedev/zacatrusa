@@ -3,7 +3,7 @@ import 'package:zacatrusa/game_board/domain/zacatrus/url/zacatrus_page_query_par
 class ZacatrusUrlBrowserComposer {
 
 
-  ZacatrusUrlBrowserComposer({int page = 1, int productsPerPage = 36})
+  ZacatrusUrlBrowserComposer({int page = 1, int productsPerPage = 24})
       : productsPerPage = ZacatrusPageProductPerPage(productsPerPage),
         pageNum = ZacatrusPageIndex(page);
 
@@ -14,7 +14,7 @@ class ZacatrusUrlBrowserComposer {
   ZacatrusPageProductPerPage productsPerPage;
   ZacatrusPageIndex pageNum;
 
-  String buildUri() {
+  String buildUrl() {
     String url = "$rawUrl?${pageNum.toParam()}${productsPerPage.toParam()}";
 
     if (url[url.length - 1] == "&" || url[url.length - 1] == "?") {
