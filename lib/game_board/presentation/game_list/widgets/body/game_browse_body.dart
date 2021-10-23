@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
@@ -15,13 +14,9 @@ import 'game_browse_sliver_list.dart';
 final fetchPageProvider = StreamProvider.autoDispose((ref) {
   final scrapper = ref.watch(httpLoaderProvider);
 
-  final cancelToken = CancelToken();
-  ref.onDispose(() {
-    cancelToken.cancel();
-  });
 
-  return scrapper.accessUrl(
-      url: "https://zacatrus.es/juegos-de-mesa.html", cancelToken: cancelToken);
+  return scrapper.getPage(
+      url: "https://zacatrus.es/juegos-de-mesa.html");
 });
 
 class GameBrowseBody extends ConsumerWidget {

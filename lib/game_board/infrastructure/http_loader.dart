@@ -1,38 +1,47 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as parser;
+import 'package:http/http.dart' as http;
+import 'package:http/retry.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/connectivity_helper.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/dio_helper.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
 
-final Provider<Dio> dioProvider = Provider<Dio>((_) => Dio());
 final Provider<Connectivity> connectivityProvider =
     Provider<Connectivity>((_) => Connectivity());
 
-final httpLoaderProvider = Provider((ref) => HttpLoader(ref: ref));
+final httpLoaderProvider = Provider((ref) {
+  final loader = HttpLoader(ref: ref, client: RetryClient(http.Client()));
+  ref.onDispose(() {loader.client.close();});
+  return loader;
+});
 
 class HttpLoader {
-  const HttpLoader({
+  HttpLoader({
     required this.ref,
+    required this.client,
   });
 
   final ProviderRef ref;
+  final http.Client client ;
 
-  Stream<Result<InternetFeedback, Response>> accessUrl({
+  void onDispose(){
+    client.close();
+  }
+
+  Stream<Result<InternetFeedback, dom.Document>> getPage({
     required String url,
-    required CancelToken cancelToken,
   }) async* {
-    Response response;
-    final dio = ref.read(dioProvider);
-
     try {
-      response = await dio.get(url, cancelToken: cancelToken);
-      yield Success(response);
-    } on DioError catch (e) {
-      if (_noInternet(e)) {
+      http.Response response = await client.get(Uri.parse(url));
+
+      yield Success(_decodeResponse(response));
+    } on SocketException {
+
         final Connectivity connectivity = ref.read(connectivityProvider);
         final ConnectivityResult connectivityResult =
             await connectivity.checkConnectivity();
@@ -40,38 +49,32 @@ class HttpLoader {
         if (connectivityResult != ConnectivityResult.none) {
           yield Error(NoInternetFailure(url: url));
         } else {
-          yield* _retryWhenConnected(url, connectivity, dio, e);
+          yield* _retryWhenConnected(url, connectivity);
         }
-      } else {
-        rethrow;
-      }
+
     }
   }
 
-   Stream<Result<InternetFeedback, Response>> _retryWhenConnected
-       (String url, Connectivity connectivity, Dio dio, DioError e) async* {
+  Stream<Result<InternetFeedback,  dom.Document>> _retryWhenConnected(
+      String url, Connectivity connectivity) async* {
     yield Error(NoInternetRetryFailure(url: url));
 
     try {
       await connectivity.onConnectionFound();
       yield Error(InternetLoading(url: url));
 
-      final response = await dio.retry(options: e.requestOptions);
+      final response = await client.get(Uri.parse(url));
 
-      yield Success(response);
-    } on DioError catch (e) {
-      if (_noInternet(e)) {
+      yield Success(_decodeResponse(response));
+    } on SocketException {
         yield Error(NoInternetFailure(url: url));
-      } else {
-        rethrow;
-      }
     }
   }
 
-
-  bool _noInternet(DioError err) {
-    return err.type == DioErrorType.other &&
-        err.error != null &&
-        err.error is SocketException;
+  dom.Document _decodeResponse(http.Response response) {
+    final String body = utf8.decode(response.bodyBytes);
+    final dom.Document document = parser.parse(body);
+    return document;
   }
+
 }
