@@ -30,7 +30,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^1.0.0-dev.11
-
+  http: ^0.13.4
+  html: ^0.15.0
+  connectivity_plus: ^2.0.2
+  mocktail: ^0.2.0
 
 dev_dependencies:
   flutter_test:
