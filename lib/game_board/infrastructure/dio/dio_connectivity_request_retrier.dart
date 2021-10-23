@@ -3,46 +3,42 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/infrastructure/dio/dio_retry_interceptor.dart';
+import 'package:multiple_result/multiple_result.dart';
+
+import '../scrapper.dart';
 
 final dioConnectivityRequestRetrierProvider =
-    Provider((ref) => DioConnectivityRequestRetrier(riverpodReader: ref.read));
+Provider((ref) => DioConnectivityRequestRetrier(riverpodReader: ref.read));
 
 class DioConnectivityRequestRetrier {
   DioConnectivityRequestRetrier({required this.riverpodReader});
 
   final Reader riverpodReader;
 
-  Future<Response> scheduleRequestRetry(RequestOptions requestOptions) async {
+  Future<ConnectivityResult> onConnectionFound() async {
     final Connectivity connectivity = riverpodReader(connectivityProvider);
-    final Dio dio = riverpodReader(dioProvider);
 
 
-    final responseCompleter = Completer<Response>();
+    return connectivity.onConnectivityChanged.firstWhere((
+        connectivityResult) => connectivityResult != ConnectivityResult.none);
 
-    StreamSubscription onConnectivityChange =
-        connectivity.onConnectivityChanged.listen((connectivityResult) {
-      if (connectivityResult != ConnectivityResult.none) {
-        responseCompleter.complete(dio.request(
-          requestOptions.path,
-          cancelToken: requestOptions.cancelToken,
-          data: requestOptions.data,
-          onReceiveProgress: requestOptions.onReceiveProgress,
-          onSendProgress: requestOptions.onSendProgress,
-          queryParameters: requestOptions.queryParameters,
-        ));
-      }
-    });
-
-
-    return _manageOnRetryResult(responseCompleter, onConnectivityChange);
-  }
-
-  Future<Response<dynamic>> _manageOnRetryResult(
-      Completer<Response<dynamic>> responseCompleter,
-      StreamSubscription<dynamic> onConnectivityChange) async {
-    final response = await responseCompleter.future;
-    onConnectivityChange.cancel();
-    return response;
+// yield*
+//   connectivity.onConnectivityChanged.listen<Result<bool, Response>>(
+//           (connectivityResult) {
+//     if (connectivityResult != ConnectivityResult.none) {
+//       yield Error(true);
+//       final Response response = await dio.request(
+//         requestOptions.path,
+//         cancelToken: requestOptions.cancelToken,
+//         data: requestOptions.data,
+//         onReceiveProgress: requestOptions.onReceiveProgress,
+//         onSendProgress: requestOptions.onSendProgress,
+//         queryParameters: requestOptions.queryParameters,
+//       );
+//       yield Success(response);
+//     }
+//   });
   }
 }
+
+
