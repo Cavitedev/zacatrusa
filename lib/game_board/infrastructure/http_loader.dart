@@ -6,16 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/connectivity_helper.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/dio_helper.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/web_exceptions.dart';
+import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
 
 final Provider<Dio> dioProvider = Provider<Dio>((_) => Dio());
 final Provider<Connectivity> connectivityProvider =
     Provider<Connectivity>((_) => Connectivity());
 
-final pageLoaderProvider = Provider((ref) => PageLoader(ref: ref));
+final httpLoaderProvider = Provider((ref) => HttpLoader(ref: ref));
 
-class PageLoader {
-  const PageLoader({
+class HttpLoader {
+  const HttpLoader({
     required this.ref,
   });
 
@@ -38,29 +38,9 @@ class PageLoader {
             await connectivity.checkConnectivity();
 
         if (connectivityResult != ConnectivityResult.none) {
-          yield Error(_noInternetError(url));
+          yield Error(NoInternetFailure(url: url));
         } else {
-          yield Error(NoInternetRetryFailure(msg: """
-No estás conectado a ninguna red.
-Activa la wifi, cable ethernet o datos móviles.
-La conexión con $url se repetirá automáticamente"""));
-
-          Connectivity connectivity = ref.read(connectivityProvider);
-
-          try {
-            await connectivity.onConnectionFound();
-            yield Error(InternetLoading(msg: "Reloading $url"));
-
-            final response = await dio.retry(options: e.requestOptions);
-
-            yield Success(response);
-          } on DioError catch (e) {
-            if (_noInternet(e)) {
-              yield Error(_noInternetError(url));
-            } else {
-              rethrow;
-            }
-          }
+          yield* _retryWhenConnected(url, connectivity, dio, e);
         }
       } else {
         rethrow;
@@ -68,11 +48,26 @@ La conexión con $url se repetirá automáticamente"""));
     }
   }
 
-  NoInternetFailure _noInternetError(String url) {
-    return NoInternetFailure(msg: """
-No hay internet para conectarse a $url.
-compruebe su conexión""");
+   Stream<Result<InternetFeedback, Response>> _retryWhenConnected
+       (String url, Connectivity connectivity, Dio dio, DioError e) async* {
+    yield Error(NoInternetRetryFailure(url: url));
+
+    try {
+      await connectivity.onConnectionFound();
+      yield Error(InternetLoading(url: url));
+
+      final response = await dio.retry(options: e.requestOptions);
+
+      yield Success(response);
+    } on DioError catch (e) {
+      if (_noInternet(e)) {
+        yield Error(NoInternetFailure(url: url));
+      } else {
+        rethrow;
+      }
+    }
   }
+
 
   bool _noInternet(DioError err) {
     return err.type == DioErrorType.other &&

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
 import 'package:zacatrusa/game_board/domain/game_overview.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/web_exceptions.dart';
-import 'package:zacatrusa/game_board/infrastructure/scrapper.dart';
+import 'package:zacatrusa/game_board/infrastructure/http_loader.dart';
+import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/internet_feedback_widgets.dart';
+import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/loading.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/game_browse.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
 
@@ -12,7 +13,7 @@ import 'game_browse_sliver_grid.dart';
 import 'game_browse_sliver_list.dart';
 
 final fetchPageProvider = StreamProvider.autoDispose((ref) {
-  final scrapper = ref.watch(pageLoaderProvider);
+  final scrapper = ref.watch(httpLoaderProvider);
 
   final cancelToken = CancelToken();
   ref.onDispose(() {
@@ -30,31 +31,14 @@ class GameBrowseBody extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final listOrGridView = ref.watch(gameOverviewListGrid);
     return ref.watch(fetchPageProvider).when(
-          data: (either) => either.when((error) => _onErrorEither(error),
+          data: (either) => either.when(
+              (feedback) => SliverToBoxAdapter(
+                  child: InternetFeedbackWidget(feedback: feedback)),
               (success) => _sucessBody(listOrGridView)),
           error: (obj, trace, data) =>
               SliverToBoxAdapter(child: Text("Error ${obj}")),
-          loading: (_) => _loading(),
+          loading: (_) => const SliverToBoxAdapter(child: Loading()),
         );
-  }
-
-  SliverToBoxAdapter _onErrorEither(InternetFeedback error) {
-    if (error is InternetLoading) {
-      return _loading(error.msg);
-    }
-    return SliverToBoxAdapter(child: Text("Error left ${error.msg}"));
-  }
-
-  SliverToBoxAdapter _loading([String msg = "Loading..."]) {
-    return SliverToBoxAdapter(
-        child: Center(
-      child: Column(
-        children: [
-          const SizedBox(width: 50, height: 50, child: CircularProgressIndicator()),
-          Text(msg, textAlign: TextAlign.center,),
-        ],
-      ),
-    ));
   }
 
   SliverPadding _sucessBody(StateController<ListGrid> listOrGridView) {
