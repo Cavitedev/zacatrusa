@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
@@ -13,7 +14,13 @@ import 'game_browse_sliver_list.dart';
 final fetchPageProvider = StreamProvider.autoDispose((ref) {
   final scrapper = ref.watch(scrapperProvider);
 
-  return scrapper.accessUrl("https://zacatrus.es/juegos-de-mesa.html");
+  final cancelToken = CancelToken();
+  ref.onDispose(() {
+    cancelToken.cancel();
+  });
+
+  return scrapper.accessUrl(
+      url: "https://zacatrus.es/juegos-de-mesa.html", cancelToken: cancelToken);
 });
 
 class GameBrowseBody extends ConsumerWidget {
@@ -23,12 +30,11 @@ class GameBrowseBody extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final listOrGridView = ref.watch(gameOverviewListGrid);
     return ref.watch(fetchPageProvider).when(
-          data: (either) => either.when(
-              (error) => _onErrorEither(error),
+          data: (either) => either.when((error) => _onErrorEither(error),
               (success) => _sucessBody(listOrGridView)),
-          error: (obj, trace, data) => SliverToBoxAdapter(child: Text("Error ${obj}")),
-          loading: (_) =>
-              _loading(),
+          error: (obj, trace, data) =>
+              SliverToBoxAdapter(child: Text("Error ${obj}")),
+          loading: (_) => _loading(),
         );
   }
 
@@ -40,18 +46,15 @@ class GameBrowseBody extends ConsumerWidget {
   }
 
   SliverToBoxAdapter _loading([String msg = "Loading..."]) {
-    return SliverToBoxAdapter(child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: CircularProgressIndicator()),
-
-                  Text(msg),
-                ],
-              ),
-            ));
+    return SliverToBoxAdapter(
+        child: Center(
+      child: Column(
+        children: [
+          const SizedBox(width: 50, height: 50, child: CircularProgressIndicator()),
+          Text(msg, textAlign: TextAlign.center,),
+        ],
+      ),
+    ));
   }
 
   SliverPadding _sucessBody(StateController<ListGrid> listOrGridView) {

@@ -20,12 +20,15 @@ class Scapper {
 
   final ProviderRef ref;
 
-  Stream<Result<InternetFeedback, Response>> accessUrl(String url) async* {
+  Stream<Result<InternetFeedback, Response>> accessUrl({
+    required String url,
+    required CancelToken cancelToken,
+  }) async* {
     Response response;
     final dio = ref.read(dioProvider);
 
     try {
-      response = await dio.get(url);
+      response = await dio.get(url, cancelToken: cancelToken);
       yield Success(response);
     } on DioError catch (e) {
       if (_noInternet(e)) {
