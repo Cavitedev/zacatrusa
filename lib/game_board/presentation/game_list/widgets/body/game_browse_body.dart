@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
-import 'package:zacatrusa/game_board/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/domain/zacatrus/game_overview.dart';
 import 'package:zacatrusa/game_board/infrastructure/http_loader.dart';
 import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/internet_feedback_widgets.dart';
 import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/loading.dart';

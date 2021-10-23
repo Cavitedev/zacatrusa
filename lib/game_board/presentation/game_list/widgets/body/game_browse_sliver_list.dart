@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/game_board/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/domain/zacatrus/game_overview.dart';
 
 class GameBrowseSliverList extends StatelessWidget {
   const GameBrowseSliverList({
