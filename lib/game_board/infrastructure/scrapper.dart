@@ -4,17 +4,18 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
+import 'package:zacatrusa/game_board/infrastructure/core/connectivity_helper.dart';
+import 'package:zacatrusa/game_board/infrastructure/core/dio_helper.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/web_exceptions.dart';
-import 'package:zacatrusa/game_board/infrastructure/dio/dio_connectivity_request_retrier.dart';
 
 final Provider<Dio> dioProvider = Provider<Dio>((_) => Dio());
 final Provider<Connectivity> connectivityProvider =
     Provider<Connectivity>((_) => Connectivity());
 
-final scrapperProvider = Provider((ref) => Scapper(ref: ref));
+final pageLoaderProvider = Provider((ref) => PageLoader(ref: ref));
 
-class Scapper {
-  const Scapper({
+class PageLoader {
+  const PageLoader({
     required this.ref,
   });
 
@@ -39,25 +40,18 @@ class Scapper {
         if (connectivityResult != ConnectivityResult.none) {
           yield Error(_noInternetError(url));
         } else {
-          yield Error(NoInternetRetryError(msg: """
+          yield Error(NoInternetRetryFailure(msg: """
 No estás conectado a ninguna red.
 Activa la wifi, cable ethernet o datos móviles.
 La conexión con $url se repetirá automáticamente"""));
 
-          DioConnectivityRequestRetrier requestRetrier =
-              ref.read(dioConnectivityRequestRetrierProvider);
+          Connectivity connectivity = ref.read(connectivityProvider);
 
           try {
-            await requestRetrier.onConnectionFound();
+            await connectivity.onConnectionFound();
             yield Error(InternetLoading(msg: "Reloading $url"));
-            final Response response = await dio.request(
-              e.requestOptions.path,
-              cancelToken: e.requestOptions.cancelToken,
-              data: e.requestOptions.data,
-              onReceiveProgress: e.requestOptions.onReceiveProgress,
-              onSendProgress: e.requestOptions.onSendProgress,
-              queryParameters: e.requestOptions.queryParameters,
-            );
+
+            final response = await dio.retry(options: e.requestOptions);
 
             yield Success(response);
           } on DioError catch (e) {
@@ -74,8 +68,8 @@ La conexión con $url se repetirá automáticamente"""));
     }
   }
 
-  NoInternetError _noInternetError(String url) {
-    return NoInternetError(msg: """
+  NoInternetFailure _noInternetError(String url) {
+    return NoInternetFailure(msg: """
 No hay internet para conectarse a $url.
 compruebe su conexión""");
   }

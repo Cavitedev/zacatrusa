@@ -12,7 +12,7 @@ import 'game_browse_sliver_grid.dart';
 import 'game_browse_sliver_list.dart';
 
 final fetchPageProvider = StreamProvider.autoDispose((ref) {
-  final scrapper = ref.watch(scrapperProvider);
+  final scrapper = ref.watch(pageLoaderProvider);
 
   final cancelToken = CancelToken();
   ref.onDispose(() {

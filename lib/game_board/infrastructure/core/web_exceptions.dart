@@ -15,14 +15,14 @@ class InternetLoading extends InternetFeedback{
   InternetLoading({required String msg}) : super(msg: msg);
 }
 
-abstract class InternetError extends InternetFeedback {
-  InternetError({required String msg}) : super(msg: msg);
+abstract class InternetFailure extends InternetFeedback {
+  InternetFailure({required String msg}) : super(msg: msg);
 }
 
-class NoInternetError extends InternetError {
-  NoInternetError({required String msg}) : super(msg: msg);
+class NoInternetFailure extends InternetFailure {
+  NoInternetFailure({required String msg}) : super(msg: msg);
 }
 
-class NoInternetRetryError extends InternetError {
-  NoInternetRetryError({required String msg}) : super(msg: msg);
+class NoInternetRetryFailure extends InternetFailure {
+  NoInternetRetryFailure({required String msg}) : super(msg: msg);
 }
