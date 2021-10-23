@@ -4,10 +4,26 @@ abstract class InternetFeedback {
   });
 
   final String url;
+
+  @override
+  String toString() {
+    return '${runtimeType} {url: $url}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InternetFeedback &&
+          runtimeType == other.runtimeType &&
+          url == other.url;
+
+  @override
+  int get hashCode => url.hashCode;
 }
 
 class InternetLoading extends InternetFeedback {
   InternetLoading({required String url}) : super(url: url);
+
 }
 
 abstract class InternetFailure extends InternetFeedback {
@@ -29,4 +45,20 @@ class StatusCodeInternetFailure extends InternetFailure {
   }) : super(url: url);
 
   final int statusCode;
+
+  @override
+  String toString() {
+    return 'StatusCodeInternetFailure{statusCode: $statusCode}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      super == other &&
+          other is StatusCodeInternetFailure &&
+          runtimeType == other.runtimeType &&
+          statusCode == other.statusCode;
+
+  @override
+  int get hashCode => super.hashCode ^ statusCode.hashCode;
 }

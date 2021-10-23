@@ -7,7 +7,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
-import 'package:multiple_result/multiple_result.dart';
+import 'package:zacatrusa/core/multiple_result.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/connectivity_helper.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
 
@@ -35,15 +35,15 @@ class HttpLoader {
     client.close();
   }
 
-  Stream<Result<InternetFeedback, dom.Document>> getPage({
+  Stream<Either<InternetFeedback, dom.Document>> getPage({
     required String url,
   }) async* {
     try {
       http.Response response = await client.get(Uri.parse(url));
       if (response.statusCode == 200) {
-        yield Success(_decodeResponse(response));
+        yield Right(_decodeResponse(response));
       } else {
-        yield Error(StatusCodeInternetFailure(
+        yield Left(StatusCodeInternetFailure(
             url: url, statusCode: response.statusCode));
       }
     } on SocketException {
@@ -52,31 +52,31 @@ class HttpLoader {
           await connectivity.checkConnectivity();
 
       if (connectivityResult != ConnectivityResult.none) {
-        yield Error(NoInternetFailure(url: url));
+        yield Left(NoInternetFailure(url: url));
       } else {
         yield* _retryWhenConnected(url, connectivity);
       }
     }
   }
 
-  Stream<Result<InternetFeedback, dom.Document>> _retryWhenConnected(
+  Stream<Either<InternetFeedback, dom.Document>> _retryWhenConnected(
       String url, Connectivity connectivity) async* {
-    yield Error(NoInternetRetryFailure(url: url));
+    yield Left(NoInternetRetryFailure(url: url));
 
     try {
       await connectivity.onConnectionFound();
-      yield Error(InternetLoading(url: url));
+      yield Left(InternetLoading(url: url));
 
       final response = await client.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        yield Success(_decodeResponse(response));
+        yield Right(_decodeResponse(response));
       } else {
-        yield Error(StatusCodeInternetFailure(
+        yield Left(StatusCodeInternetFailure(
             url: url, statusCode: response.statusCode));
       }
     } on SocketException {
-      yield Error(NoInternetFailure(url: url));
+      yield Left(NoInternetFailure(url: url));
     }
   }
 

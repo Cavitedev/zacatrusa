@@ -33,7 +33,7 @@ dependencies:
   http: ^0.13.4
   html: ^0.15.0
   connectivity_plus: ^2.0.2
-  multiple_result: ^1.0.4
+  mocktail: ^0.2.0
 
 dev_dependencies:
   flutter_test:
