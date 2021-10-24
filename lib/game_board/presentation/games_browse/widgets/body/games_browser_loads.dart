@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/internet_feedback_widgets.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
 
-class GameBrowserLoads extends ConsumerWidget {
-  const GameBrowserLoads({
+import '../../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
+import '../../../core/feedback_errors_loading/internet_feedback_widgets.dart';
+
+class GamesBrowserLoads extends ConsumerWidget {
+  const GamesBrowserLoads({
     Key? key,
   }) : super(key: key);
 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_page_query_parameter.dart';
+
+import 'zacatrus_page_query_parameter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_games_widget.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/widgets/sort_list_grid_switcher_row/sort_games_widget.dart';
 
 import 'list_grid_switcher.dart';
 

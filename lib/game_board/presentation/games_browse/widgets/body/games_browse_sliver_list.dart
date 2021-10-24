@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 
-class GameBrowseSliverList extends StatelessWidget {
-  const GameBrowseSliverList({
+import '../../../../zacatrus/domain/game_overview.dart';
+
+class GamesBrowseSliverList extends StatelessWidget {
+  const GamesBrowseSliverList({
     required this.games,
     Key? key,
   }) : super(key: key);

@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_state.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
+
+import '../../infrastructure/zacatrus_scrapper.dart';
+import 'zacatrus_browser_state.dart';
 
 final zacatrusBrowserNotifierProvider =
     StateNotifierProvider<ZacatrusBrowserNotifier, ZacatrusBrowserState>(
