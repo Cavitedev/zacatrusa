@@ -65,7 +65,7 @@ void _getName(dom.Element detailsElement, GameOverview gameOverview) {
         detailsElement.getElementsByClassName(_itemDetailsName);
     if (nameLinkElements.isNotEmpty) {
       final nameLinkElement = nameLinkElements.first;
-      gameOverview.name = nameLinkElement.text;
+      gameOverview.name = nameLinkElement.text.trim();
       gameOverview.link ??= nameLinkElement.attributes["href"];
     }
   } on Exception {

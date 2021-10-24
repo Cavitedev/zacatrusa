@@ -23,19 +23,19 @@ class GameBrowse extends ConsumerWidget {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.refresh(zacatrusGetGamesOverviewProvider);
-          ref.refresh(gamesListNotifierProvider);
+          ref.refresh(zacatrusUrlBrowserNotifierProvider);
+          ref.read(gamesListNotifierProvider.notifier).clear();
         },
         child: NotificationListener<ScrollUpdateNotification>(
           onNotification: (ScrollNotification scrollInfo) {
             if (scrollInfo.metrics.pixels >
-                scrollInfo.metrics.maxScrollExtent - 100) {
+                scrollInfo.metrics.maxScrollExtent - 300) {
               ref.read(zacatrusGetGamesOverviewProvider).whenData((value) {
                 if (value.isRight()) {
-                  final urlComposer =
+                  final urlComposerNotifier =
                       ref.read(zacatrusUrlBrowserNotifierProvider.notifier);
-                  urlComposer.nextPage();
-                  print("Overscroll");
+
+                  urlComposerNotifier.nextPage();
                   return true;
                 }
               });

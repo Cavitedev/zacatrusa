@@ -13,4 +13,9 @@ class GamesListNotifier extends StateNotifier<List<GameOverview>> {
   void addGames(List<GameOverview> games) {
     state = [...state, ...games];
   }
+
+  void clear(){
+    state = [];
+  }
+
 }

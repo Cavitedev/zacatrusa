@@ -27,7 +27,10 @@ void main() {
 
       final GameOverview game1 = listGames.first;
 
-      expect(game1.name , isNot("Error retrieving game"));
+      expect(game1.name, isNot("Error retrieving game"));
+
+      expect(game1.name, isNot(startsWith(" ")));
+      expect(game1.name, isNot(startsWith("\n")));
 
       expect(game1.link, isNotNull);
 
@@ -38,7 +41,6 @@ void main() {
       expect(game1.stars, isNotNull);
 
       expect(game1.price, isNotNull);
-
     });
   });
 }

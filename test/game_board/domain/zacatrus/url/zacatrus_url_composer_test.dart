@@ -14,8 +14,8 @@ void main() {
 
     test("Initial class with next page returns default page with 24 elements",
         () {
-      final urlComposer = ZacatrusUrlBrowserComposer();
-      urlComposer.nextPage();
+      var urlComposer = ZacatrusUrlBrowserComposer();
+      urlComposer = urlComposer.nextPage();
 
       final output = urlComposer.buildUrl();
 

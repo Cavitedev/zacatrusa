@@ -32,7 +32,6 @@ class ZacatrusUrlBrowserComposer {
     return copyWith(pageNum: pageNum.copyWithNextPage());
   }
 
-//<editor-fold desc="Data Methods">
 
   const ZacatrusUrlBrowserComposer._({
     required this.productsPerPage,
@@ -60,5 +59,5 @@ class ZacatrusUrlBrowserComposer {
     );
   }
 
-//</editor-fold>
+
 }
