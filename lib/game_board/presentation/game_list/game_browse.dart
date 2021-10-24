@@ -9,7 +9,7 @@ import 'package:zacatrusa/game_board/presentation/game_list/widgets/body/game_br
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 import 'package:zacatrusa/game_board/zacatrus/application/games_list.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/url/zacatrus_url_notifier.dart';
+import 'package:zacatrusa/game_board/zacatrus/application/url/zacatrus_url_browser_notifier.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
 

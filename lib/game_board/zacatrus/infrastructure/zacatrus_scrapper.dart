@@ -3,7 +3,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:zacatrusa/core/multiple_result.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
 import 'package:zacatrusa/game_board/zacatrus/application/games_list.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/url/zacatrus_url_notifier.dart';
+import 'package:zacatrusa/game_board/zacatrus/application/url/zacatrus_url_browser_notifier.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_game_browser_parser.dart';
