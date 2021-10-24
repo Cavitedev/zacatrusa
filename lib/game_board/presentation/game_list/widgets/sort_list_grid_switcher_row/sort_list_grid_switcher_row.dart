@@ -14,17 +14,19 @@ class SortListGridSwitcherRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(listPadding),
-      child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const SortGamesWidget(),
-              ListGridSwitcher(
-                onViewChange: onViewChange
-              ),
-            ],
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(listPadding),
+        child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SortGamesWidget(),
+                ListGridSwitcher(
+                  onViewChange: onViewChange
+                ),
+              ],
+        ),
       ),
     );
   }

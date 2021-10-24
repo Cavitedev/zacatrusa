@@ -23,7 +23,7 @@ void main() {
           "https://zacatrus.es/juegos-de-mesa.html?p=2");
     });
 
-    test("Initial class with 36 elements returns basic url", () {
+    test("Initial class with 36 elements returns basic browser", () {
       final urlComposer = ZacatrusUrlBrowserComposer(productsPerPage: 36);
 
       final output = urlComposer.buildUrl();

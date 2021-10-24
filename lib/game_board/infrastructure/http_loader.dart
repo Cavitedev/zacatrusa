@@ -38,6 +38,8 @@ class HttpLoader {
   Stream<Either<InternetFeedback, dom.Document>> getPage({
     required String url,
   }) async* {
+    yield Left(InternetLoading(url: url));
+
     try {
       http.Response response = await client.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -65,7 +67,7 @@ class HttpLoader {
 
     try {
       await connectivity.onConnectionFound();
-      yield Left(InternetLoading(url: url));
+      yield Left(InternetReloading(url: url));
 
       final response = await client.get(Uri.parse(url));
 

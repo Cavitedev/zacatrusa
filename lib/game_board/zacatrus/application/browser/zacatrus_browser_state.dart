@@ -2,26 +2,35 @@ import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart'
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 
-class ZacatrusUrlBrowserState{
-
-    const ZacatrusUrlBrowserState({
+class ZacatrusBrowserState {
+  const ZacatrusBrowserState({
     required this.urlComposer,
     required this.games,
-    required this.loadingFeedback,
+    this.loadingFeedback,
   });
 
   final ZacatrusUrlBrowserComposer urlComposer;
   final List<GameOverview> games;
-  final InternetFeedback loadingFeedback;
+  final InternetFeedback? loadingFeedback;
+
+  factory ZacatrusBrowserState.init() {
+    return ZacatrusBrowserState(
+        urlComposer: ZacatrusUrlBrowserComposer.init(), games: []);
+  }
+
+  ZacatrusBrowserState addGames(List<GameOverview> addedGames) {
+    return copyWith(games: [...games, ...addedGames], loadingFeedback: null);
+  }
+
+  bool get isLoaded => loadingFeedback == null;
+
 
 //<editor-fold desc="Data Methods">
-
-
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ZacatrusUrlBrowserState &&
+      (other is ZacatrusBrowserState &&
           runtimeType == other.runtimeType &&
           urlComposer == other.urlComposer &&
           games == other.games &&
@@ -40,18 +49,17 @@ class ZacatrusUrlBrowserState{
         '}';
   }
 
-  ZacatrusUrlBrowserState copyWith({
+  ZacatrusBrowserState copyWith({
     ZacatrusUrlBrowserComposer? urlComposer,
     List<GameOverview>? games,
     InternetFeedback? loadingFeedback,
   }) {
-    return ZacatrusUrlBrowserState(
+    return ZacatrusBrowserState(
       urlComposer: urlComposer ?? this.urlComposer,
       games: games ?? this.games,
-      loadingFeedback: loadingFeedback ?? this.loadingFeedback,
+      loadingFeedback: loadingFeedback,
     );
   }
-
 
 //</editor-fold>
 }
