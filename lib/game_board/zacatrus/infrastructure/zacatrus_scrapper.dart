@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:zacatrusa/core/multiple_result.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
+import 'package:zacatrusa/game_board/zacatrus/application/games_list.dart';
 import 'package:zacatrusa/game_board/zacatrus/application/url/zacatrus_url_notifier.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
@@ -16,6 +17,7 @@ final zacatrusGetGamesOverviewProvider = StreamProvider.autoDispose<
   final scrapper = ref.watch(zacatrusScrapperProvider);
   final urlComposer = ref.watch(zacatrusUrlBrowserNotifierProvider);
   return scrapper.getGamesOverviews(urlComposer);
+
 });
 
 class ZacatrusScapper {
@@ -34,7 +36,9 @@ class ZacatrusScapper {
         stream.map((result) {
       if (result.isRight()) {
         final dom.Document doc = result.getRight()!;
-        return Right(parseBrowserPage(doc));
+        final games = parseBrowserPage(doc);
+        ref.read(gamesListNotifierProvider.notifier).addGames(games);
+        return Right(games);
       }
 
       return Left(result.getLeft()!);

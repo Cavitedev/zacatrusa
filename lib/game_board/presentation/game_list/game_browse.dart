@@ -23,14 +23,14 @@ class GameBrowse extends ConsumerWidget {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.read(zacatrusUrlBrowserNotifierProvider.notifier).nextPage();
-          // ref.refresh(zacatrusGameListProvider);
+          ref.refresh(zacatrusGetGamesOverviewProvider);
+          ref.refresh(gamesListNotifierProvider);
         },
         child: NotificationListener<ScrollUpdateNotification>(
           onNotification: (ScrollNotification scrollInfo) {
             if (scrollInfo.metrics.pixels >
                 scrollInfo.metrics.maxScrollExtent - 100) {
-              ref.read(zacatrusGameListProvider).whenData((value) {
+              ref.read(zacatrusGetGamesOverviewProvider).whenData((value) {
                 if (value.isRight()) {
                   final urlComposer =
                       ref.read(zacatrusUrlBrowserNotifierProvider.notifier);
@@ -76,7 +76,7 @@ class GameBrowse extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, _) {
         final loadedGames = ref.watch(gamesListNotifierProvider);
-        return _sucessBody([...loadedGames, GameOverview(name: "fake")]);
+        return _sucessBody([...loadedGames]);
       },
     );
   }
@@ -88,7 +88,11 @@ class GameBrowse extends ConsumerWidget {
               data: (either) => either.when(
                   (feedback) => SliverToBoxAdapter(
                       child: InternetFeedbackWidget(feedback: feedback)),
-                  (gameList) => _sucessBody(gameList)),
+                  (gameList) {
+                return const SliverToBoxAdapter(
+                  child: SizedBox.shrink(),
+                );
+              }),
               error: (obj, trace, data) =>
                   SliverToBoxAdapter(child: Text("Error ${obj}")),
               loading: (_) => const SliverToBoxAdapter(child: Loading()),
