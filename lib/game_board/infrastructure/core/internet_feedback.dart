@@ -7,7 +7,7 @@ abstract class InternetFeedback {
 
   @override
   String toString() {
-    return '${runtimeType} {url: $url}';
+    return '$runtimeType {browser: $url}';
   }
 
   @override
@@ -23,6 +23,10 @@ abstract class InternetFeedback {
 
 class InternetLoading extends InternetFeedback {
   InternetLoading({required String url}) : super(url: url);
+}
+
+class InternetReloading extends InternetFeedback {
+  InternetReloading({required String url}) : super(url: url);
 
 }
 

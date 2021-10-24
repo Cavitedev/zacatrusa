@@ -54,8 +54,11 @@ void main() {
       // Assert
       expect(
           _streamDocumentToString(docStream),
-          emits(
+          emitsInOrder([
+            Left(InternetLoading(url: url)),
             fakeDom.outerHtml,
+            emitsDone
+          ]
           ));
     });
 
@@ -78,8 +81,12 @@ void main() {
       // Assert
       expect(
           docStream,
-          emits(
+          emitsInOrder(
+            [
+              Left(InternetLoading(url: url)),
             Left(NoInternetFailure(url: url)),
+              emitsDone
+            ]
           ));
     });
 
@@ -101,6 +108,7 @@ void main() {
       expect(
           docStream,
           emitsInOrder([
+            Left(InternetLoading(url: url)),
             Left(StatusCodeInternetFailure(url: url, statusCode: statusCode)),
             emitsDone
           ]));
@@ -136,8 +144,9 @@ void main() {
       expect(
           docStream,
           emitsInOrder([
-            Left(NoInternetRetryFailure(url: url)),
             Left(InternetLoading(url: url)),
+            Left(NoInternetRetryFailure(url: url)),
+            Left(InternetReloading(url: url)),
             Left(StatusCodeInternetFailure(url: url, statusCode: statusCode)),
             emitsDone
           ]));
@@ -175,8 +184,9 @@ void main() {
       expect(
           _streamDocumentToString(docStream),
           emitsInOrder([
-            Left(NoInternetRetryFailure(url: url)),
             Left(InternetLoading(url: url)),
+            Left(NoInternetRetryFailure(url: url)),
+            Left(InternetReloading(url: url)),
             fakeDom.outerHtml,
             emitsDone
           ]));
@@ -206,8 +216,9 @@ void main() {
       expect(
           docStream,
           emitsInOrder([
-            Left(NoInternetRetryFailure(url: url)),
             Left(InternetLoading(url: url)),
+            Left(NoInternetRetryFailure(url: url)),
+            Left(InternetReloading(url: url)),
             Left(NoInternetFailure(url: url)),
             emitsDone
           ]));

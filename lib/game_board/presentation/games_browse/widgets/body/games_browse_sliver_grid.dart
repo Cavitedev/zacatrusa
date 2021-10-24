@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/constants/app_margins.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 
-class GameBrowseSliverGrid extends StatelessWidget {
-  const GameBrowseSliverGrid({
+import '../../../../../constants/app_margins.dart';
+import '../../../../zacatrus/domain/game_overview.dart';
+
+class GamesBrowseSliverGrid extends StatelessWidget {
+  const GamesBrowseSliverGrid({
     required this.games,
     Key? key,
   }) : super(key: key);

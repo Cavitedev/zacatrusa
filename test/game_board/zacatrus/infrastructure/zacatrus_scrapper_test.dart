@@ -17,9 +17,7 @@ void main() {
 
       final result = scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer());
 
-      final firstRes = await result.first;
-
-      expect(firstRes.isRight(), true);
+      final firstRes = await result.skip(1).first;
 
       final listGames = firstRes.getRight()!;
 

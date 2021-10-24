@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
-import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/loading.dart';
+
+import '../../../infrastructure/core/internet_feedback.dart';
+import 'loading.dart';
 
 class InternetFeedbackWidget extends StatelessWidget {
   const InternetFeedbackWidget({
@@ -32,6 +33,10 @@ Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}""
 
       return Text(txt);
     } else if (feedback is InternetLoading) {
+      txt = "Loading $url";
+      return Loading(msg: txt);
+    }
+     else if (feedback is InternetReloading) {
       txt = "Retrying to load $url";
       return Loading(msg: txt);
     }

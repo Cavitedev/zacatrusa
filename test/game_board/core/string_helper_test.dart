@@ -6,7 +6,7 @@ void main() {
   group("fromCommaDecimalToNum", (){
     test("9,95 € works fine", (){
 
-      final str = "9,95 €";
+      const str = "9,95 €";
 
       final double result = str.fromCommaDecimalToNum();
 

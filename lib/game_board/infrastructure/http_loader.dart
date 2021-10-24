@@ -7,9 +7,10 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
-import 'package:zacatrusa/core/multiple_result.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/connectivity_helper.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
+
+import '../../core/multiple_result.dart';
+import 'core/connectivity_helper.dart';
+import 'core/internet_feedback.dart';
 
 final Provider<Connectivity> connectivityProvider =
     Provider<Connectivity>((_) => Connectivity());
@@ -38,6 +39,8 @@ class HttpLoader {
   Stream<Either<InternetFeedback, dom.Document>> getPage({
     required String url,
   }) async* {
+    yield Left(InternetLoading(url: url));
+
     try {
       http.Response response = await client.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -65,7 +68,7 @@ class HttpLoader {
 
     try {
       await connectivity.onConnectionFound();
-      yield Left(InternetLoading(url: url));
+      yield Left(InternetReloading(url: url));
 
       final response = await client.get(Uri.parse(url));
 
