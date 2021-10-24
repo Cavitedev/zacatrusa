@@ -1,4 +1,5 @@
-import 'package:zacatrusa/game_board/domain/zacatrus/url/zacatrus_page_query_parameter.dart';
+
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_page_query_parameter.dart';
 
 class ZacatrusUrlBrowserComposer {
 

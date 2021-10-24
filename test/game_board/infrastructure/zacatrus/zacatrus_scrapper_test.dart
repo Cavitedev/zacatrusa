@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zacatrusa/game_board/domain/zacatrus/game_overview.dart';
-import 'package:zacatrusa/game_board/infrastructure/zacatrus/zacatrus_scrapper.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
 
 void main() {
   ProviderContainer container = ProviderContainer();
@@ -14,7 +15,7 @@ void main() {
     test("Default object loads page", () async {
       final ZacatrusScapper scrapper = container.read(zacatrusScrapperProvider);
 
-      final result = scrapper.getGamesOverviews();
+      final result = scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer());
 
       final firstRes = await result.first;
 

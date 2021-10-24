@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zacatrusa/game_board/domain/zacatrus/url/zacatrus_url_composer.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 
 void main() {
   group("Build urls", () {

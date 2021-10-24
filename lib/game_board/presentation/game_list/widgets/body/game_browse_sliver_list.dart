@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/game_board/domain/zacatrus/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 
 class GameBrowseSliverList extends StatelessWidget {
   const GameBrowseSliverList({
@@ -14,7 +14,10 @@ class GameBrowseSliverList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
-        return const Placeholder();
+        final GameOverview game = games[index];
+        return Card(
+          child: Text(game.name),
+        );
       //TODO render data
       }, childCount: games.length),
     );

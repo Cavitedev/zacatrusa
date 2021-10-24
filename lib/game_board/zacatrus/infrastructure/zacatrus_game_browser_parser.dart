@@ -1,6 +1,6 @@
 import 'package:html/dom.dart' as dom;
 import 'package:zacatrusa/game_board/domain/core/string_helper.dart';
-import 'package:zacatrusa/game_board/domain/zacatrus/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 
 const String _idDivAllProductsData = "amasty-shopby-product-list";
 const String _productItems = "product-items";

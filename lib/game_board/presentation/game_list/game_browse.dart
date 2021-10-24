@@ -5,7 +5,7 @@ import 'package:zacatrusa/game_board/presentation/game_list/widgets/body/game_br
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 
-final gameOverviewListGrid = StateProvider((_) => ListGrid.list);
+final listGridViewProvider = StateProvider((_) => ListGrid.list);
 
 class GameBrowse extends ConsumerWidget {
   const GameBrowse({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class GameBrowse extends ConsumerWidget {
           SliverToBoxAdapter(
             child: SortListGridSwitcherRow(
               onViewChange: (listOrGrid) {
-                  ref.read(gameOverviewListGrid).state = listOrGrid;
+                  ref.read(listGridViewProvider).state = listOrGrid;
               },
             ),
           ),
