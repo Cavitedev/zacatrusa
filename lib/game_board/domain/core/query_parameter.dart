@@ -1,13 +1,28 @@
+import 'package:flutter/cupertino.dart';
+
+@immutable
 class QueryParameter<T> {
-  QueryParameter({
+
+    const QueryParameter({
     required this.key,
     required this.value,
   });
 
   final String key;
-   T value;
+  final T value;
 
   String toParam() => key + "=" + value.toString() + "&";
+
+
+
+  QueryParameter copyWith({
+    T? value,
+  }) {
+    return QueryParameter(
+      key: key,
+      value: value ?? this.value,
+    );
+  }
 
 
 }

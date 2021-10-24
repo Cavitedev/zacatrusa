@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:zacatrusa/game_board/domain/core/query_parameter.dart';
 
+@immutable
 class ZacatrusPageIndex extends QueryParameter<int> {
-  ZacatrusPageIndex(int value) : super(key: "p", value: value);
+  const ZacatrusPageIndex(int value) : super(key: "p", value: value);
 
-  void nextPage() => value += 1;
+  ZacatrusPageIndex copyWithNextPage() {
+    return ZacatrusPageIndex(value + 1);
+  }
 
   @override
   String toParam() {
@@ -14,19 +18,17 @@ class ZacatrusPageIndex extends QueryParameter<int> {
   }
 }
 
+@immutable
 class ZacatrusPageProductPerPage extends QueryParameter<int> {
-  ZacatrusPageProductPerPage(int value)
-      : assert(possibleValues.contains(value)),
+  const ZacatrusPageProductPerPage(int value)
+      : assert(value == 12 || value == 24 || value == 36),
         super(key: "product_list_limit", value: value);
 
-  static const List<int> possibleValues = [12, 24, 36];
-
-    @override
+  @override
   String toParam() {
     if (value == 24) {
       return "";
     }
     return super.toParam();
   }
-
 }

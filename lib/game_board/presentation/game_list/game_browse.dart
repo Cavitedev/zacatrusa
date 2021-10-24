@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_constants.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/widgets/body/game_browse_body.dart';
+import 'package:zacatrusa/constants/app_margins.dart';
+import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/internet_feedback_widgets.dart';
+import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/loading.dart';
+import 'package:zacatrusa/game_board/presentation/game_list/widgets/body/game_browse_sliver_grid.dart';
+import 'package:zacatrusa/game_board/presentation/game_list/widgets/body/game_browse_sliver_list.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
 import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
+import 'package:zacatrusa/game_board/zacatrus/application/games_list.dart';
+import 'package:zacatrusa/game_board/zacatrus/application/url/zacatrus_url_notifier.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
 
 final listGridViewProvider = StateProvider((_) => ListGrid.list);
 
@@ -13,32 +21,103 @@ class GameBrowse extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverAppBar(
-            title: const Text(appName),
-            floating: true,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    //TODO add filtering sprint 2
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.read(zacatrusUrlBrowserNotifierProvider.notifier).nextPage();
+          // ref.refresh(zacatrusGameListProvider);
+        },
+        child: NotificationListener<ScrollUpdateNotification>(
+          onNotification: (ScrollNotification scrollInfo) {
+            if (scrollInfo.metrics.pixels >
+                scrollInfo.metrics.maxScrollExtent - 100) {
+              ref.read(zacatrusGameListProvider).whenData((value) {
+                if (value.isRight()) {
+                  final urlComposer =
+                      ref.read(zacatrusUrlBrowserNotifierProvider.notifier);
+                  urlComposer.nextPage();
+                  print("Overscroll");
+                  return true;
+                }
+              });
+            }
+            return false;
+          },
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                title: const Text(appName),
+                floating: true,
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        //TODO add filtering sprint 2
+                      },
+                      icon: const Icon(Icons.filter_list))
+                ],
+              ),
+              SliverToBoxAdapter(
+                child: SortListGridSwitcherRow(
+                  onViewChange: (listOrGrid) {
+                    ref.read(listGridViewProvider).state = listOrGrid;
                   },
-                  icon: const Icon(Icons.filter_list))
+                ),
+              ),
+              _loadedgames(),
+              _loadedPending(),
             ],
           ),
-          SliverToBoxAdapter(
-            child: SortListGridSwitcherRow(
-              onViewChange: (listOrGrid) {
-                  ref.read(listGridViewProvider).state = listOrGrid;
-              },
-            ),
-          ),
-          const GameBrowseBody(),
-        ],
+        ),
       ),
     );
   }
 
+  Widget _loadedgames() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final loadedGames = ref.watch(gamesListNotifierProvider);
+        return _sucessBody([...loadedGames, GameOverview(name: "fake")]);
+      },
+    );
+  }
 
+  Widget _loadedPending() {
+    return Consumer(
+      builder: (context, ref, _) {
+        return ref.watch(zacatrusGetGamesOverviewProvider).when(
+              data: (either) => either.when(
+                  (feedback) => SliverToBoxAdapter(
+                      child: InternetFeedbackWidget(feedback: feedback)),
+                  (gameList) => _sucessBody(gameList)),
+              error: (obj, trace, data) =>
+                  SliverToBoxAdapter(child: Text("Error ${obj}")),
+              loading: (_) => const SliverToBoxAdapter(child: Loading()),
+            );
+      },
+    );
+  }
+
+  Widget _sucessBody(List<GameOverview> gamesOverviews) {
+    return Consumer(
+      builder: (context, ref, _) {
+        final listOrGridView = ref.watch(listGridViewProvider);
+        return SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: listPadding),
+            sliver: _gamesOverviewBody(listOrGridView.state, gamesOverviews));
+      },
+    );
+  }
+
+  Widget _gamesOverviewBody(
+      ListGrid listGrid, List<GameOverview> gamesOverviews) {
+    if (listGrid == ListGrid.list) {
+      return GameBrowseSliverList(
+        games: gamesOverviews,
+      );
+    } else {
+      return GameBrowseSliverGrid(
+        games: gamesOverviews,
+      );
+    }
+  }
 }

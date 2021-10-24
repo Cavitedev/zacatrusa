@@ -3,13 +3,13 @@ import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.d
 
 final zacatrusUrlBrowserNotifierProvider = StateNotifierProvider<
         ZacatrusUrlBrowserNotifier, ZacatrusUrlBrowserComposer>(
-    (ref) => ZacatrusUrlBrowserNotifier(ZacatrusUrlBrowserComposer()));
+    (ref) => ZacatrusUrlBrowserNotifier(ZacatrusUrlBrowserComposer.init()));
 
 class ZacatrusUrlBrowserNotifier
     extends StateNotifier<ZacatrusUrlBrowserComposer> {
   ZacatrusUrlBrowserNotifier(ZacatrusUrlBrowserComposer state) : super(state);
 
   void nextPage() {
-    state.nextPage();
+    state = state.nextPage();
   }
 }
