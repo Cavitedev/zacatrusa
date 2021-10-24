@@ -7,7 +7,7 @@ abstract class InternetFeedback {
 
   @override
   String toString() {
-    return '${runtimeType} {browser: $url}';
+    return '$runtimeType {browser: $url}';
   }
 
   @override

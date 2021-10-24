@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:zacatrusa/game_board/domain/core/query_parameter.dart';
+
+import '../../../domain/core/query_parameter.dart';
 
 @immutable
 class ZacatrusPageIndex extends QueryParameter<int> {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/constants/app_constants.dart';
 
-class GameBrowseSliverAppBar extends StatelessWidget {
-  const GameBrowseSliverAppBar({
+import '../../../constants/app_constants.dart';
+
+class GamesBrowseSliverAppBar extends StatelessWidget {
+  const GamesBrowseSliverAppBar({
     Key? key,
   }) : super(key: key);
 

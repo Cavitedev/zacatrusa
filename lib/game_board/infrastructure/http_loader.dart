@@ -7,9 +7,10 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
-import 'package:zacatrusa/core/multiple_result.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/connectivity_helper.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
+
+import '../../core/multiple_result.dart';
+import 'core/connectivity_helper.dart';
+import 'core/internet_feedback.dart';
 
 final Provider<Connectivity> connectivityProvider =
     Provider<Connectivity>((_) => Connectivity());

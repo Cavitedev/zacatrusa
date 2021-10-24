@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_constants.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/game_browse.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/games_browse.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const GameBrowse(),
+      home: const GamesBrowse(),
     );
   }
 }

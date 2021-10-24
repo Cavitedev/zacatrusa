@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/game_browse_sliver_app_bar.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/widgets/body/game_browser_loaded_games.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/widgets/body/game_browser_loads.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
-import 'package:zacatrusa/game_board/presentation/game_list/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/widgets/body/games_browser_loaded_games.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/widgets/body/games_browser_loads.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
+
+import 'games_browse_sliver_app_bar.dart';
 
 final listGridViewProvider = StateProvider((_) => ListGrid.list);
 
-class GameBrowse extends ConsumerWidget {
-  const GameBrowse({Key? key}) : super(key: key);
+class GamesBrowse extends ConsumerWidget {
+  const GamesBrowse({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ref) {
@@ -26,14 +27,14 @@ class GameBrowse extends ConsumerWidget {
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-              const GameBrowseSliverAppBar(),
+              const GamesBrowseSliverAppBar(),
               SortListGridSwitcherRow(
                 onViewChange: (listOrGrid) {
                   ref.read(listGridViewProvider).state = listOrGrid;
                 },
               ),
-              const GameBrowserLoadedGames(),
-              const GameBrowserLoads(),
+              const GamesBrowserLoadedGames(),
+              const GamesBrowserLoads(),
             ],
           ),
         ),

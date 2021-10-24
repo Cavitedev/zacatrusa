@@ -1,6 +1,6 @@
-import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
+import '../../../infrastructure/core/internet_feedback.dart';
+import '../../domain/game_overview.dart';
+import '../../domain/url/zacatrus_url_composer.dart';
 
 class ZacatrusBrowserState {
   const ZacatrusBrowserState({
@@ -42,8 +42,7 @@ class ZacatrusBrowserState {
 
   @override
   String toString() {
-    return 'ZacatrusUrlBrowserState{' +
-        ' urlComposer: $urlComposer,' +
+    return 'ZacatrusUrlBrowserState{' ' urlComposer: $urlComposer,' +
         ' games: $games,' +
         ' loadingFeedback: $loadingFeedback,' +
         '}';
