@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: appName,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          appBarTheme:
+              const AppBarTheme(color: Color.fromRGBO(76, 176, 86, 1))),
       home: const GamesBrowse(),
     );
   }
