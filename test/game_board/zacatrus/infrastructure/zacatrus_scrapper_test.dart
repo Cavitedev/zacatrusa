@@ -32,7 +32,9 @@ void main() {
 
       expect(game1.link, isNotNull);
 
-      expect(game1.imageUrl, isNotNull);
+      expect(game1.image, isNotNull);
+      expect(game1.image!.imageLink, isNotNull);
+      expect(game1.image!.imageAlt, isNotNull);
 
       expect(game1.numberOfComments, isNotNull);
 
