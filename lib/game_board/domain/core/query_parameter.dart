@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 @immutable
 class QueryParameter<T> {
-
-    const QueryParameter({
+  const QueryParameter({
     required this.key,
     required this.value,
   });
@@ -12,8 +11,6 @@ class QueryParameter<T> {
   final T value;
 
   String toParam() => key + "=" + value.toString() + "&";
-
-
 
   QueryParameter copyWith({
     T? value,
@@ -24,5 +21,14 @@ class QueryParameter<T> {
     );
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is QueryParameter &&
+          runtimeType == other.runtimeType &&
+          key == other.key &&
+          value == other.value;
 
+  @override
+  int get hashCode => key.hashCode ^ value.hashCode;
 }

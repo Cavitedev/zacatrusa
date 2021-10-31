@@ -15,4 +15,9 @@ class GameOverview{
   int? numberOfComments;
   double? stars;
   double? price;
+
+  @override
+  String toString() {
+    return 'GameOverview{name: $name}';
+  }
 }

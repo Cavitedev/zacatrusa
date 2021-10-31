@@ -66,7 +66,7 @@ class _GamesBrowseState extends ConsumerState<GamesBrowse> {
       final zacatrusBrowserNotifier =
           ref.read(zacatrusBrowserNotifierProvider.notifier);
 
-      zacatrusBrowserNotifier.nextPage();
+      zacatrusBrowserNotifier.nextPageIfNotLoading();
       return true;
     }
     return false;
