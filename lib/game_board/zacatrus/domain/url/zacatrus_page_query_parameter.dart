@@ -17,6 +17,8 @@ class ZacatrusPageIndex extends QueryParameter<int> {
     }
     return super.toParam();
   }
+
+
 }
 
 @immutable
@@ -32,4 +34,6 @@ class ZacatrusPageProductPerPage extends QueryParameter<int> {
     }
     return super.toParam();
   }
+
+
 }

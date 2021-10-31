@@ -1,9 +1,11 @@
+import 'package:zacatrusa/game_board/domain/image_data.dart';
+
 class GameOverview{
 
   GameOverview({
     this.name = "Error retrieving game",
     this.link,
-    this.imageUrl,
+    this.image,
     this.numberOfComments,
     this.stars,
     this.price,
@@ -11,8 +13,13 @@ class GameOverview{
 
   String name;
   String? link;
-  String? imageUrl;
+  ImageData? image;
   int? numberOfComments;
   double? stars;
   double? price;
+
+  @override
+  String toString() {
+    return 'GameOverview{name: $name}';
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:zacatrusa/game_board/domain/image_data.dart';
 
 import '../../../core/multiple_result.dart';
 import '../../domain/core/string_helper.dart';
@@ -71,8 +72,11 @@ class ZacatrusScapper {
       final anchorElement = divWithGame.children
           .firstWhere((element) => element.localName == "a");
       gameOverview.link = anchorElement.attributes["href"];
-      gameOverview.imageUrl =
-          anchorElement.getElementsByTagName("img").first.attributes["src"];
+
+      dom.Element imageElement = anchorElement.getElementsByTagName("img").first;
+      String? imageLink = imageElement.attributes["src"];
+      String? imageAlt = imageElement.attributes["alt"];
+      gameOverview.image = ImageData(imageLink: imageLink, imageAlt: imageAlt);
     } on Exception {
       // Not found
     }

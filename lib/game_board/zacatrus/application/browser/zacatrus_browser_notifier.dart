@@ -26,18 +26,19 @@ class ZacatrusBrowserNotifier extends StateNotifier<ZacatrusBrowserState> {
       event.when((left) {
         state = state.copyWith(loadingFeedback: event.getLeft()!);
       }, (right) {
-        state = state.addGames(event.getRight()!);
+        state = state.copyWith(urlComposer: state.urlComposer.nextPage()).addGames(event.getRight()!);
       });
-    });
-
-    subscription?.onDone(() {
-      subscription = null;
-    });
+    })
+          ..onDone(() {
+            subscription = null;
+          });
   }
 
-  void nextPage() {
-    state = state.copyWith(urlComposer: state.urlComposer.nextPage());
-    loadGames();
+  /// Retrieves next page if it is not loading any page
+  void nextPageIfNotLoading() {
+    if (subscription == null) {
+      loadGames();
+    }
   }
 
   void clear() {
