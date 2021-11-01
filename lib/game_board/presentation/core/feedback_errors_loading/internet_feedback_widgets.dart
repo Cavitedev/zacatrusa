@@ -32,7 +32,7 @@ La conexión con $url se repetirá automáticamente""";
 Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}""";
       }
 
-      else if (feedback is NoGamesFoundFailure) {
+      else if (feedback is Parsingfailure) {
         txt = """No aparecen juegos en la búsqueda, error de parseo""";
       }
 
