@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:zacatrusa/game_board/domain/image_data.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/zacatrus_browse_page_data.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 
 import '../../../core/multiple_result.dart';
 import '../../domain/core/string_helper.dart';
@@ -18,17 +20,18 @@ class ZacatrusScapper {
 
   final ProviderRef ref;
 
-  Stream<Either<InternetFeedback, List<GameOverview>>> getGamesOverviews(
+  Stream<Either<InternetFeedback, ZacatrusBrowsePageData>> getGamesOverviews(
       ZacatrusUrlBrowserComposer urlComposer) async* {
     final httpLoader = ref.read(httpLoaderProvider);
-    final stream = httpLoader.getPage(url: urlComposer.buildUrl());
+    final String url = urlComposer.buildUrl();
+    final stream = httpLoader.getPage(url: url);
 
-    final Stream<Either<InternetFeedback, List<GameOverview>>> mappedStream =
-        stream.map((result) {
+    final Stream<Either<InternetFeedback, ZacatrusBrowsePageData>>
+        mappedStream = stream.map((result) {
       if (result.isRight()) {
         final dom.Document doc = result.getRight()!;
-        final games = _parseBrowserPage(doc);
-        return Right(games);
+        final data = _parseBrowserPage(doc, url);
+        return data;
       }
 
       return Left(result.getLeft()!);
@@ -42,15 +45,37 @@ class ZacatrusScapper {
   static const String _itemDetails = "product-item-details";
   static const String _itemDetailsName = "product-item-name";
 
-  List<GameOverview> _parseBrowserPage(dom.Document doc) {
+  Either<InternetFeedback, ZacatrusBrowsePageData> _parseBrowserPage(
+      dom.Document doc, String url) {
     final shopListDiv = doc.getElementById(_idDivAllProductsData);
     if (shopListDiv == null) {
-      return [];
+      return Left(NoGamesFoundFailure(url: url));
     }
 
+    final int? amount = _getAmountGames(shopListDiv);
     final gameListDom = shopListDiv.getElementsByClassName(_productItems).first;
 
-    return _parseGameList(gameListDom);
+    final List<GameOverview> games = _parseGameList(gameListDom);
+
+    final ZacatrusBrowsePageData data = ZacatrusBrowsePageData(
+      amount: amount,
+      games: games,
+    );
+
+    return Right(data);
+  }
+
+  int? _getAmountGames(dom.Element productListDiv) {
+    try {
+      final dom.Element toolbarAmount =
+          productListDiv.getElementsByClassName("toolbar-amount")[0];
+
+      final dom.Element totalGamesAmountElement = toolbarAmount.children[2];
+
+      return int.parse(totalGamesAmountElement.text);
+    } on Exception {
+      // No found
+    }
   }
 
   List<GameOverview> _parseGameList(dom.Element gamesListDom) {
@@ -73,7 +98,8 @@ class ZacatrusScapper {
           .firstWhere((element) => element.localName == "a");
       gameOverview.link = anchorElement.attributes["href"];
 
-      dom.Element imageElement = anchorElement.getElementsByTagName("img").first;
+      dom.Element imageElement =
+          anchorElement.getElementsByTagName("img").first;
       String? imageLink = imageElement.attributes["src"];
       String? imageAlt = imageElement.attributes["alt"];
       gameOverview.image = ImageData(imageLink: imageLink, imageAlt: imageAlt);

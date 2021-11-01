@@ -15,13 +15,16 @@ void main() {
     test("Default object loads page", () async {
       final ZacatrusScapper scrapper = container.read(zacatrusScrapperProvider);
 
-      final result = scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer());
+      final result =
+          scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init());
 
       final firstRes = await result.skip(1).first;
 
-      final listGames = firstRes.getRight()!;
+      final pageDate = firstRes.getRight()!;
+      final listGames = pageDate.games;
 
       expect(listGames.length, 24);
+      expect(pageDate.amount, greaterThanOrEqualTo(7196));
 
       final GameOverview game1 = listGames.first;
 

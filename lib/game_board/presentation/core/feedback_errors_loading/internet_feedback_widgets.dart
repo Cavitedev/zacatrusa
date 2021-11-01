@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 
 import '../../../infrastructure/core/internet_feedback.dart';
 import 'loading.dart';
@@ -29,6 +30,10 @@ La conexión con $url se repetirá automáticamente""";
         final statusfeedback = feedback as StatusCodeInternetFailure;
         txt = """
 Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}""";
+      }
+
+      else if (feedback is NoGamesFoundFailure) {
+        txt = """No aparecen juegos en la búsqueda, error de parseo""";
       }
 
       return Text(txt);
