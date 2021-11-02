@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:zacatrusa/game_board/domain/image_data.dart';
+import 'package:zacatrusa/game_board/domain/url/category_amount.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/filters/zacatrus_filters.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/filters/zacatrus_looking_for_filter_options.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/zacatrus_browse_page_data.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 
@@ -49,23 +52,26 @@ class ZacatrusScapper {
       dom.Document doc, String url) {
     final shopListDiv = doc.getElementById(_idDivAllProductsData);
     if (shopListDiv == null) {
-      return Left(NoGamesFoundFailure(url: url));
+      return Left(Parsingfailure(url: url));
     }
 
-    final int? amount = _getAmountGames(shopListDiv);
-    final gameListDom = shopListDiv.getElementsByClassName(_productItems).first;
+    final ZacatrusFilters? filters = _parseFilters(doc);
 
+    final int? amount = _parseAmountGames(shopListDiv);
+
+    final gameListDom = shopListDiv.getElementsByClassName(_productItems).first;
     final List<GameOverview> games = _parseGameList(gameListDom);
 
     final ZacatrusBrowsePageData data = ZacatrusBrowsePageData(
-      amount: amount,
       games: games,
+      filters: filters,
+      amount: amount,
     );
 
     return Right(data);
   }
 
-  int? _getAmountGames(dom.Element productListDiv) {
+  int? _parseAmountGames(dom.Element productListDiv) {
     try {
       final dom.Element toolbarAmount =
           productListDiv.getElementsByClassName("toolbar-amount")[0];
@@ -75,6 +81,42 @@ class ZacatrusScapper {
       return int.parse(totalGamesAmountElement.text);
     } on Exception {
       // No found
+    }
+  }
+
+  ZacatrusFilters? _parseFilters(dom.Document doc) {
+    try {
+      dom.Element filterElement = doc.getElementById("narrow-by-list")!;
+      final lookingFor = _parseLookingFor(filterElement);
+    } on Exception {
+      // No found
+    }
+  }
+
+  ZacatrusLookingForFilterOptions? _parseLookingFor(dom.Element filterElement) {
+    try {
+      final categoriesOl = filterElement
+          .getElementsByClassName("items am-filter-items-attr_ocasiones")[0];
+      List<CategoryAmount> categories = [];
+      for (final element in categoriesOl.children) {
+        final CategoryAmount? category = _parseLookingForCategoryAmount(element);
+        if (category != null) {
+          categories.add(category);
+        }
+      }
+    } on Exception {
+      // No found
+    }
+  }
+
+  CategoryAmount? _parseLookingForCategoryAmount(dom.Element liFilter) {
+
+    try{
+      final String category = liFilter.attributes["data-label"]!;
+      final int amount = 1;
+      return null;
+    }on Exception{
+
     }
   }
 

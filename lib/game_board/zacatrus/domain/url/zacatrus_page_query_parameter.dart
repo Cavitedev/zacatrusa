@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../../domain/core/query_parameter.dart';
+import '../../../domain/url/query_parameter.dart';
 
 @immutable
 class ZacatrusPageIndex extends QueryParameter<int> {
@@ -22,8 +22,8 @@ class ZacatrusPageIndex extends QueryParameter<int> {
 }
 
 @immutable
-class ZacatrusPageProductPerPage extends QueryParameter<int> {
-  const ZacatrusPageProductPerPage(int value)
+class ZacatrusProductsPerPage extends QueryParameter<int> {
+  const ZacatrusProductsPerPage(int value)
       : assert(value == 12 || value == 24 || value == 36),
         super(key: "product_list_limit", value: value);
 

@@ -5,6 +5,7 @@ import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart'
 import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/zacatrus_browse_page_data.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
 
 class MockZacatrusScrapper extends Mock implements ZacatrusScapper {}
@@ -51,12 +52,13 @@ void main() {
           ZacatrusUrlBrowserComposer.init();
 
       final List<
-          Stream<Either<InternetFeedback, List<GameOverview>>> Function(
+          Stream<Either<InternetFeedback, ZacatrusBrowsePageData>> Function(
               Invocation)> answers = [
         (_) => Stream.fromFutures(
             [Future.value(Left(NoInternetFailure(url: "url")))]),
         (_) => Stream.fromFutures([
-              Future.value(Right([gameOverview1]))
+              Future.value(
+                  Right(ZacatrusBrowsePageData(games: [gameOverview1])))
             ]),
       ];
 
@@ -96,7 +98,7 @@ void _mockScrapperSingleCall(ZacatrusScapper scrapper,
   when(() => scrapper.getGamesOverviews(urlComposer))
       .thenAnswer((invocation) => Stream.fromFutures([
             Future.value(Left(InternetLoading(url: urlComposer.buildUrl()))),
-            Future.delayed(
-                const Duration(milliseconds: 100), () => Right([gameOverview]))
+            Future.delayed(const Duration(milliseconds: 100),
+                () => Right(ZacatrusBrowsePageData(games: [gameOverview])))
           ]));
 }

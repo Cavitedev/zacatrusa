@@ -1,23 +1,23 @@
 import 'package:flutter/cupertino.dart';
 
+import '../../../../core/optional.dart';
 import 'zacatrus_page_query_parameter.dart';
+import 'zacatrus_path_modifier_arguments.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
-  ZacatrusUrlBrowserComposer({int page = 1, int productsPerPage = 24})
-      : productsPerPage = ZacatrusPageProductPerPage(productsPerPage),
-        pageNum = ZacatrusPageIndex(page);
-
   factory ZacatrusUrlBrowserComposer.init() {
-    return const ZacatrusUrlBrowserComposer._(
-        productsPerPage: ZacatrusPageProductPerPage(24),
+    return const ZacatrusUrlBrowserComposer(
+        productsPerPage: ZacatrusProductsPerPage(24),
         pageNum: ZacatrusPageIndex(1));
   }
 
   static const String rawUrl = "https://zacatrus.es/juegos-de-mesa.html";
 
-  final ZacatrusPageProductPerPage productsPerPage;
+  final ZacatrusProductsPerPage productsPerPage;
   final ZacatrusPageIndex pageNum;
+
+  final ZacatrusLookingForFilter? lookingFor;
 
   String buildUrl() {
     String url = "$rawUrl?${pageNum.toParam()}${productsPerPage.toParam()}";
@@ -33,10 +33,10 @@ class ZacatrusUrlBrowserComposer {
     return copyWith(pageNum: pageNum.copyWithNextPage());
   }
 
-
-  const ZacatrusUrlBrowserComposer._({
+  const ZacatrusUrlBrowserComposer({
     required this.productsPerPage,
     required this.pageNum,
+    this.lookingFor,
   });
 
   @override
@@ -45,20 +45,32 @@ class ZacatrusUrlBrowserComposer {
       (other is ZacatrusUrlBrowserComposer &&
           runtimeType == other.runtimeType &&
           productsPerPage == other.productsPerPage &&
-          pageNum == other.pageNum);
+          pageNum == other.pageNum &&
+          lookingFor == other.lookingFor);
 
   @override
-  int get hashCode => productsPerPage.hashCode ^ pageNum.hashCode;
+  int get hashCode =>
+      productsPerPage.hashCode ^ pageNum.hashCode ^ lookingFor.hashCode;
 
-  ZacatrusUrlBrowserComposer copyWith({
-    ZacatrusPageProductPerPage? productsPerPage,
-    ZacatrusPageIndex? pageNum,
-  }) {
-    return ZacatrusUrlBrowserComposer._(
-      productsPerPage: productsPerPage ?? this.productsPerPage,
-      pageNum: pageNum ?? this.pageNum,
-    );
+  @override
+  String toString() {
+    return 'ZacatrusUrlBrowserComposer{'
+        ' productsPerPage: $productsPerPage,'
+        ' pageNum: $pageNum,'
+        ' lookingFor: $lookingFor,'
+        '}';
   }
 
-
+  ZacatrusUrlBrowserComposer copyWith({
+    ZacatrusProductsPerPage? productsPerPage,
+    ZacatrusPageIndex? pageNum,
+    Optional<ZacatrusLookingForFilter?>? lookingFor,
+  }) {
+    return ZacatrusUrlBrowserComposer(
+      productsPerPage: productsPerPage ?? this.productsPerPage,
+      pageNum: pageNum ?? this.pageNum,
+      lookingFor:
+          lookingFor?.isValid ?? false ? lookingFor!.value : this.lookingFor,
+    );
+  }
 }
