@@ -1,5 +1,3 @@
-import '../filters/zacatrus_looking_for_filter_options.dart';
-
 class ZacatrusLookingForFilter {
   final String? category;
 
@@ -7,9 +5,28 @@ class ZacatrusLookingForFilter {
     this.category,
   });
 
+    static List<String> categories = [
+    "Familiares",
+    "Cooperativo",
+    "Solitario ",
+    "Para 2",
+    "Experiencia",
+    "Fiesta",
+    "Rápido",
+    "Infantil",
+    "Viaje",
+    "Eurogame",
+    "Ameritrash"
+  ];
+
+  static bool isValidCategory(String category) {
+    return categories.contains(category);
+  }
+
+
   isValid() =>
       category == null ||
-      ZacatrusLookingForFilterOptions.isValidCategory(category!);
+      isValidCategory(category!);
 
   @override
   bool operator ==(Object other) =>

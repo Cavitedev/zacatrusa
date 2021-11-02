@@ -1,18 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:zacatrusa/game_board/domain/image_data.dart';
-import 'package:zacatrusa/game_board/domain/url/category_amount.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/filters/zacatrus_filters.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/filters/zacatrus_looking_for_filter_options.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/zacatrus_browse_page_data.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 
 import '../../../core/multiple_result.dart';
 import '../../domain/core/string_helper.dart';
+import '../../domain/image_data.dart';
 import '../../infrastructure/core/internet_feedback.dart';
 import '../../infrastructure/http_loader.dart';
 import '../domain/game_overview.dart';
 import '../domain/url/zacatrus_url_composer.dart';
+import '../domain/zacatrus_browse_page_data.dart';
+import 'zacatrus_browse_failures.dart';
 
 final zacatrusScrapperProvider = Provider((ref) => ZacatrusScapper(ref: ref));
 
@@ -55,7 +52,6 @@ class ZacatrusScapper {
       return Left(Parsingfailure(url: url));
     }
 
-    final ZacatrusFilters? filters = _parseFilters(doc);
 
     final int? amount = _parseAmountGames(shopListDiv);
 
@@ -64,7 +60,6 @@ class ZacatrusScapper {
 
     final ZacatrusBrowsePageData data = ZacatrusBrowsePageData(
       games: games,
-      filters: filters,
       amount: amount,
     );
 
@@ -84,41 +79,8 @@ class ZacatrusScapper {
     }
   }
 
-  ZacatrusFilters? _parseFilters(dom.Document doc) {
-    try {
-      dom.Element filterElement = doc.getElementById("narrow-by-list")!;
-      final lookingFor = _parseLookingFor(filterElement);
-    } on Exception {
-      // No found
-    }
-  }
 
-  ZacatrusLookingForFilterOptions? _parseLookingFor(dom.Element filterElement) {
-    try {
-      final categoriesOl = filterElement
-          .getElementsByClassName("items am-filter-items-attr_ocasiones")[0];
-      List<CategoryAmount> categories = [];
-      for (final element in categoriesOl.children) {
-        final CategoryAmount? category = _parseLookingForCategoryAmount(element);
-        if (category != null) {
-          categories.add(category);
-        }
-      }
-    } on Exception {
-      // No found
-    }
-  }
 
-  CategoryAmount? _parseLookingForCategoryAmount(dom.Element liFilter) {
-
-    try{
-      final String category = liFilter.attributes["data-label"]!;
-      final int amount = 1;
-      return null;
-    }on Exception{
-
-    }
-  }
 
   List<GameOverview> _parseGameList(dom.Element gamesListDom) {
     final List<GameOverview> gamesRetrieved = [];

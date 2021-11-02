@@ -1,4 +1,4 @@
-import 'package:zacatrusa/game_board/domain/image_data.dart';
+import '../../domain/image_data.dart';
 
 class GameOverview{
 
