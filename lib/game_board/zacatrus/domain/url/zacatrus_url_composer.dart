@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:zacatrusa/core/string_helper.dart';
 
 import '../../../../core/optional.dart';
 import 'zacatrus_page_query_parameter.dart';
-import 'zacatrus_sibuscas_filter.dart';
+import 'zacatrus_si_buscas_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
@@ -21,7 +22,7 @@ class ZacatrusUrlBrowserComposer {
 
   String buildUrl() {
     final String lookingForAddition =
-        lookingFor == null ? "" : "/${lookingFor!.category.toLowerCase()}";
+        lookingFor == null ? "" : "/${lookingFor!.category.toUrlValidCharacters()}";
     final String pathUrl = '$rawUrl$lookingForAddition.html';
 
     String url = "$pathUrl?${pageNum.toParam()}${productsPerPage.toParam()}";

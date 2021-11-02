@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
 
 import '../../../core/multiple_result.dart';
-import '../../domain/core/string_helper.dart';
+import '../../../core/string_helper.dart';
 import '../../domain/image_data.dart';
 import '../../infrastructure/core/internet_feedback.dart';
 import '../../infrastructure/http_loader.dart';

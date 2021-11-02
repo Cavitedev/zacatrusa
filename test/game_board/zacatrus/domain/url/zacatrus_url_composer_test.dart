@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_page_query_parameter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_sibuscas_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 
 void main() {
@@ -34,15 +34,24 @@ void main() {
           "https://zacatrus.es/juegos-de-mesa.html?product_list_limit=36");
     });
 
-    test("Initial class with Looking Familiares returns right url", () {
+    test('Initial class with "Si buscas" Familiares returns right url', () {
       final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
           lookingFor: const Optional.value(
               ZacatrusSiBuscasFilter(category: "Familiares")));
 
       final output = urlComposer.buildUrl();
 
-      expect(output,
-          "https://zacatrus.es/juegos-de-mesa/familiares.html");
+      expect(output, "https://zacatrus.es/juegos-de-mesa/familiares.html");
+    });
+
+    test('Initial class with "Si Buscas" Para 2 returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          lookingFor:
+              const Optional.value(ZacatrusSiBuscasFilter(category: "Para 2")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output, "https://zacatrus.es/juegos-de-mesa/para_2.html");
     });
   });
 }
