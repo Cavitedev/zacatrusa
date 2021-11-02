@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_constants.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/games_browse.dart';
+
+import 'constants/app_constants.dart';
+import 'game_board/presentation/games_browse/games_browse.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
