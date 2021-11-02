@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_categoria_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
@@ -37,7 +38,7 @@ void main() {
     test('Initial class with "Si buscas" Familiares returns right url', () {
       final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
           lookingFor: const Optional.value(
-              ZacatrusSiBuscasFilter(category: "Familiares")));
+              ZacatrusSiBuscasFilter(value: "Familiares")));
 
       final output = urlComposer.buildUrl();
 
@@ -47,11 +48,33 @@ void main() {
     test('Initial class with "Si Buscas" Para 2 returns right url', () {
       final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
           lookingFor:
-              const Optional.value(ZacatrusSiBuscasFilter(category: "Para 2")));
+              const Optional.value(ZacatrusSiBuscasFilter(value: "Para 2")));
 
       final output = urlComposer.buildUrl();
 
       expect(output, "https://zacatrus.es/juegos-de-mesa/para_2.html");
+    });
+
+    test('Categoria returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          categoria: const Optional.value(
+              ZacatrusCategoriaFilter(value: "Juegos de tablero")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output, "https://zacatrus.es/juegos-de-mesa/tablero.html");
+    });
+
+    test('Categoria and si buscas returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          lookingFor:
+              const Optional.value(ZacatrusSiBuscasFilter(value: "Para 2")),
+          categoria: const Optional.value(
+              ZacatrusCategoriaFilter(value: "Juegos de tablero")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output, "https://zacatrus.es/juegos-de-mesa/tablero/para_2.html");
     });
   });
 }

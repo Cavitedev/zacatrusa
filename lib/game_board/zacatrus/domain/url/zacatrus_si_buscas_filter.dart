@@ -1,8 +1,8 @@
 class ZacatrusSiBuscasFilter {
-  final String category;
+  final String value;
 
   const ZacatrusSiBuscasFilter({
-    required this.category,
+    required this.value,
   });
 
     static List<String> categories = [
@@ -24,15 +24,15 @@ class ZacatrusSiBuscasFilter {
   }
 
 
-  isValid() => isValidCategory(category);
+  isValid() => isValidCategory(value);
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ZacatrusSiBuscasFilter &&
           runtimeType == other.runtimeType &&
-          category == other.category;
+          value == other.value;
 
   @override
-  int get hashCode => category.hashCode;
+  int get hashCode => value.hashCode;
 }

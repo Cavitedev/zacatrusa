@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:zacatrusa/core/string_helper.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_tematica_filter.dart';
 
 import '../../../../core/optional.dart';
 import 'zacatrus_page_query_parameter.dart';
@@ -19,11 +21,18 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusPageIndex pageNum;
 
   final ZacatrusSiBuscasFilter? lookingFor;
+  final ZacatrusCategoriaFilter? categoria;
+  final ZacatrusTematicaFilter? tematica;
 
   String buildUrl() {
-    final String lookingForAddition =
-        lookingFor == null ? "" : "/${lookingFor!.category.toUrlValidCharacters()}";
-    final String pathUrl = '$rawUrl$lookingForAddition.html';
+    final String categoriaAddition = categoria == null
+        ? ""
+        : "/${ZacatrusCategoriaFilter.urlMapping[categoria!.value]}";
+
+    final String siBuscasAddition = lookingFor == null
+        ? ""
+        : "/${lookingFor!.value.toUrlValidCharacters()}";
+    final String pathUrl = '$rawUrl$categoriaAddition$siBuscasAddition.html';
 
     String url = "$pathUrl?${pageNum.toParam()}${productsPerPage.toParam()}";
 
@@ -42,6 +51,8 @@ class ZacatrusUrlBrowserComposer {
     required this.productsPerPage,
     required this.pageNum,
     this.lookingFor,
+    this.categoria,
+    this.tematica,
   });
 
   @override
@@ -70,12 +81,17 @@ class ZacatrusUrlBrowserComposer {
     ZacatrusProductsPerPage? productsPerPage,
     ZacatrusPageIndex? pageNum,
     Optional<ZacatrusSiBuscasFilter?>? lookingFor,
+    Optional<ZacatrusCategoriaFilter?>? categoria,
+    Optional<ZacatrusTematicaFilter?>? tematica,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
       pageNum: pageNum ?? this.pageNum,
       lookingFor:
           lookingFor?.isValid ?? false ? lookingFor!.value : this.lookingFor,
+      categoria:
+          categoria?.isValid ?? false ? categoria!.value : this.categoria,
+      tematica: tematica?.isValid ?? false ? tematica!.value : this.tematica,
     );
   }
 }
