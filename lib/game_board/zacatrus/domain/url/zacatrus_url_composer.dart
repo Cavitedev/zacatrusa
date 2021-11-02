@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:zacatrusa/core/string_helper.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_categoria_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_tematica_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
 import '../../../../core/optional.dart';
-import 'zacatrus_page_query_parameter.dart';
-import 'zacatrus_si_buscas_filter.dart';
+import 'filters/zacatrus_page_query_parameter.dart';
+import 'filters/zacatrus_si_buscas_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
@@ -25,14 +25,26 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusTematicaFilter? tematica;
 
   String buildUrl() {
-    final String categoriaAddition = categoria == null
-        ? ""
-        : "/${ZacatrusCategoriaFilter.urlMapping[categoria!.value]}";
+    String categoriaAddition = categoria?.toUrl() ?? "";
+    if (categoriaAddition.isNotEmpty) {
+      categoriaAddition = "/" + categoriaAddition;
+    }
 
-    final String siBuscasAddition = lookingFor == null
+    String siBuscasAddition = lookingFor == null
         ? ""
         : "/${lookingFor!.value.toUrlValidCharacters()}";
-    final String pathUrl = '$rawUrl$categoriaAddition$siBuscasAddition.html';
+
+    String tematicaAddition = tematica?.toUrl() ?? "";
+    if (tematicaAddition.isNotEmpty) {
+      if (siBuscasAddition.isNotEmpty) {
+        tematicaAddition = "-" + tematicaAddition;
+      } else {
+        tematicaAddition = "/" + tematicaAddition;
+      }
+    }
+
+    final String pathUrl =
+        '$rawUrl$categoriaAddition$siBuscasAddition$tematicaAddition.html';
 
     String url = "$pathUrl?${pageNum.toParam()}${productsPerPage.toParam()}";
 

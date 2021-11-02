@@ -1,8 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_categoria_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_page_query_parameter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_si_buscas_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 
 void main() {
@@ -75,6 +76,31 @@ void main() {
       final output = urlComposer.buildUrl();
 
       expect(output, "https://zacatrus.es/juegos-de-mesa/tablero/para_2.html");
+    });
+
+    test('Tematica returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          tematica:
+              const Optional.value(ZacatrusTematicaFilter(value: "Abstracto")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output, "https://zacatrus.es/juegos-de-mesa/abstracto.html");
+    });
+
+    test('Tematica, Si buscas, categoria returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          lookingFor:
+              const Optional.value(ZacatrusSiBuscasFilter(value: "Para 2")),
+          categoria: const Optional.value(
+              ZacatrusCategoriaFilter(value: "Juegos de tablero")),
+          tematica:
+              const Optional.value(ZacatrusTematicaFilter(value: "Abstracto")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output,
+          "https://zacatrus.es/juegos-de-mesa/tablero/para_2-abstracto.html");
     });
   });
 }

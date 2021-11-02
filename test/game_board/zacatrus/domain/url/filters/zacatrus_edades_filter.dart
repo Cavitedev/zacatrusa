@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_edades_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
 
 void main() {
   group("Is valid", () {

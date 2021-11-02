@@ -50,7 +50,7 @@ void main() {
       }
       final List<String> urlSplitted = link.split(RegExp("[\/\.]"));
       final String urlModifier = urlSplitted[urlSplitted.length - 2];
-      return MapEntry(label, urlModifier);
+      return MapEntry('"$label"', '"$urlModifier"');
     }).whereType<MapEntry<String, String>>());
 
     print(tematicas);

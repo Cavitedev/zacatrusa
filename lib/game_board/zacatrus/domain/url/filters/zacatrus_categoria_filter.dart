@@ -5,21 +5,18 @@ class ZacatrusCategoriaFilter {
     required this.value,
   });
 
-  static List<String> categories = [
-    "Juegos de tablero",
-    "Juegos de cartas",
-    "Wargames",
-    "Juegos de miniaturas",
-    "Juegos de dados",
-  ];
+    static Iterable<String> get categories => categoriesUrl.keys;
 
-  static Map<String, String> urlMapping = {
+
+  static Map<String, String> categoriesUrl = {
     "Juegos de tablero": "tablero",
     "Juegos de cartas": "cartas",
     "Wargames": "wargames",
     "Juegos de miniaturas": "juegos-de-miniaturas",
     "Juegos de dados": "dados",
   };
+
+  String? toUrl() => categoriesUrl[value];
 
   static bool isValidCategory(String category) {
     return categories.contains(category);
