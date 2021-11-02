@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_page_query_parameter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_sibuscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 
 void main() {
@@ -30,6 +32,17 @@ void main() {
 
       expect(output,
           "https://zacatrus.es/juegos-de-mesa.html?product_list_limit=36");
+    });
+
+    test("Initial class with Looking Familiares returns right url", () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          lookingFor: const Optional.value(
+              ZacatrusSiBuscasFilter(category: "Familiares")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output,
+          "https://zacatrus.es/juegos-de-mesa/familiares.html");
     });
   });
 }

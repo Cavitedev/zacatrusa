@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../../core/optional.dart';
 import 'zacatrus_page_query_parameter.dart';
-import 'zacatrus_path_modifier_arguments.dart';
+import 'zacatrus_sibuscas_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
@@ -12,15 +12,19 @@ class ZacatrusUrlBrowserComposer {
         pageNum: ZacatrusPageIndex(1));
   }
 
-  static const String rawUrl = "https://zacatrus.es/juegos-de-mesa.html";
+  static const String rawUrl = "https://zacatrus.es/juegos-de-mesa";
 
   final ZacatrusProductsPerPage productsPerPage;
   final ZacatrusPageIndex pageNum;
 
-  final ZacatrusLookingForFilter? lookingFor;
+  final ZacatrusSiBuscasFilter? lookingFor;
 
   String buildUrl() {
-    String url = "$rawUrl?${pageNum.toParam()}${productsPerPage.toParam()}";
+    final String lookingForAddition =
+        lookingFor == null ? "" : "/${lookingFor!.category.toLowerCase()}";
+    final String pathUrl = '$rawUrl$lookingForAddition.html';
+
+    String url = "$pathUrl?${pageNum.toParam()}${productsPerPage.toParam()}";
 
     if (url[url.length - 1] == "&" || url[url.length - 1] == "?") {
       return url.substring(0, url.length - 1);
@@ -64,7 +68,7 @@ class ZacatrusUrlBrowserComposer {
   ZacatrusUrlBrowserComposer copyWith({
     ZacatrusProductsPerPage? productsPerPage,
     ZacatrusPageIndex? pageNum,
-    Optional<ZacatrusLookingForFilter?>? lookingFor,
+    Optional<ZacatrusSiBuscasFilter?>? lookingFor,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,

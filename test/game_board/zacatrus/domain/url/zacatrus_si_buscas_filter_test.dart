@@ -1,17 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_path_modifier_arguments.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_sibuscas_filter.dart';
 
 void main() {
   group("Looking For Options", () {
     test("Check is not a valid name", () {
-      const lookingForFilterOption = ZacatrusLookingForFilter(category: "Wrong");
+      const lookingForFilterOption = ZacatrusSiBuscasFilter(category: "Wrong");
 
       expect(lookingForFilterOption.isValid(), false);
     });
 
-
     test("Check it is valid", () {
-      const lookingForFilterOption = ZacatrusLookingForFilter(category: "Familiarse");
+      const lookingForFilterOption =
+          ZacatrusSiBuscasFilter(category: "Familiares");
 
       expect(lookingForFilterOption.isValid(), true);
     });
