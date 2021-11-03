@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 
 import '../../../../core/optional.dart';
 import 'filters/zacatrus_categoria_filter.dart';
 import 'filters/zacatrus_edades_filter.dart';
+import 'filters/zacatrus_editorial_filter.dart';
+import 'filters/zacatrus_mecanica_filter.dart';
 import 'filters/zacatrus_num_jugadores_filter.dart';
 import 'filters/zacatrus_page_query_parameter.dart';
 import 'filters/zacatrus_rango_precio_filter.dart';
@@ -22,6 +23,7 @@ class ZacatrusUrlBrowserComposer {
     this.numJugadores,
     this.precio,
     this.mecanica,
+    this.editorial,
   });
 
   factory ZacatrusUrlBrowserComposer.init() {
@@ -42,6 +44,7 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusNumJugadoresFilter? numJugadores;
   final ZacatrusRangoPrecioFilter? precio;
   final ZacatrusMecanicaFilter? mecanica;
+  final ZacatrusEditorialFilter? editorial;
 
   String buildUrl() {
     String categoriaAddition = categoria?.toUrl() ?? "";
@@ -66,8 +69,11 @@ class ZacatrusUrlBrowserComposer {
 
     String mecanicaAddition = mecanica == null ? "" : "/${mecanica!.toUrl()}";
 
+    String editorialAddition =
+        editorial == null ? "" : "/${editorial!.toUrl()}";
+
     final String pathUrl =
-        '$rawUrl$categoriaAddition$siBuscasAddition$tematicaAddition$mecanicaAddition$numJugadoresAddition.html';
+        '$rawUrl$categoriaAddition$siBuscasAddition$tematicaAddition$editorialAddition$mecanicaAddition$numJugadoresAddition.html';
 
     final String params =
         "${pageNum.toParam()}${productsPerPage.toParam()}${precio?.toUrl() ?? ""}${edades?.toUrl() ?? ""}";
@@ -117,6 +123,7 @@ class ZacatrusUrlBrowserComposer {
     Optional<ZacatrusNumJugadoresFilter?>? numJugadores,
     Optional<ZacatrusRangoPrecioFilter?>? precio,
     Optional<ZacatrusMecanicaFilter?>? mecanica,
+    Optional<ZacatrusEditorialFilter?>? editorial,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
@@ -132,6 +139,8 @@ class ZacatrusUrlBrowserComposer {
           : this.numJugadores,
       precio: precio?.isValid ?? false ? precio!.value : this.precio,
       mecanica: mecanica?.isValid ?? false ? mecanica!.value : this.mecanica,
+      editorial:
+          editorial?.isValid ?? false ? editorial!.value : this.editorial,
     );
   }
 }

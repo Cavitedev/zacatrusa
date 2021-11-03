@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
@@ -152,6 +153,16 @@ void main() {
 
       expect(output,
           "https://zacatrus.es/juegos-de-mesa/deduccion_e_investigacion.html");
+    });
+
+    test('Editorial returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          editorial:
+              const Optional.value(ZacatrusEditorialFilter(value: "Ankama")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output, "https://zacatrus.es/juegos-de-mesa/ankama.html");
     });
   });
 }
