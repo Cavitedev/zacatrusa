@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
@@ -114,6 +115,19 @@ void main() {
       final output = urlComposer.buildUrl();
 
       expect(output, "https://zacatrus.es/juegos-de-mesa.html?edad=91,93");
+    });
+
+    test('NumJugadores returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          numJugadores:
+              const Optional.value(ZacatrusNumJugadoresFilter(values: [
+        "8",
+        "+8",
+      ])));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output, "https://zacatrus.es/juegos-de-mesa/8_1-8.html");
     });
   });
 }
