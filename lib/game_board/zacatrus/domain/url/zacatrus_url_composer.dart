@@ -16,7 +16,7 @@ class ZacatrusUrlBrowserComposer {
   const ZacatrusUrlBrowserComposer({
     required this.productsPerPage,
     required this.pageNum,
-    this.lookingFor,
+    this.siBuscas,
     this.categoria,
     this.tematica,
     this.edades,
@@ -37,7 +37,7 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusProductsPerPage productsPerPage;
   final ZacatrusPageIndex pageNum;
 
-  final ZacatrusSiBuscasFilter? lookingFor;
+  final ZacatrusSiBuscasFilter? siBuscas;
   final ZacatrusCategoriaFilter? categoria;
   final ZacatrusTematicaFilter? tematica;
   final ZacatrusEdadesFilter? edades;
@@ -47,33 +47,28 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusEditorialFilter? editorial;
 
   String buildUrl() {
-    String categoriaAddition = categoria?.toUrl() ?? "";
-    if (categoriaAddition.isNotEmpty) {
-      categoriaAddition = "/" + categoriaAddition;
-    }
+    String categoriaAddition =
+        categoria == null ? "" : "/${categoria!.toUrl()}";
 
-    String siBuscasAddition =
-        lookingFor == null ? "" : "/${lookingFor!.toUrl()}";
+    final String siBuscasAddition = siBuscas?.toUrl() ?? "";
 
-    String tematicaAddition = tematica?.toUrl() ?? "";
-    if (tematicaAddition.isNotEmpty) {
-      if (siBuscasAddition.isNotEmpty) {
-        tematicaAddition = "-" + tematicaAddition;
-      } else {
-        tematicaAddition = "/" + tematicaAddition;
-      }
-    }
+    final String tematicaAddition = tematica?.toUrl() ?? "";
 
-    String numJugadoresAddition =
-        numJugadores == null ? "" : "/${numJugadores!.toUrl()}";
+    final String numJugadoresAddition = numJugadores?.toUrl() ?? "";
 
-    String mecanicaAddition = mecanica == null ? "" : "/${mecanica!.toUrl()}";
+    final String mecanicaAddition = mecanica?.toUrl() ?? "";
 
-    String editorialAddition =
-        editorial == null ? "" : "/${editorial!.toUrl()}";
+    final String editorialAddition = editorial?.toUrl() ?? "";
 
-    final String pathUrl =
-        '$rawUrl$categoriaAddition$siBuscasAddition$tematicaAddition$editorialAddition$mecanicaAddition$numJugadoresAddition.html';
+    final String pathJoin2 = _joinPath([
+      siBuscasAddition,
+      tematicaAddition,
+      numJugadoresAddition,
+      mecanicaAddition,
+      editorialAddition
+    ]);
+
+    final String pathUrl = '$rawUrl$categoriaAddition$pathJoin2.html';
 
     final String params =
         "${pageNum.toParam()}${productsPerPage.toParam()}${precio?.toUrl() ?? ""}${edades?.toUrl() ?? ""}";
@@ -91,6 +86,17 @@ class ZacatrusUrlBrowserComposer {
     return copyWith(pageNum: pageNum.copyWithNextPage());
   }
 
+  String _joinPath(List<String> elements) {
+    final List<String> nonEmptyElements =
+        elements.where((element) => element.isNotEmpty).toList();
+
+    if (nonEmptyElements.isEmpty) {
+      return "";
+    }
+
+    return "/" + nonEmptyElements.join("-");
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -98,25 +104,25 @@ class ZacatrusUrlBrowserComposer {
           runtimeType == other.runtimeType &&
           productsPerPage == other.productsPerPage &&
           pageNum == other.pageNum &&
-          lookingFor == other.lookingFor);
+          siBuscas == other.siBuscas);
 
   @override
   int get hashCode =>
-      productsPerPage.hashCode ^ pageNum.hashCode ^ lookingFor.hashCode;
+      productsPerPage.hashCode ^ pageNum.hashCode ^ siBuscas.hashCode;
 
   @override
   String toString() {
     return 'ZacatrusUrlBrowserComposer{'
         ' productsPerPage: $productsPerPage,'
         ' pageNum: $pageNum,'
-        ' lookingFor: $lookingFor,'
+        ' lookingFor: $siBuscas,'
         '}';
   }
 
   ZacatrusUrlBrowserComposer copyWith({
     ZacatrusProductsPerPage? productsPerPage,
     ZacatrusPageIndex? pageNum,
-    Optional<ZacatrusSiBuscasFilter?>? lookingFor,
+    Optional<ZacatrusSiBuscasFilter?>? siBuscas,
     Optional<ZacatrusCategoriaFilter?>? categoria,
     Optional<ZacatrusTematicaFilter?>? tematica,
     Optional<ZacatrusEdadesFilter?>? edades,
@@ -128,8 +134,7 @@ class ZacatrusUrlBrowserComposer {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
       pageNum: pageNum ?? this.pageNum,
-      lookingFor:
-          lookingFor?.isValid ?? false ? lookingFor!.value : this.lookingFor,
+      siBuscas: siBuscas?.isValid ?? false ? siBuscas!.value : this.siBuscas,
       categoria:
           categoria?.isValid ?? false ? categoria!.value : this.categoria,
       tematica: tematica?.isValid ?? false ? tematica!.value : this.tematica,

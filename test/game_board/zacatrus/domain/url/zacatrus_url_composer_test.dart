@@ -43,7 +43,7 @@ void main() {
 
     test('Initial class with "Si buscas" Familiares returns right url', () {
       final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
-          lookingFor: const Optional.value(
+          siBuscas: const Optional.value(
               ZacatrusSiBuscasFilter(value: "Familiares")));
 
       final output = urlComposer.buildUrl();
@@ -53,7 +53,7 @@ void main() {
 
     test('Initial class with "Si Buscas" Para 2 returns right url', () {
       final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
-          lookingFor:
+          siBuscas:
               const Optional.value(ZacatrusSiBuscasFilter(value: "Para 2")));
 
       final output = urlComposer.buildUrl();
@@ -73,7 +73,7 @@ void main() {
 
     test('Categoria and si buscas returns right url', () {
       final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
-          lookingFor:
+          siBuscas:
               const Optional.value(ZacatrusSiBuscasFilter(value: "Para 2")),
           categoria: const Optional.value(
               ZacatrusCategoriaFilter(value: "Juegos de tablero")));
@@ -95,7 +95,7 @@ void main() {
 
     test('Tematica, Si buscas, categoria returns right url', () {
       final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
-          lookingFor:
+          siBuscas:
               const Optional.value(ZacatrusSiBuscasFilter(value: "Para 2")),
           categoria: const Optional.value(
               ZacatrusCategoriaFilter(value: "Juegos de tablero")),
@@ -163,6 +163,29 @@ void main() {
       final output = urlComposer.buildUrl();
 
       expect(output, "https://zacatrus.es/juegos-de-mesa/ankama.html");
+    });
+
+    test(
+        'Si buscas, temática, num jugadores, mecánica, editorial returns right url',
+        () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          siBuscas:
+              const Optional.value(ZacatrusSiBuscasFilter(value: "Familiares")),
+          tematica:
+              const Optional.value(ZacatrusTematicaFilter(value: "Animales")),
+          categoria: const Optional.value(
+              ZacatrusCategoriaFilter(value: "Juegos de tablero")),
+          mecanica: const Optional.value(
+              ZacatrusMecanicaFilter(value: "Colección de sets")),
+          editorial:
+              const Optional.value(ZacatrusEditorialFilter(value: "Devir")),
+          numJugadores: const Optional.value(ZacatrusNumJugadoresFilter(
+              values: ["1", "2", "3", "4", "5", "6", "7", "8", "+8"])));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output,
+          "https://zacatrus.es/juegos-de-mesa/tablero/familiares-animales-1-2-3-4-5-6-7-8_1-8-coleccion_de_sets-devir.html");
     });
   });
 }
