@@ -28,7 +28,7 @@ class ZacatrusEdadesFilter implements IMultipleFilter {
     String url = "edad=" +
         values.map((value) => categoriesUrl[value]!).fold(
             "", (previousValue, element) => previousValue + element + ",");
-    return url.substring(0, url.length - 2);
+    return url.substring(0, url.length - 1);
   }
 
   static bool isValidCategory(String category) {

@@ -35,10 +35,5 @@ extension StringX on String {
           ? nonDiacritics[diacritics.indexOf(char)]
           : char);
 
-  String toUrlValidCharacters() {
-    String res = toLowerCase();
-    res = res.replaceAll(" ", "_");
-    res = res.withoutDiacriticalMarks();
-    return res;
-  }
+
 }

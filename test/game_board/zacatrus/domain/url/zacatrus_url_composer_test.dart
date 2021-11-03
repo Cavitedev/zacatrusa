@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
@@ -101,6 +102,18 @@ void main() {
 
       expect(output,
           "https://zacatrus.es/juegos-de-mesa/tablero/para_2-abstracto.html");
+    });
+
+    test('Edades returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          edades: const Optional.value(ZacatrusEdadesFilter(values: [
+        "de 0 a 3 años",
+        "de 3 a 6 años",
+      ])));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output, "https://zacatrus.es/juegos-de-mesa.html?edad=91,93");
     });
   });
 }
