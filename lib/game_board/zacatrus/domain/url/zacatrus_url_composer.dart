@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 
 import '../../../../core/optional.dart';
 import 'filters/zacatrus_categoria_filter.dart';
@@ -20,6 +21,7 @@ class ZacatrusUrlBrowserComposer {
     this.edades,
     this.numJugadores,
     this.precio,
+    this.mecanica,
   });
 
   factory ZacatrusUrlBrowserComposer.init() {
@@ -39,6 +41,7 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusEdadesFilter? edades;
   final ZacatrusNumJugadoresFilter? numJugadores;
   final ZacatrusRangoPrecioFilter? precio;
+  final ZacatrusMecanicaFilter? mecanica;
 
   String buildUrl() {
     String categoriaAddition = categoria?.toUrl() ?? "";
@@ -61,8 +64,10 @@ class ZacatrusUrlBrowserComposer {
     String numJugadoresAddition =
         numJugadores == null ? "" : "/${numJugadores!.toUrl()}";
 
+    String mecanicaAddition = mecanica == null ? "" : "/${mecanica!.toUrl()}";
+
     final String pathUrl =
-        '$rawUrl$categoriaAddition$siBuscasAddition$tematicaAddition$numJugadoresAddition.html';
+        '$rawUrl$categoriaAddition$siBuscasAddition$tematicaAddition$mecanicaAddition$numJugadoresAddition.html';
 
     final String params =
         "${pageNum.toParam()}${productsPerPage.toParam()}${precio?.toUrl() ?? ""}${edades?.toUrl() ?? ""}";
@@ -111,6 +116,7 @@ class ZacatrusUrlBrowserComposer {
     Optional<ZacatrusEdadesFilter?>? edades,
     Optional<ZacatrusNumJugadoresFilter?>? numJugadores,
     Optional<ZacatrusRangoPrecioFilter?>? precio,
+    Optional<ZacatrusMecanicaFilter?>? mecanica,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
@@ -125,6 +131,7 @@ class ZacatrusUrlBrowserComposer {
           ? numJugadores!.value
           : this.numJugadores,
       precio: precio?.isValid ?? false ? precio!.value : this.precio,
+      mecanica: mecanica?.isValid ?? false ? mecanica!.value : this.mecanica,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
@@ -140,6 +141,17 @@ void main() {
 
       expect(
           output, "https://zacatrus.es/juegos-de-mesa.html?price=89.00-203.00");
+    });
+
+    test('Mecanica returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          mecanica: const Optional.value(
+              ZacatrusMecanicaFilter(value: "Deducción e Investigación")));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output,
+          "https://zacatrus.es/juegos-de-mesa/deduccion_e_investigacion.html");
     });
   });
 }
