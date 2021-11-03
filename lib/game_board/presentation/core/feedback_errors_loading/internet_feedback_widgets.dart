@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 
 import '../../../infrastructure/core/internet_feedback.dart';
+import '../../../zacatrus/infrastructure/zacatrus_browse_failures.dart';
 import 'loading.dart';
 
 class InternetFeedbackWidget extends StatelessWidget {

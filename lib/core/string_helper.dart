@@ -30,10 +30,17 @@ extension StringX on String {
   static const nonDiacritics =
       'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
 
-  String withoutDiacriticalMarks() => splitMapJoin('',
-      onNonMatch: (char) => char.isNotEmpty && diacritics.contains(char)
-          ? nonDiacritics[diacritics.indexOf(char)]
-          : char);
+  String withoutDiacriticalMarks() =>
+      splitMapJoin('',
+          onNonMatch: (char) =>
+          char.isNotEmpty && diacritics.contains(char)
+              ? nonDiacritics[diacritics.indexOf(char)]
+              : char);
 
-
+  String removeDomain() {
+    final Uri uri = Uri.parse(this);
+    final String path = uri.path.substring(1);
+    final String query = uri.query.isEmpty ? "" : "?" + uri.query;
+    return path + query;
+  }
 }

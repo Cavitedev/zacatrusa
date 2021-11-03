@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 
 import '../../infrastructure/zacatrus_scrapper.dart';
 import 'zacatrus_browser_state.dart';
@@ -46,5 +47,9 @@ class ZacatrusBrowserNotifier extends StateNotifier<ZacatrusBrowserState> {
   void clear() {
     state = ZacatrusBrowserState.init();
     loadGames();
+  }
+
+  void changeFilters(ZacatrusUrlBrowserComposer composer) {
+    state = state.copyWith(urlComposer: composer);
   }
 }

@@ -1,6 +1,7 @@
 import 'i_filter.dart';
 
 class ZacatrusEditorialFilter implements ISingleFilter {
+  @override
   final String value;
 
   const ZacatrusEditorialFilter({

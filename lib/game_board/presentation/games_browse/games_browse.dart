@@ -10,20 +10,11 @@ import 'widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 
 final listGridViewProvider = StateProvider((_) => ListGrid.list);
 
-class GamesBrowse extends ConsumerStatefulWidget {
-  const GamesBrowse({
-    Key? key,
-  }) : super(key: key);
+class GamesBrowse extends ConsumerWidget {
+  const GamesBrowse({Key? key}) : super(key: key);
 
   @override
-  ConsumerState createState() => _GamesBrowseState();
-}
-
-class _GamesBrowseState extends ConsumerState<GamesBrowse> {
-
-  @override
-  Widget build(BuildContext context) {
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: RefreshIndicator(
         semanticsLabel: "Recargar juegos de mesa",
@@ -51,7 +42,9 @@ class _GamesBrowseState extends ConsumerState<GamesBrowse> {
                 child: SizedBox.shrink(),
               ),
               SliverToBoxAdapter(
-                child: Container(height: 1,),
+                child: Container(
+                  height: 1,
+                ),
               )
             ],
           ),
@@ -71,7 +64,4 @@ class _GamesBrowseState extends ConsumerState<GamesBrowse> {
     }
     return false;
   }
-
 }
-
-

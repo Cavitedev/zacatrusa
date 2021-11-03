@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_margins.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/games_browse.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 
+import '../../../../../constants/app_margins.dart';
+import '../../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
+import '../../../../zacatrus/domain/game_overview.dart';
+import '../../games_browse.dart';
+import '../sort_list_grid_switcher_row/list_grid_switcher.dart';
 import 'games_browse_sliver_grid.dart';
 import 'games_browse_sliver_list.dart';
 

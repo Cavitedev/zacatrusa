@@ -42,8 +42,7 @@ class ZacatrusBrowserState {
 
   @override
   String toString() {
-    return 'ZacatrusUrlBrowserState{' ' urlComposer: $urlComposer,' +
-        ' games: $games,' +
+    return 'ZacatrusUrlBrowserState{' ' urlComposer: $urlComposer,' ' games: $games,' +
         ' loadingFeedback: $loadingFeedback,' +
         '}';
   }

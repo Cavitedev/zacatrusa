@@ -1,4 +1,4 @@
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/i_filter.dart';
+import 'i_filter.dart';
 
 class ZacatrusRangoPrecioFilter implements IFilter {
   final double min;

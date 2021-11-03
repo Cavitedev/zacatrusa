@@ -1,6 +1,7 @@
 import 'i_filter.dart';
 
 class ZacatrusNumJugadoresFilter implements IMultipleFilter {
+  @override
   final List<String> values;
 
   const ZacatrusNumJugadoresFilter({
@@ -37,6 +38,7 @@ class ZacatrusNumJugadoresFilter implements IMultipleFilter {
     return categories.contains(category);
   }
 
+  @override
   isValid() =>
       values.every((value) => isValidCategory(value)) && _notRepeated();
 

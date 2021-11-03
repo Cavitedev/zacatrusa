@@ -112,7 +112,7 @@ Map<String, String> _getLabelLinkCategories(dom.Element ol,
       if (isParameter) {
         urlModifier = link.substring(link.lastIndexOf("?") + 1);
       } else {
-        final List<String> urlSplitted = link.split(RegExp("[\/\.]"));
+        final List<String> urlSplitted = link.split(RegExp("[/.]"));
         urlModifier = urlSplitted[urlSplitted.length - 2];
       }
 

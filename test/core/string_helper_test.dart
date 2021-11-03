@@ -11,4 +11,14 @@ void main() {
       expect(result, 9.95);
     });
   });
+
+  group("Remove domain", () {
+    test("Removes domain on Zacatrus game browse", () {
+      const str = "https://zacatrus.es/juegos-de-mesa.html";
+
+      final String result = str.removeDomain();
+
+      expect(result, "juegos-de-mesa.html");
+    });
+  });
 }

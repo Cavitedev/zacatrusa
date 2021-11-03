@@ -1,6 +1,7 @@
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/i_filter.dart';
+import 'i_filter.dart';
 
 class ZacatrusEdadesFilter implements IMultipleFilter {
+  @override
   final List<String> values;
 
   const ZacatrusEdadesFilter({
