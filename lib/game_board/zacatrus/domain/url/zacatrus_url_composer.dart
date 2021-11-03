@@ -1,23 +1,26 @@
 import 'package:flutter/cupertino.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
 import '../../../../core/optional.dart';
+import 'filters/zacatrus_categoria_filter.dart';
+import 'filters/zacatrus_edades_filter.dart';
+import 'filters/zacatrus_num_jugadores_filter.dart';
 import 'filters/zacatrus_page_query_parameter.dart';
+import 'filters/zacatrus_rango_precio_filter.dart';
 import 'filters/zacatrus_si_buscas_filter.dart';
+import 'filters/zacatrus_tematica_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
-  const ZacatrusUrlBrowserComposer(
-      {required this.productsPerPage,
-      required this.pageNum,
-      this.lookingFor,
-      this.categoria,
-      this.tematica,
-      this.edades,
-      this.numJugadores});
+  const ZacatrusUrlBrowserComposer({
+    required this.productsPerPage,
+    required this.pageNum,
+    this.lookingFor,
+    this.categoria,
+    this.tematica,
+    this.edades,
+    this.numJugadores,
+    this.precio,
+  });
 
   factory ZacatrusUrlBrowserComposer.init() {
     return const ZacatrusUrlBrowserComposer(
@@ -35,6 +38,7 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusTematicaFilter? tematica;
   final ZacatrusEdadesFilter? edades;
   final ZacatrusNumJugadoresFilter? numJugadores;
+  final ZacatrusRangoPrecioFilter? precio;
 
   String buildUrl() {
     String categoriaAddition = categoria?.toUrl() ?? "";
@@ -61,7 +65,7 @@ class ZacatrusUrlBrowserComposer {
         '$rawUrl$categoriaAddition$siBuscasAddition$tematicaAddition$numJugadoresAddition.html';
 
     final String params =
-        "${pageNum.toParam()}${productsPerPage.toParam()}${edades?.toUrl() ?? ""}";
+        "${pageNum.toParam()}${productsPerPage.toParam()}${precio?.toUrl() ?? ""}${edades?.toUrl() ?? ""}";
 
     String url = "$pathUrl?$params";
 
@@ -106,6 +110,7 @@ class ZacatrusUrlBrowserComposer {
     Optional<ZacatrusTematicaFilter?>? tematica,
     Optional<ZacatrusEdadesFilter?>? edades,
     Optional<ZacatrusNumJugadoresFilter?>? numJugadores,
+    Optional<ZacatrusRangoPrecioFilter?>? precio,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
@@ -119,6 +124,7 @@ class ZacatrusUrlBrowserComposer {
       numJugadores: numJugadores?.isValid ?? false
           ? numJugadores!.value
           : this.numJugadores,
+      precio: precio?.isValid ?? false ? precio!.value : this.precio,
     );
   }
 }

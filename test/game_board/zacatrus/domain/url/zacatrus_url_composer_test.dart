@@ -4,6 +4,7 @@ import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_catego
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
@@ -128,6 +129,17 @@ void main() {
       final output = urlComposer.buildUrl();
 
       expect(output, "https://zacatrus.es/juegos-de-mesa/8_1-8.html");
+    });
+
+    test('Precio returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          precio: const Optional.value(
+              ZacatrusRangoPrecioFilter(min: 89, max: 203)));
+
+      final output = urlComposer.buildUrl();
+
+      expect(
+          output, "https://zacatrus.es/juegos-de-mesa.html?price=89.00-203.00");
     });
   });
 }

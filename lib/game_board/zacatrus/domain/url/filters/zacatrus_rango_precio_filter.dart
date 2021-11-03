@@ -11,7 +11,7 @@ class ZacatrusRangoPrecioFilter implements IFilter {
 
   @override
   String? toUrl() {
-    return "price =" + min.toStringAsFixed(2) + "-" + max.toStringAsFixed(2);
+    return "price=" + min.toStringAsFixed(2) + "-" + max.toStringAsFixed(2);
   }
 
   @override
