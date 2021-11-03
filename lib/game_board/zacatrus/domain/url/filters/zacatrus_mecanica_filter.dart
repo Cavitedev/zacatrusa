@@ -1,16 +1,61 @@
-class ZacatrusMecanicaFilter {
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/i_filter.dart';
+
+class ZacatrusMecanicaFilter implements ISingleFilter {
+  @override
   final String value;
 
   const ZacatrusMecanicaFilter({
     required this.value,
   });
 
-  static List<String> categories = ["4X", "Arena", "Bazas", "Colección de sets", "Colocación de losetas", "Colocación de trabajadores", "Conquista de territorio", "Crawler", "Creación de mazo", "Deducción e Investigación", "Defensa de la Torre", "Draft", "Escape room", "Evolución de Civilización", "Exploración y Aventura", "Gestión de cartas", "Gestión de recursos", "Juegos de palabras", "Habilidad", "LCG", "Legacy", "Matemáticas", "Mayorías", "Memoria", "Negociación", "Pick & Deliver", "Preguntas y respuestas", "Programación acciones", "Puzzle", "Roles ocultos", "Roll&Write", "Sandbox", "Subastas", "Tienta la suerte", "Wargame"];
+  static Iterable<String> get categories => categoriesUrl.keys;
+
+  static Map<String, String> categoriesUrl = {
+    "4X": "4x",
+    "Arena": "arena",
+    "Bazas": "bazas",
+    "Colección de sets": "coleccion_de_sets",
+    "Colocación de losetas": "colocacion_de_losetas",
+    "Colocación de trabajadores": "colocacion_de_trabajadores",
+    "Conquista de territorio": "conquista_de_territorio",
+    "Crawler": "crawler",
+    "Creación de mazo": "creacion_de_mazo",
+    "Deducción e Investigación": "deduccion_e_investigacion",
+    "Defensa de la Torre": "defensa_de_la_torre",
+    "Draft": "draft",
+    "Escape room": "escape_room",
+    "Evolución de Civilización": "evolucion_de_civilizacion",
+    "Exploración y Aventura": "exploracion_y_aventura",
+    "Gestión de cartas": "gestion_de_cartas",
+    "Gestión de recursos": "gestion_de_recursos",
+    "Juegos de palabras": "juegos_de_palabras",
+    "Habilidad": "habilidad",
+    "LCG": "lcg",
+    "Legacy": "legacy",
+    "Matemáticas": "matematicas",
+    "Mayorías": "mayorias",
+    "Memoria": "memoria",
+    "Negociación": "negociacion",
+    "Pick & Deliver": "pick_deliver",
+    "Preguntas y respuestas": "preguntas_y_respuestas",
+    "Programación acciones": "programacion_acciones",
+    "Puzzle": "puzzle",
+    "Roles ocultos": "roles_ocultos",
+    "Roll&Write": "roll_write",
+    "Sandbox": "sandbox",
+    "Subastas": "subastas",
+    "Tienta la suerte": "tienta_la_suerte",
+    "Wargame": "wargame"
+  };
+
+  @override
+  String? toUrl() => categoriesUrl[value];
 
   static bool isValidCategory(String category) {
     return categories.contains(category);
   }
 
+  @override
   isValid() => isValidCategory(value);
 
   @override

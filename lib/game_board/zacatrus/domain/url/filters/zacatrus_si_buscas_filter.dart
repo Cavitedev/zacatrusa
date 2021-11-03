@@ -1,29 +1,39 @@
-class ZacatrusSiBuscasFilter {
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/i_filter.dart';
+
+class ZacatrusSiBuscasFilter implements ISingleFilter {
   final String value;
 
   const ZacatrusSiBuscasFilter({
     required this.value,
   });
 
-    static List<String> categories = [
-    "Familiares",
-    "Cooperativo",
-    "Solitario ",
-    "Para 2",
-    "Experiencia",
-    "Fiesta",
-    "Rápido",
-    "Infantil",
-    "Viaje",
-    "Eurogame",
-    "Ameritrash"
-  ];
+  static Iterable<String> get categories => categoriesUrl.keys;
+
+  static Map<String, String> categoriesUrl = {
+    "Familiares": "familiares",
+    "Cooperativo": "cooperativo",
+    "Solitario": "solitario",
+    "Para 2": "para_2",
+    "Experiencia": "experiencia",
+    "Fiesta": "fiesta",
+    "Narrativo": "narrativo",
+    "Rápido": "rapido",
+    "Infantil": "infantil",
+    "Viaje": "viaje",
+    "Eurogame": "eurogame",
+    "Ameritrash": "ameritrash"
+  };
+
+  @override
+  String? toUrl() {
+    return categoriesUrl[value];
+  }
 
   static bool isValidCategory(String category) {
     return categories.contains(category);
   }
 
-
+  @override
   isValid() => isValidCategory(value);
 
   @override

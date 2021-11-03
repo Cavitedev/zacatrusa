@@ -1,21 +1,37 @@
-class ZacatrusNumJugadoresFilter {
+import 'i_filter.dart';
+
+class ZacatrusNumJugadoresFilter implements IMultipleFilter {
   final List<String> values;
 
   const ZacatrusNumJugadoresFilter({
     required this.values,
   });
 
-  static List<String> categories = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "+8"
-  ];
+  static Iterable<String> get categories => categoriesUrl.keys;
+
+  static Map<String, String> categoriesUrl = {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8_1",
+    "+8": "8"
+  };
+
+  @override
+  String? toUrl() {
+    if (values.isEmpty) {
+      return null;
+    }
+
+    String url =
+        values.map((value) => categoriesUrl[value]!).fold(
+            "", (previousValue, element) => previousValue + element + "-");
+    return url.substring(0, url.length - 2);
+  }
 
   static bool isValidCategory(String category) {
     return categories.contains(category);

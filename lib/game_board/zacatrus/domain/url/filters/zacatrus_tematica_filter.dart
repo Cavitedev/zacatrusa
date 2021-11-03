@@ -1,4 +1,6 @@
-class ZacatrusTematicaFilter {
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/i_filter.dart';
+
+class ZacatrusTematicaFilter implements ISingleFilter {
   final String value;
 
   const ZacatrusTematicaFilter({
@@ -53,12 +55,14 @@ class ZacatrusTematicaFilter {
     "Zombies": "zombie"
   };
 
+  @override
   String? toUrl() => categoriesUrl[value];
 
   static bool isValidCategory(String category) {
     return categories.contains(category);
   }
 
+  @override
   isValid() => isValidCategory(value);
 
   @override
