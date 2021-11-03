@@ -6,7 +6,7 @@ import '../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
 import '../../games_browse/games_browse.dart';
 import 'games_routing_configuration.dart';
 
-final gameRouterProvider = Provider((ref) => GamesRouterDelegate(ref));
+final gamesRouterDelegateProvider = Provider((ref) => GamesRouterDelegate(ref));
 
 class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
     with
@@ -57,7 +57,7 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
       _currentConf.settings = false;
       notifyListeners();
       return Future.value(true);
-    } else if (_currentConf.detailsPage != null) {
+    } else if (_currentConf.detailsGame != null) {
       // _currentConf.detailsPage = null;
       notifyListeners();
       return Future.value(true);

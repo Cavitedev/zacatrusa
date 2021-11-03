@@ -32,6 +32,18 @@ class ZacatrusUrlBrowserComposer {
         pageNum: ZacatrusPageIndex(1));
   }
 
+  factory ZacatrusUrlBrowserComposer.fromUrl(String url) {
+    ZacatrusUrlBrowserComposer composer = ZacatrusUrlBrowserComposer.init();
+
+    if (url.endsWith("familiares.html")) {
+      composer = composer.copyWith(
+          siBuscas: const Optional.value(
+              ZacatrusSiBuscasFilter(value: "Familiares")));
+    }
+
+    return composer;
+  }
+
   static const String rawUrl = "https://zacatrus.es/juegos-de-mesa";
 
   final ZacatrusProductsPerPage productsPerPage;
@@ -100,23 +112,35 @@ class ZacatrusUrlBrowserComposer {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ZacatrusUrlBrowserComposer &&
+      other is ZacatrusUrlBrowserComposer &&
           runtimeType == other.runtimeType &&
           productsPerPage == other.productsPerPage &&
           pageNum == other.pageNum &&
-          siBuscas == other.siBuscas);
+          siBuscas == other.siBuscas &&
+          categoria == other.categoria &&
+          tematica == other.tematica &&
+          edades == other.edades &&
+          numJugadores == other.numJugadores &&
+          precio == other.precio &&
+          mecanica == other.mecanica &&
+          editorial == other.editorial;
 
   @override
   int get hashCode =>
-      productsPerPage.hashCode ^ pageNum.hashCode ^ siBuscas.hashCode;
+      productsPerPage.hashCode ^
+      pageNum.hashCode ^
+      siBuscas.hashCode ^
+      categoria.hashCode ^
+      tematica.hashCode ^
+      edades.hashCode ^
+      numJugadores.hashCode ^
+      precio.hashCode ^
+      mecanica.hashCode ^
+      editorial.hashCode;
 
   @override
   String toString() {
-    return 'ZacatrusUrlBrowserComposer{'
-        ' productsPerPage: $productsPerPage,'
-        ' pageNum: $pageNum,'
-        ' lookingFor: $siBuscas,'
-        '}';
+    return 'ZacatrusUrlBrowserComposer{productsPerPage: $productsPerPage, pageNum: $pageNum, siBuscas: $siBuscas, categoria: $categoria, tematica: $tematica, edades: $edades, numJugadores: $numJugadores, precio: $precio, mecanica: $mecanica, editorial: $editorial}';
   }
 
   ZacatrusUrlBrowserComposer copyWith({

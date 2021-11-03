@@ -5,23 +5,25 @@ import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.d
 class GamesRoutingConfiguration {
   ZacatrusUrlBrowserComposer? _filterComposer;
   bool settings;
-  String? detailsPage;
+  String? detailsGame;
 
   GamesRoutingConfiguration.home({
     required ProviderRef ref,
     ZacatrusUrlBrowserComposer? filterComposer,
   })  : settings = false,
-        detailsPage = null {
+        detailsGame = null {
     setFilterComposer(filterComposer, ref);
   }
 
-  GamesRoutingConfiguration.id({this.detailsPage})
+  GamesRoutingConfiguration.details({this.detailsGame})
       : _filterComposer = null,
         settings = false;
 
+  GamesRoutingConfiguration.settings() : settings = true;
+
   ZacatrusUrlBrowserComposer? get filterComposer => _filterComposer;
 
-  bool isHome() => settings == false && detailsPage == null;
+  bool isHome() => settings == false && detailsGame == null;
 
   void setFilterComposer(
       ZacatrusUrlBrowserComposer? composer, ProviderRef ref) {

@@ -188,4 +188,24 @@ void main() {
           "https://zacatrus.es/juegos-de-mesa/tablero/familiares-animales-1-2-3-4-5-6-7-8_1-8-coleccion_de_sets-devir.html");
     });
   });
+
+  group("Build composer from url", () {
+    test("home page returns init composer", () {
+      const String url = "https://zacatrus.es/juegos-de-mesa.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(result, ZacatrusUrlBrowserComposer.init());
+    });
+
+    test("home page with si buscas returns right composer", () {
+      const String url = "https://zacatrus.es/juegos-de-mesa/familiares.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              siBuscas: const Optional.value(
+                  ZacatrusSiBuscasFilter(value: "Familiares"))));
+    });
+  });
 }

@@ -46,4 +46,9 @@ class ZacatrusSiBuscasFilter implements ISingleFilter {
 
   @override
   int get hashCode => value.hashCode;
+
+  @override
+  String toString() {
+    return 'ZacatrusSiBuscasFilter{value: $value}';
+  }
 }

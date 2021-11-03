@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/string_helper.dart';
+import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'games_routing_configuration.dart';
 
 final gameRouteInformationParserProvider =
@@ -16,7 +17,23 @@ class GameRouteInformationParser
   @override
   Future<GamesRoutingConfiguration> parseRouteInformation(
       RouteInformation routeInformation) async {
-    return GamesRoutingConfiguration.home(ref: ref);
+    if (routeInformation.location == null || routeInformation.location == "/") {
+      return GamesRoutingConfiguration.home(ref: ref);
+    }
+
+    final String location = routeInformation.location!;
+
+    if (location.endsWith("settings")) {
+      return GamesRoutingConfiguration.settings();
+    } else if (location.contains("juegos-de-mesa")) {
+      return GamesRoutingConfiguration.home(
+          filterComposer: ZacatrusUrlBrowserComposer.fromUrl(location),
+          ref: ref);
+    }
+
+    String detailsGame = location.substring(
+        location.lastIndexOf("/") + 1, location.lastIndexOf("."));
+    return GamesRoutingConfiguration.details(detailsGame: detailsGame);
   }
 
   @override
@@ -29,6 +46,6 @@ class GameRouteInformationParser
     } else if (configuration.settings == true) {
       return const RouteInformation(location: "settings");
     }
-    return RouteInformation(location: configuration.detailsPage!);
+    return RouteInformation(location: configuration.detailsGame!);
   }
 }
