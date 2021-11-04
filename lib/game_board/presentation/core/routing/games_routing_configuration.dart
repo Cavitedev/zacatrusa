@@ -1,37 +1,41 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
+import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 
 class GamesRoutingConfiguration {
-  ZacatrusUrlBrowserComposer? _filterComposer;
+  ZacatrusUrlBrowserComposer? filterComposer;
   bool settings;
   String? detailsGame;
 
   GamesRoutingConfiguration.home({
-    required ProviderRef ref,
-    ZacatrusUrlBrowserComposer? filterComposer,
+    this.filterComposer,
   })  : settings = false,
-        detailsGame = null {
-    setFilterComposer(filterComposer, ref);
-  }
+        detailsGame = null;
 
   GamesRoutingConfiguration.details({this.detailsGame})
-      : _filterComposer = null,
+      : filterComposer = null,
         settings = false;
 
   GamesRoutingConfiguration.settings() : settings = true;
 
-  ZacatrusUrlBrowserComposer? get filterComposer => _filterComposer;
+  // ZacatrusUrlBrowserComposer? get filterComposer => _filterComposer;
 
   bool isHome() => settings == false && detailsGame == null;
 
-  void setFilterComposer(
-      ZacatrusUrlBrowserComposer? composer, ProviderRef ref) {
-    if (composer != null) {
-      ref
-          .read(zacatrusBrowserNotifierProvider.notifier)
-          .changeFilters(composer);
-    }
-    _filterComposer = composer;
+
+  @override
+  String toString() {
+    return 'GamesRoutingConfiguration{filterComposer: $filterComposer, settings: $settings, detailsGame: $detailsGame}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GamesRoutingConfiguration &&
+          runtimeType == other.runtimeType &&
+          filterComposer == other.filterComposer &&
+          settings == other.settings &&
+          detailsGame == other.detailsGame;
+
+  @override
+  int get hashCode =>
+      filterComposer.hashCode ^ settings.hashCode ^ detailsGame.hashCode;
 }

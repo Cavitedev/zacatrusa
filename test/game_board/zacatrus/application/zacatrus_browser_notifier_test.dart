@@ -69,7 +69,8 @@ void main() {
       _mockScrapperSingleCall(scrapper, urlComposer2, gameOverview2);
 
       notifier = ZacatrusBrowserNotifier(scrapper: scrapper);
-      await Future.delayed(const Duration(milliseconds: 100));
+      notifier.loadGames();
+      await Future.delayed(const Duration(milliseconds: 200));
       notifier.nextPageIfNotLoading();
       await Future.delayed(const Duration(milliseconds: 200));
 

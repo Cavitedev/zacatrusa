@@ -14,7 +14,7 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
         PopNavigatorRouterDelegateMixin<GamesRoutingConfiguration> {
   GamesRouterDelegate(this.ref)
       : navigatorKey = GlobalKey<NavigatorState>(),
-        _currentConf = GamesRoutingConfiguration.home(ref: ref);
+        _currentConf = GamesRoutingConfiguration.home();
 
   @override
   GlobalKey<NavigatorState> navigatorKey;
@@ -73,4 +73,6 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
     notifyListeners();
     return Future.value(null);
   }
+
+
 }
