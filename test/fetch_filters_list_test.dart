@@ -92,7 +92,7 @@ void main() {
     final Map<String, String> editoriales = _getLabelLinkCategories(ol);
 
     print(editoriales);
-    expect(editoriales.length, 189);
+    expect(editoriales.length, 190);
   });
 }
 

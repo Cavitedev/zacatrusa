@@ -40,6 +40,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "Burning Games": "burning_games",
     "Buró de Juegos": "buro_de_juegos",
     "Cacahuete Games": "cacahuete_games",
+    "Caracol Juegos de Mesa": "caracol_juegos_de_mesa",
     "Cayro": "cayro",
     "Cerebrer Games": "cerebrer_games",
     "CGE - Czech Games Edition": "cge_czech_games_edition",
