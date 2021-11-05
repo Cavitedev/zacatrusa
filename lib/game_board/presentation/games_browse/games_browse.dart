@@ -18,7 +18,7 @@ class GamesBrowse extends ConsumerWidget {
     return Scaffold(
       body: RefreshIndicator(
         semanticsLabel: "Recargar juegos de mesa",
-        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
         onRefresh: () async {
           ref.read(zacatrusBrowserNotifierProvider.notifier).clear();
         },
@@ -64,4 +64,7 @@ class GamesBrowse extends ConsumerWidget {
     }
     return false;
   }
+
 }
+
+

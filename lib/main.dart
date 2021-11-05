@@ -24,8 +24,8 @@ class MyApp extends ConsumerWidget {
       backButtonDispatcher: RootBackButtonDispatcher(),
       routeInformationParser: routeInformationParser,
       theme: ThemeData(
-          appBarTheme:
-              const AppBarTheme(color: Color.fromRGBO(76, 176, 86, 1))),
+          appBarTheme: const AppBarTheme(color: Color.fromRGBO(76, 176, 86, 1)),
+          textTheme: const TextTheme(headline5: TextStyle(fontSize: 20))),
     );
   }
 }
