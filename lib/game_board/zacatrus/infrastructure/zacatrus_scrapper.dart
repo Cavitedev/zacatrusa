@@ -52,7 +52,6 @@ class ZacatrusScapper {
       return Left(Parsingfailure(url: url));
     }
 
-
     final int? amount = _parseAmountGames(shopListDiv);
 
     final gameListDom = shopListDiv.getElementsByClassName(_productItems).first;
@@ -79,9 +78,6 @@ class ZacatrusScapper {
     }
     return null;
   }
-
-
-
 
   List<GameOverview> _parseGameList(dom.Element gamesListDom) {
     final List<GameOverview> gamesRetrieved = [];

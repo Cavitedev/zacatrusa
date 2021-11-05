@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
 import 'constants/app_constants.dart';
 import 'game_board/presentation/core/routing/game_route_information_parser.dart';
+import 'game_board/presentation/core/routing/games_router_delegate.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
