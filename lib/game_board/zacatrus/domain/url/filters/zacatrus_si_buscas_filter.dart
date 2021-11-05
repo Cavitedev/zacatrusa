@@ -8,6 +8,11 @@ class ZacatrusSiBuscasFilter implements ISingleFilter {
     required this.value,
   });
 
+  ZacatrusSiBuscasFilter.url({
+    required String valueUrl,
+  }) : value = categoriesUrl.keys
+            .firstWhere((key) => categoriesUrl[key] == valueUrl);
+
   static Iterable<String> get categories => categoriesUrl.keys;
 
   static Map<String, String> categoriesUrl = {

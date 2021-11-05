@@ -33,15 +33,51 @@ class ZacatrusUrlBrowserComposer {
   }
 
   factory ZacatrusUrlBrowserComposer.fromUrl(String url) {
-    ZacatrusUrlBrowserComposer composer = ZacatrusUrlBrowserComposer.init();
+    ZacatrusProductsPerPage productsPerPage = const ZacatrusProductsPerPage(24);
+    ZacatrusPageIndex pageNum = const ZacatrusPageIndex(1);
 
-    if (url.endsWith("familiares.html")) {
-      composer = composer.copyWith(
-          siBuscas: const Optional.value(
-              ZacatrusSiBuscasFilter(value: "Familiares")));
+    ZacatrusSiBuscasFilter? siBuscas;
+    ZacatrusCategoriaFilter? categoria;
+    ZacatrusTematicaFilter? tematica;
+    ZacatrusEdadesFilter? edades;
+    ZacatrusNumJugadoresFilter? numJugadores;
+    ZacatrusRangoPrecioFilter? precio;
+    ZacatrusMecanicaFilter? mecanica;
+    ZacatrusEditorialFilter? editorial;
+
+    url = url.replaceAll(".html", "");
+    final Uri uri = Uri.parse(url);
+
+    if (uri.pathSegments.length == 1 && uri.queryParameters.isEmpty) {
+      return ZacatrusUrlBrowserComposer.init();
     }
 
-    return composer;
+    final String segment1 = uri.pathSegments[1];
+
+    if (ZacatrusCategoriaFilter.categoriesUrl.values.contains(segment1)) {
+      categoria = ZacatrusCategoriaFilter(value: segment1);
+    } else {
+      //SiBuscas-Temática-numJugadores-numJugadores2...-mecanica-editorial
+      final List<String> multiplesFiltersSegment = segment1.split("-");
+
+      for (String filter in multiplesFiltersSegment) {
+        if (ZacatrusSiBuscasFilter.categoriesUrl.values.contains(filter)) {
+          siBuscas = ZacatrusSiBuscasFilter.url(valueUrl: filter);
+        }
+      }
+    }
+
+    return ZacatrusUrlBrowserComposer(
+        pageNum: pageNum,
+        productsPerPage: productsPerPage,
+        siBuscas: siBuscas,
+        numJugadores: numJugadores,
+        categoria: categoria,
+        edades: edades,
+        editorial: editorial,
+        mecanica: mecanica,
+        precio: precio,
+        tematica: tematica);
   }
 
   static const String rawUrl = "https://zacatrus.es/juegos-de-mesa";
