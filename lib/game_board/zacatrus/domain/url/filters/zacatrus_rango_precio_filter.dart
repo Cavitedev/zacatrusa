@@ -9,7 +9,7 @@ class ZacatrusRangoPrecioFilter implements IFilter {
   const ZacatrusRangoPrecioFilter({
     required this.min,
     required this.max,
-  }) : assert(min <= max && min >= 10 && max <= 270);
+  }) : assert(min <= max && min >= 0 && max <= 270);
 
   factory ZacatrusRangoPrecioFilter.url({required String precioParameter}) {
     final List<String> splittedPrecio = precioParameter.split("-");
@@ -22,7 +22,7 @@ class ZacatrusRangoPrecioFilter implements IFilter {
 
   @override
   String? toUrl() {
-    return "price=" + min.toStringAsFixed(2) + "-" + max.toStringAsFixed(2);
+    return "price=" + min.toStringAsFixed(2) + "-" + max.toStringAsFixed(2) + "&";
   }
 
   @override

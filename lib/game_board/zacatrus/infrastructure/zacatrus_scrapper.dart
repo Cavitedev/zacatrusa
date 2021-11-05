@@ -71,12 +71,13 @@ class ZacatrusScapper {
       final dom.Element toolbarAmount =
           productListDiv.getElementsByClassName("toolbar-amount")[0];
 
-      final dom.Element totalGamesAmountElement = toolbarAmount.children[2];
+      final dom.Element totalGamesAmountElement = toolbarAmount.children.last;
 
       return int.parse(totalGamesAmountElement.text);
     } on Exception {
       // No found
     }
+    return null;
   }
 
 

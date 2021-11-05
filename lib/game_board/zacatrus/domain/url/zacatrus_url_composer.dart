@@ -168,7 +168,7 @@ class ZacatrusUrlBrowserComposer {
     final String pathUrl = '$rawUrl$categoriaAddition$pathJoin2.html';
 
     final String params =
-        "${pageNum.toParam()}${productsPerPage.toParam()}${precio?.toUrl() ?? ""}${edades?.toUrl() ?? ""}";
+        "${pageNum.toParam()}${edades?.toUrl() ?? ""}${precio?.toUrl() ?? ""}${productsPerPage.toParam()}";
 
     String url = "$pathUrl?$params";
 

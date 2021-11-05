@@ -323,4 +323,17 @@ void main() {
                   ZacatrusRangoPrecioFilter(min: 181, max: 270))));
     });
   });
+
+  group("From url to composer and from composer to url", () {
+    test("Full case 1", () {
+      const givenUrl =
+          "https://zacatrus.es/juegos-de-mesa/dados/fiesta-abstracto-habilidad-asmodee.html?edad=73%2C72%2C71%2C70%2C1614&price=8.00-25.00";
+
+      final composer = ZacatrusUrlBrowserComposer.fromUrl(givenUrl);
+      final builtUrl = composer.buildUrl();
+
+      final expectedUrl = Uri.decodeFull(givenUrl);
+      expect(builtUrl, expectedUrl);
+    });
+  });
 }
