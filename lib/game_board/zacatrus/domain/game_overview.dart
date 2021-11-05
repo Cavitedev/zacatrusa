@@ -1,9 +1,8 @@
 import 'package:zacatrusa/game_board/domain/image_data.dart';
 
-class GameOverview{
-
+class GameOverview {
   GameOverview({
-    this.name = "Error retrieving game",
+    this.name = "Error recuperando juego",
     this.link,
     this.image,
     this.numberOfComments,

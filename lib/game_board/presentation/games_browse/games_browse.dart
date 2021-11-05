@@ -20,14 +20,12 @@ class GamesBrowse extends ConsumerStatefulWidget {
 }
 
 class _GamesBrowseState extends ConsumerState<GamesBrowse> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: RefreshIndicator(
         semanticsLabel: "Recargar juegos de mesa",
-        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
         onRefresh: () async {
           ref.read(zacatrusBrowserNotifierProvider.notifier).clear();
         },
@@ -51,7 +49,9 @@ class _GamesBrowseState extends ConsumerState<GamesBrowse> {
                 child: SizedBox.shrink(),
               ),
               SliverToBoxAdapter(
-                child: Container(height: 1,),
+                child: Container(
+                  height: 1,
+                ),
               )
             ],
           ),
@@ -71,7 +71,4 @@ class _GamesBrowseState extends ConsumerState<GamesBrowse> {
     }
     return false;
   }
-
 }
-
-
