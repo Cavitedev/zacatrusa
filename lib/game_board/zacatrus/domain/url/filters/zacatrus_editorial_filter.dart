@@ -8,6 +8,11 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     required this.value,
   });
 
+  ZacatrusEditorialFilter.url({
+    required String valueUrl,
+  }) : value = categoriesUrl.keys
+            .firstWhere((key) => categoriesUrl[key] == valueUrl);
+
   static Iterable<String> get categories => categoriesUrl.keys;
 
   static Map<String, String> categoriesUrl = {

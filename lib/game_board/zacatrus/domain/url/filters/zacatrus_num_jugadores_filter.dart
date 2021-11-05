@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'i_filter.dart';
 
 class ZacatrusNumJugadoresFilter implements IMultipleFilter {
@@ -7,6 +9,13 @@ class ZacatrusNumJugadoresFilter implements IMultipleFilter {
   const ZacatrusNumJugadoresFilter({
     required this.values,
   });
+
+  ZacatrusNumJugadoresFilter.url({
+    required List<String> valuesUrl,
+  }) : values = valuesUrl
+            .map((valueUrl) => categoriesUrl.keys
+                .firstWhere((key) => categoriesUrl[key] == valueUrl))
+            .toList(growable: false);
 
   static Iterable<String> get categories => categoriesUrl.keys;
 
@@ -28,9 +37,9 @@ class ZacatrusNumJugadoresFilter implements IMultipleFilter {
       return null;
     }
 
-    String url =
-        values.map((value) => categoriesUrl[value]!).fold(
-            "", (previousValue, element) => previousValue + element + "-");
+    String url = values
+        .map((value) => categoriesUrl[value]!)
+        .fold("", (previousValue, element) => previousValue + element + "-");
     return url.substring(0, url.length - 1);
   }
 
@@ -49,8 +58,13 @@ class ZacatrusNumJugadoresFilter implements IMultipleFilter {
       identical(this, other) ||
       other is ZacatrusNumJugadoresFilter &&
           runtimeType == other.runtimeType &&
-          values == other.values;
+          listEquals(values, other.values);
 
   @override
   int get hashCode => values.hashCode;
+
+  @override
+  String toString() {
+    return 'ZacatrusNumJugadoresFilter{values: $values}';
+  }
 }

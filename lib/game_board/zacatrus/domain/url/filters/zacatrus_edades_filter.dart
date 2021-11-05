@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'i_filter.dart';
 
 class ZacatrusEdadesFilter implements IMultipleFilter {
@@ -7,6 +9,13 @@ class ZacatrusEdadesFilter implements IMultipleFilter {
   const ZacatrusEdadesFilter({
     required this.values,
   });
+
+  ZacatrusEdadesFilter.url({
+    required List<String> valuesUrl,
+  }) : values = valuesUrl
+            .map((valueUrl) => categoriesUrl.keys
+                .firstWhere((key) => categoriesUrl[key] == valueUrl))
+            .toList(growable: false);
 
   static Iterable<String> get categories => categoriesUrl.keys;
 
@@ -47,7 +56,7 @@ class ZacatrusEdadesFilter implements IMultipleFilter {
       identical(this, other) ||
       other is ZacatrusEdadesFilter &&
           runtimeType == other.runtimeType &&
-          values == other.values;
+          listEquals(values, other.values);
 
   @override
   int get hashCode => values.hashCode;

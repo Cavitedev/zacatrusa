@@ -1,13 +1,17 @@
 import 'i_filter.dart';
 
 class ZacatrusCategoriaFilter implements ISingleFilter {
-
   @override
   final String value;
 
   const ZacatrusCategoriaFilter({
     required this.value,
   });
+
+  ZacatrusCategoriaFilter.url({
+    required String valueUrl,
+  }) : value = categoriesUrl.keys
+            .firstWhere((key) => categoriesUrl[key] == valueUrl);
 
   static Iterable<String> get categories => categoriesUrl.keys;
 

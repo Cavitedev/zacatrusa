@@ -207,5 +207,97 @@ void main() {
               siBuscas: const Optional.value(
                   ZacatrusSiBuscasFilter(value: "Familiares"))));
     });
+
+    test("home page with categoria returns right composer", () {
+      const String url = "https://zacatrus.es/juegos-de-mesa/tablero.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              categoria: const Optional.value(
+                  ZacatrusCategoriaFilter(value: "Juegos de tablero"))));
+    });
+
+    test("home page with categoria and si buscas returns right composer", () {
+      const String url =
+          "https://zacatrus.es/juegos-de-mesa/tablero/para_2.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              categoria: const Optional.value(
+                  ZacatrusCategoriaFilter(value: "Juegos de tablero")),
+              siBuscas: const Optional.value(
+                  ZacatrusSiBuscasFilter(value: "Para 2"))));
+    });
+
+    test("home page with Tematica returns right composer", () {
+      const String url =
+          "https://zacatrus.es/juegos-de-mesa/arte_literatura.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              tematica: const Optional.value(
+                  ZacatrusTematicaFilter(value: "Arte y Literatura"))));
+    });
+
+    test("home page with num jugadores returns right composer", () {
+      const String url = "https://zacatrus.es/juegos-de-mesa/3-4-5.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              numJugadores: const Optional.value(
+                  ZacatrusNumJugadoresFilter(values: ["3", "4", "5"]))));
+    });
+
+    test("home page with Mecánica returns right composer", () {
+      const String url = "https://zacatrus.es/juegos-de-mesa/4x.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              mecanica:
+                  const Optional.value(ZacatrusMecanicaFilter(value: "4X"))));
+    });
+
+    test("home page with Editorial returns right composer", () {
+      const String url = "https://zacatrus.es/juegos-de-mesa/zacatrus.html";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              editorial: const Optional.value(
+                  ZacatrusEditorialFilter(value: "Zacatrus"))));
+    });
+
+    test(
+        "Mixed filter si buscas, categoria, num jugadores, tematica and editorial returns right composer",
+        () {
+      final urlComposer = ZacatrusUrlBrowserComposer.fromUrl(
+          "https://zacatrus.es/juegos-de-mesa/tablero/familiares-animales-1-2-3-4-5-6-7-8_1-8-coleccion_de_sets-devir.html");
+      final urlComposerExpected = ZacatrusUrlBrowserComposer.init().copyWith(
+          siBuscas:
+              const Optional.value(ZacatrusSiBuscasFilter(value: "Familiares")),
+          tematica:
+              const Optional.value(ZacatrusTematicaFilter(value: "Animales")),
+          categoria: const Optional.value(
+              ZacatrusCategoriaFilter(value: "Juegos de tablero")),
+          mecanica: const Optional.value(
+              ZacatrusMecanicaFilter(value: "Colección de sets")),
+          editorial:
+              const Optional.value(ZacatrusEditorialFilter(value: "Devir")),
+          numJugadores: const Optional.value(ZacatrusNumJugadoresFilter(
+              values: ["1", "2", "3", "4", "5", "6", "7", "8", "+8"])));
+
+      expect(urlComposer, urlComposerExpected);
+    });
   });
 }
