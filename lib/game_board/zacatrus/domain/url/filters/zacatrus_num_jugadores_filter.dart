@@ -63,8 +63,4 @@ class ZacatrusNumJugadoresFilter implements IMultipleFilter {
   @override
   int get hashCode => values.hashCode;
 
-  @override
-  String toString() {
-    return 'ZacatrusNumJugadoresFilter{values: $values}';
-  }
 }

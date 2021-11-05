@@ -299,5 +299,28 @@ void main() {
 
       expect(urlComposer, urlComposerExpected);
     });
+
+    test("home page with edades returns right composer", () {
+      const String url = "https://zacatrus.es/juegos-de-mesa.html?edad=93%2C73";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              edades: const Optional.value(ZacatrusEdadesFilter(
+                  values: ["de 3 a 6 años", "de 6 a 8 años"]))));
+    });
+
+    test("home page with precio returns right composer", () {
+      const String url =
+          "https://zacatrus.es/juegos-de-mesa.html?price=181.00-270.00";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              precio: const Optional.value(
+                  ZacatrusRangoPrecioFilter(min: 181, max: 270))));
+    });
   });
 }

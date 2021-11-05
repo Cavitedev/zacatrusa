@@ -1,3 +1,5 @@
+import 'package:zacatrusa/core/string_helper.dart';
+
 import 'i_filter.dart';
 
 class ZacatrusRangoPrecioFilter implements IFilter {
@@ -8,6 +10,15 @@ class ZacatrusRangoPrecioFilter implements IFilter {
     required this.min,
     required this.max,
   }) : assert(min <= max && min >= 10 && max <= 270);
+
+  factory ZacatrusRangoPrecioFilter.url({required String precioParameter}) {
+    final List<String> splittedPrecio = precioParameter.split("-");
+
+    return ZacatrusRangoPrecioFilter(
+      min: splittedPrecio[0].toNum().toDouble(),
+      max: splittedPrecio[1].toNum().toDouble(),
+    );
+  }
 
   @override
   String? toUrl() {

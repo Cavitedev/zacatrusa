@@ -52,52 +52,67 @@ class ZacatrusUrlBrowserComposer {
       return ZacatrusUrlBrowserComposer.init();
     }
 
-    final String segment1 = uri.pathSegments[1];
-    String? multipleFiltersSegmnet;
-    if (ZacatrusCategoriaFilter.categoriesUrl.values.contains(segment1)) {
-      categoria = ZacatrusCategoriaFilter.url(valueUrl: segment1);
-    } else {
-      multipleFiltersSegmnet = segment1;
-    }
+    if (uri.pathSegments.length > 1) {
+      final String segment1 = uri.pathSegments[1];
+      String? multipleFiltersSegmnet;
+      if (ZacatrusCategoriaFilter.categoriesUrl.values.contains(segment1)) {
+        categoria = ZacatrusCategoriaFilter.url(valueUrl: segment1);
+      } else {
+        multipleFiltersSegmnet = segment1;
+      }
 
-    if (uri.pathSegments.length == 3) {
-      multipleFiltersSegmnet = uri.pathSegments[2];
-    }
+      if (uri.pathSegments.length == 3) {
+        multipleFiltersSegmnet = uri.pathSegments[2];
+      }
 
-    if (multipleFiltersSegmnet != null) {
-      //SiBuscas-Temática-numJugadores-numJugadores2...-mecanica-editorial
-      final List<String> multiplesFiltersSegment =
-          multipleFiltersSegmnet.split("-");
+      if (multipleFiltersSegmnet != null) {
+        //SiBuscas-Temática-numJugadores-numJugadores2...-mecanica-editorial
+        final List<String> multiplesFiltersSegment =
+            multipleFiltersSegmnet.split("-");
 
-      final List<String> numJugadoresFound = [];
-      //Filters always appear on that order, so once one is checked avoid checking it again
-      int filterFound = -1;
+        final List<String> numJugadoresFound = [];
+        //Filters always appear on that order, so once one is checked avoid checking it again
+        int filterFound = -1;
 
-      for (String filter in multiplesFiltersSegment) {
-        if (filterFound < 0 &&
-            ZacatrusSiBuscasFilter.categoriesUrl.values.contains(filter)) {
-          siBuscas = ZacatrusSiBuscasFilter.url(valueUrl: filter);
-          filterFound = 0;
-        } else if (filterFound < 1 &&
-            ZacatrusTematicaFilter.categoriesUrl.values.contains(filter)) {
-          tematica = ZacatrusTematicaFilter.url(valueUrl: filter);
-          filterFound = 1;
-        } else if (filterFound <= 2 &&
-            ZacatrusNumJugadoresFilter.categoriesUrl.values.contains(filter)) {
-          numJugadoresFound.add(filter);
-          filterFound = 2;
-        } else if (filterFound < 3 &&
-            ZacatrusMecanicaFilter.categoriesUrl.values.contains(filter)) {
-          mecanica = ZacatrusMecanicaFilter.url(valueUrl: filter);
-          filterFound = 3;
-        } else if (ZacatrusEditorialFilter.categoriesUrl.values
-            .contains(filter)) {
-          editorial = ZacatrusEditorialFilter.url(valueUrl: filter);
+        for (String filter in multiplesFiltersSegment) {
+          if (filterFound < 0 &&
+              ZacatrusSiBuscasFilter.categoriesUrl.values.contains(filter)) {
+            siBuscas = ZacatrusSiBuscasFilter.url(valueUrl: filter);
+            filterFound = 0;
+          } else if (filterFound < 1 &&
+              ZacatrusTematicaFilter.categoriesUrl.values.contains(filter)) {
+            tematica = ZacatrusTematicaFilter.url(valueUrl: filter);
+            filterFound = 1;
+          } else if (filterFound <= 2 &&
+              ZacatrusNumJugadoresFilter.categoriesUrl.values
+                  .contains(filter)) {
+            numJugadoresFound.add(filter);
+            filterFound = 2;
+          } else if (filterFound < 3 &&
+              ZacatrusMecanicaFilter.categoriesUrl.values.contains(filter)) {
+            mecanica = ZacatrusMecanicaFilter.url(valueUrl: filter);
+            filterFound = 3;
+          } else if (ZacatrusEditorialFilter.categoriesUrl.values
+              .contains(filter)) {
+            editorial = ZacatrusEditorialFilter.url(valueUrl: filter);
+          }
+        }
+        if (numJugadoresFound.isNotEmpty) {
+          numJugadores =
+              ZacatrusNumJugadoresFilter.url(valuesUrl: numJugadoresFound);
         }
       }
-      if (numJugadoresFound.isNotEmpty) {
-        numJugadores =
-            ZacatrusNumJugadoresFilter.url(valuesUrl: numJugadoresFound);
+    }
+
+    if (uri.queryParameters.isNotEmpty) {
+      final String? edad = uri.queryParameters["edad"];
+      if (edad != null) {
+        edades = ZacatrusEdadesFilter.url(concatenatedValue: edad);
+      }
+
+      final String? precioParam = uri.queryParameters["price"];
+      if (precioParam != null) {
+        precio = ZacatrusRangoPrecioFilter.url(precioParameter: precioParam);
       }
     }
 
