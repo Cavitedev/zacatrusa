@@ -13,7 +13,6 @@ class BrowsePageFilters extends ConsumerStatefulWidget {
 }
 
 class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters> {
-
   late ZacatrusUrlBrowserComposer urlComposer;
 
   @override
@@ -28,10 +27,16 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters> {
       title: const Text("Filtros"),
       content: const Text("Aquí se seleccionarán los filtros"),
       scrollable: true,
-
-      actions: [ElevatedButton(onPressed: () {
-        ref.read(zacatrusBrowserNotifierProvider.notifier).changeFilters(urlComposer);
-      }, child: const Text("Aceptar"))],
+      actions: [
+        ElevatedButton(
+            onPressed: () {
+              ref
+                  .read(zacatrusBrowserNotifierProvider.notifier)
+                  .changeFilters(urlComposer);
+              Navigator.pop(context);
+            },
+            child: const Text("Aceptar"))
+      ],
     );
   }
 }

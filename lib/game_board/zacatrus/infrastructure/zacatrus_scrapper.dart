@@ -73,10 +73,9 @@ class ZacatrusScapper {
       final dom.Element totalGamesAmountElement = toolbarAmount.children.last;
 
       return int.parse(totalGamesAmountElement.text);
-    } on Exception {
+    } catch (_) {
       // No found
     }
-    return null;
   }
 
   List<GameOverview> _parseGameList(dom.Element gamesListDom) {
@@ -104,7 +103,7 @@ class ZacatrusScapper {
       String? imageLink = imageElement.attributes["src"];
       String? imageAlt = imageElement.attributes["alt"];
       gameOverview.image = ImageData(imageLink: imageLink, imageAlt: imageAlt);
-    } on Exception {
+    } catch (_) {
       // Not found
     }
 
@@ -119,7 +118,7 @@ class ZacatrusScapper {
       _getComments(detailsElement, gameOverview);
 
       _getPrice(detailsElement, gameOverview);
-    } on Exception {
+    } catch (_) {
       // Not found
     }
 
@@ -135,7 +134,7 @@ class ZacatrusScapper {
         gameOverview.name = nameLinkElement.text.trim();
         gameOverview.link ??= nameLinkElement.attributes["href"];
       }
-    } on Exception {
+    } catch (_) {
       //Not found
     }
   }
@@ -151,7 +150,7 @@ class ZacatrusScapper {
           gameOverview.stars = titleTag.toNum() / 20.0;
         }
       }
-    } on Exception {
+    } catch (_) {
       //Not found
     }
   }
@@ -166,7 +165,7 @@ class ZacatrusScapper {
 
         gameOverview.numberOfComments = comments.toNum().toInt();
       }
-    } on Exception {
+    } catch (_) {
       //Not found
     }
   }
@@ -180,7 +179,7 @@ class ZacatrusScapper {
 
         gameOverview.price = priceText.fromCommaDecimalToNum();
       }
-    } on Exception {
+    } catch (_) {
       //Not found
     }
   }
