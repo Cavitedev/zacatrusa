@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -35,7 +36,11 @@ class ListGameItem extends StatelessWidget {
     return Card(
       child: Row(
         children: [
-          if (game.image != null) Image.network(game.image!.imageLink!),
+          if (game.image != null)
+            ExtendedImage.network(
+              game.image!.imageLink!,
+              cache: true,
+            ),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
