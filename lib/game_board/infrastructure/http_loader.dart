@@ -42,7 +42,7 @@ class HttpLoader {
     yield Left(InternetLoading(url: url));
 
     try {
-      http.Response response = await client.get(Uri.parse(url), headers: {"accept-encoding": "gzip, deflate, br"});
+      http.Response response = await client.get(Uri.parse(url));
       if (response.statusCode == 200) {
         yield Right(_decodeResponse(response));
       } else {

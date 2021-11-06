@@ -11,7 +11,8 @@ import '../../infrastructure/http_loader.dart';
 import '../domain/browse_page/game_overview.dart';
 import '../domain/url/zacatrus_url_composer.dart';
 
-final zacatrusBrowsePageScrapperProvider = Provider((ref) => ZacatrusBrowsePageScapper(ref: ref));
+final zacatrusBrowsePageScrapperProvider =
+    Provider((ref) => ZacatrusBrowsePageScapper(ref: ref));
 
 class ZacatrusBrowsePageScapper {
   const ZacatrusBrowsePageScapper({
@@ -42,7 +43,7 @@ class ZacatrusBrowsePageScapper {
 
   static const String _idDivAllProductsData = "amasty-shopby-product-list";
   static const String _productItems = "product-items";
-  static const String _itemDetails = "product-item-summary";
+  static const String _itemDetails = "product-item-details";
   static const String _itemDetailsName = "product-item-name";
 
   Either<InternetFeedback, ZacatrusBrowsePageData> _parseBrowserPage(
