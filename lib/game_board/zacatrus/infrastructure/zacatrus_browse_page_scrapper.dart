@@ -11,10 +11,10 @@ import '../domain/url/zacatrus_url_composer.dart';
 import '../domain/zacatrus_browse_page_data.dart';
 import 'zacatrus_browse_failures.dart';
 
-final zacatrusScrapperProvider = Provider((ref) => ZacatrusScapper(ref: ref));
+final zacatrusBrowsePageScrapperProvider = Provider((ref) => ZacatrusBrowsePageScapper(ref: ref));
 
-class ZacatrusScapper {
-  const ZacatrusScapper({
+class ZacatrusBrowsePageScapper {
+  const ZacatrusBrowsePageScapper({
     required this.ref,
   });
 

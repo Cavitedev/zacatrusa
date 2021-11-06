@@ -4,7 +4,7 @@ import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
 
 void main() {
   ProviderContainer container = ProviderContainer();
@@ -15,7 +15,7 @@ void main() {
 
   group("Get Games Overview", () {
     test("Default object loads page", () async {
-      final ZacatrusScapper scrapper = container.read(zacatrusScrapperProvider);
+      final ZacatrusBrowsePageScapper scrapper = container.read(zacatrusBrowsePageScrapperProvider);
 
       final result =
           scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init());
@@ -49,7 +49,7 @@ void main() {
     });
 
     test("Returns no games found on not matching filters", () async {
-      final ZacatrusScapper scrapper = container.read(zacatrusScrapperProvider);
+      final ZacatrusBrowsePageScapper scrapper = container.read(zacatrusBrowsePageScrapperProvider);
 
       final result =
           scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init().copyWith(

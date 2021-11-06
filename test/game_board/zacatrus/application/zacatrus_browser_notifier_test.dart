@@ -6,12 +6,12 @@ import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_brows
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/zacatrus_browse_page_data.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
 
-class MockZacatrusScrapper extends Mock implements ZacatrusScapper {}
+class MockZacatrusScrapper extends Mock implements ZacatrusBrowsePageScapper {}
 
 void main() {
-  late ZacatrusScapper scrapper;
+  late ZacatrusBrowsePageScapper scrapper;
 
   late ZacatrusBrowserNotifier notifier;
 
@@ -83,7 +83,7 @@ final GameOverview gameOverview1 = GameOverview(name: "Game1");
 final GameOverview gameOverview2 = GameOverview(name: "Game2");
 final GameOverview gameOverview3 = GameOverview(name: "Game3");
 
-void _mockScrapper(ZacatrusScapper scrapper) {
+void _mockScrapper(ZacatrusBrowsePageScapper scrapper) {
   ZacatrusUrlBrowserComposer urlComposer1 = ZacatrusUrlBrowserComposer.init();
   _mockScrapperSingleCall(scrapper, urlComposer1, gameOverview1);
 
@@ -94,7 +94,7 @@ void _mockScrapper(ZacatrusScapper scrapper) {
   _mockScrapperSingleCall(scrapper, urlComposer3, gameOverview3);
 }
 
-void _mockScrapperSingleCall(ZacatrusScapper scrapper,
+void _mockScrapperSingleCall(ZacatrusBrowsePageScapper scrapper,
     ZacatrusUrlBrowserComposer urlComposer, GameOverview gameOverview) {
   when(() => scrapper.getGamesOverviews(urlComposer))
       .thenAnswer((invocation) => Stream.fromFutures([
