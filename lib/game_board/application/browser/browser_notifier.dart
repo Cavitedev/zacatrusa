@@ -10,8 +10,8 @@ import '../../zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
 import 'browser_state.dart';
 
 final browserNotifierProvider =
-    StateNotifierProvider<BrowserNotifier, BrowserState>(
-        (ref) => BrowserNotifier(
+    StateNotifierProvider<BrowserNotifier, BrowserState>((ref) =>
+        BrowserNotifier(
             scrapper: ref.read(zacatrusBrowsePageScrapperProvider)));
 
 class BrowserNotifier extends StateNotifier<BrowserState> {
@@ -69,7 +69,7 @@ class BrowserNotifier extends StateNotifier<BrowserState> {
 
   void changeFilters(ZacatrusUrlBrowserComposer composer) {
     state = state.copyWith(
-        urlComposer: composer,
+        urlComposer: composer.copyWith(pageNum: const ZacatrusPageIndex(1)),
         games: [],
         gamesFound: const Optional.value(null),
         loadingFeedback: null);
