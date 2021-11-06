@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 
+import '../../../../core/optional.dart';
+import '../../domain/url/filters/zacatrus_page_query_parameter.dart';
 import '../../domain/url/zacatrus_url_composer.dart';
+import '../../infrastructure/zacatrus_browse_failures.dart';
 import '../../infrastructure/zacatrus_scrapper.dart';
 import 'zacatrus_browser_state.dart';
 

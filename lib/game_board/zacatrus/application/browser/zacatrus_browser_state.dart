@@ -1,4 +1,4 @@
-import 'package:zacatrusa/core/optional.dart';
+import '../../../../core/optional.dart';
 
 import '../../../infrastructure/core/internet_feedback.dart';
 import '../../domain/game_overview.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
+import '../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
 
 import '../../../../core/string_helper.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';

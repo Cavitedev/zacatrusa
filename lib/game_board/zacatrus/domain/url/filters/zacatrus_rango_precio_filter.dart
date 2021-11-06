@@ -1,4 +1,4 @@
-import 'package:zacatrusa/core/string_helper.dart';
+import '../../../../../core/string_helper.dart';
 
 import 'i_filter.dart';
 

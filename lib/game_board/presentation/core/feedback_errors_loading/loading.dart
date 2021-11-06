@@ -18,6 +18,7 @@ class Loading extends StatelessWidget {
           Text(
             msg,
             textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headline6,
           ),
         ],
       ),
