@@ -1,7 +1,15 @@
+import 'dart:math';
+
+import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/constants/app_margins.dart';
+import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
-import '../../../../zacatrus/domain/game_overview.dart';
+import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 
 class GamesBrowseSliverList extends StatelessWidget {
   const GamesBrowseSliverList({
@@ -22,7 +30,7 @@ class GamesBrowseSliverList extends StatelessWidget {
   }
 }
 
-class ListGameItem extends StatelessWidget {
+class ListGameItem extends ConsumerWidget {
   const ListGameItem({
     Key? key,
     required this.game,
@@ -31,55 +39,98 @@ class ListGameItem extends StatelessWidget {
   final GameOverview game;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Row(
-        children: [
-          if (game.image != null) Image.network(game.image!.imageLink!),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 80.0),
-                  child: Text(
-                    game.name,
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Stack(
+      children: [
+        Card(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (game.image != null && game.image!.imageLink != null)
+                ExtendedImage.network(
+                  game.image!.imageLink!,
+                  width: min(200, MediaQuery.of(context).size.width / 2.2),
+                  semanticLabel: game.image?.imageAlt,
                 ),
-                if (game.numberOfComments != null)
-                  if (game.numberOfComments! > 1)
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 10.0),
+                      padding: const EdgeInsets.fromLTRB(5, 10, 0, 10),
                       child: Text(
-                          game.numberOfComments!.toString() + " comentarios"),
+                        game.name,
+                        style: Theme.of(context).textTheme.headline5,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                if (game.numberOfComments == 1)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 0, 10.0),
-                    child:
-                        Text(game.numberOfComments!.toString() + " comentario"),
-                  ),
-                if (game.stars != null)
-                  RatingBarIndicator(
-                    itemBuilder: (context, index) => const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    rating: game.stars!,
-                    itemSize: 25.0,
-                  ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(5, 10.0, 0, 0),
-                  child: Text(
-                    game.price.toString() + " €",
-                  ),
+                    if (game.numberOfComments != null &&
+                        game.numberOfComments! > 1)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            5, 0, 0, innerElementsPadding),
+                        child: Text(
+                          game.numberOfComments!.toString() +
+                              (game.numberOfComments! > 1
+                                  ? " comentarios"
+                                  : " comentario"),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ),
+                    if (game.numberOfComments != null &&
+                        game.numberOfComments == 1)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            5, 0, 0, innerElementsPadding),
+                        child: Text(
+                            game.numberOfComments!.toString() + " comentario"),
+                      ),
+                    if (game.stars != null)
+                      RatingBarIndicator(
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        rating: game.stars!,
+                        itemSize: 25.0,
+                      ),
+                    if (game.price != null)
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                              5, innerElementsPadding, 0, innerElementsPadding),
+                          child: Text(
+                            game.price!.toStringAsFixed(2) + " €",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              )
+            ],
+          ),
+        ),
+        Positioned.fill(
+            child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    final routerDelegate =
+                        ref.read(gamesRouterDelegateProvider);
+
+                    routerDelegate.currentConf = routerDelegate.currentConf
+                        .copyWith(detailsGameUrl: Optional.value(game.link));
+                  },
+                ))),
+      ],
     );
   }
 }

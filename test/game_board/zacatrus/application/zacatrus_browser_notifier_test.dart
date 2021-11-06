@@ -1,18 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:zacatrusa/core/multiple_result.dart';
+import 'package:zacatrusa/game_board/application/browser/browser_notifier.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/zacatrus_browse_page_data.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
 
-class MockZacatrusScrapper extends Mock implements ZacatrusScapper {}
+class MockZacatrusScrapper extends Mock implements ZacatrusBrowsePageScapper {}
 
 void main() {
-  late ZacatrusScapper scrapper;
+  late ZacatrusBrowsePageScapper scrapper;
 
-  late ZacatrusBrowserNotifier notifier;
+  late BrowserNotifier notifier;
 
   setUp(() {
     scrapper = MockZacatrusScrapper();
@@ -23,7 +24,7 @@ void main() {
         () async {
       _mockScrapper(scrapper);
 
-      notifier = ZacatrusBrowserNotifier(scrapper: scrapper);
+      notifier = BrowserNotifier(scrapper: scrapper);
       notifier.nextPageIfNotLoading();
       notifier.nextPageIfNotLoading();
       await Future.delayed(const Duration(milliseconds: 400));
@@ -36,7 +37,7 @@ void main() {
         () async {
       _mockScrapper(scrapper);
 
-      notifier = ZacatrusBrowserNotifier(scrapper: scrapper);
+      notifier = BrowserNotifier(scrapper: scrapper);
       notifier.nextPageIfNotLoading();
       await Future.delayed(const Duration(milliseconds: 200));
       notifier.nextPageIfNotLoading();
@@ -51,12 +52,13 @@ void main() {
           ZacatrusUrlBrowserComposer.init();
 
       final List<
-          Stream<Either<InternetFeedback, List<GameOverview>>> Function(
+          Stream<Either<InternetFeedback, ZacatrusBrowsePageData>> Function(
               Invocation)> answers = [
         (_) => Stream.fromFutures(
             [Future.value(Left(NoInternetFailure(url: "url")))]),
         (_) => Stream.fromFutures([
-              Future.value(Right([gameOverview1]))
+              Future.value(
+                  Right(ZacatrusBrowsePageData(games: [gameOverview1])))
             ]),
       ];
 
@@ -66,8 +68,9 @@ void main() {
       ZacatrusUrlBrowserComposer urlComposer2 = urlComposer1.nextPage();
       _mockScrapperSingleCall(scrapper, urlComposer2, gameOverview2);
 
-      notifier = ZacatrusBrowserNotifier(scrapper: scrapper);
-      await Future.delayed(const Duration(milliseconds: 100));
+      notifier = BrowserNotifier(scrapper: scrapper);
+      notifier.loadGames();
+      await Future.delayed(const Duration(milliseconds: 200));
       notifier.nextPageIfNotLoading();
       await Future.delayed(const Duration(milliseconds: 200));
 
@@ -80,7 +83,7 @@ final GameOverview gameOverview1 = GameOverview(name: "Game1");
 final GameOverview gameOverview2 = GameOverview(name: "Game2");
 final GameOverview gameOverview3 = GameOverview(name: "Game3");
 
-void _mockScrapper(ZacatrusScapper scrapper) {
+void _mockScrapper(ZacatrusBrowsePageScapper scrapper) {
   ZacatrusUrlBrowserComposer urlComposer1 = ZacatrusUrlBrowserComposer.init();
   _mockScrapperSingleCall(scrapper, urlComposer1, gameOverview1);
 
@@ -91,12 +94,12 @@ void _mockScrapper(ZacatrusScapper scrapper) {
   _mockScrapperSingleCall(scrapper, urlComposer3, gameOverview3);
 }
 
-void _mockScrapperSingleCall(ZacatrusScapper scrapper,
+void _mockScrapperSingleCall(ZacatrusBrowsePageScapper scrapper,
     ZacatrusUrlBrowserComposer urlComposer, GameOverview gameOverview) {
   when(() => scrapper.getGamesOverviews(urlComposer))
       .thenAnswer((invocation) => Stream.fromFutures([
             Future.value(Left(InternetLoading(url: urlComposer.buildUrl()))),
-            Future.delayed(
-                const Duration(milliseconds: 100), () => Right([gameOverview]))
+            Future.delayed(const Duration(milliseconds: 100),
+                () => Right(ZacatrusBrowsePageData(games: [gameOverview])))
           ]));
 }

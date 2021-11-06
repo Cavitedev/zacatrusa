@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/app_constants.dart';
+import 'filters/browse_page_filters.dart';
 
 class GamesBrowseSliverAppBar extends StatelessWidget {
   const GamesBrowseSliverAppBar({
@@ -15,7 +16,9 @@ class GamesBrowseSliverAppBar extends StatelessWidget {
       actions: [
         IconButton(
             onPressed: () {
-              //TODO add filtering sprint 2
+              showDialog(context: context, builder: (context){
+                return BrowsePageFilters();
+              });
             },
             icon: const Icon(Icons.filter_list))
       ],

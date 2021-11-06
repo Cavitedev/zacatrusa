@@ -1,8 +1,12 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
 import '../../../../../constants/app_margins.dart';
-import '../../../../zacatrus/domain/game_overview.dart';
+import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 
 class GamesBrowseSliverGrid extends StatelessWidget {
   const GamesBrowseSliverGrid({
@@ -14,9 +18,13 @@ class GamesBrowseSliverGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double mainAxisExtent =
+        MediaQuery.of(context).textScaleFactor * 85 + 200;
+
     return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 256,
+        mainAxisExtent: mainAxisExtent,
         mainAxisSpacing: listSpacing,
         crossAxisSpacing: listSpacing,
       ),
@@ -31,7 +39,7 @@ class GamesBrowseSliverGrid extends StatelessWidget {
   }
 }
 
-class ListGameItem extends StatelessWidget {
+class ListGameItem extends ConsumerWidget {
   const ListGameItem({
     Key? key,
     required this.game,
@@ -40,48 +48,135 @@ class ListGameItem extends StatelessWidget {
   final GameOverview game;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          if (game.image != null)
-            Image.network(
-              game.image!.imageLink!,
-              height: 100,
-              width: 100,
-            ),
-          Flexible(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Stack(
+      children: [
+        Card(
+          child: Column(
             children: [
-              Text(
-                game.name,
-                style: Theme.of(context).textTheme.headline5,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (game.numberOfComments != null)
-                Text(game.numberOfComments!.toString() +
-                    (game.numberOfComments! > 1
-                        ? " comentarios"
-                        : " comentario")),
-              if (game.stars != null)
-                RatingBarIndicator(
-                  itemBuilder: (context, index) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  rating: game.stars!,
-                  itemSize: 25.0,
+              if (game.image != null)
+                ExtendedImage.network(
+                  game.image!.imageLink!,
+                  height: 150,
+                  width: 150,
+                  semanticLabel: game.image?.imageAlt,
                 ),
-              if (game.price != null)
-                Text(
-                  game.price!.toString() + " €",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+              Flexible(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GameName(game: game),
+                  if (game.numberOfComments != null) Comments(game: game),
+                  if (game.stars != null) Stars(game: game),
+                  if (game.price != null) Price(game: game),
+                ],
+              ))
             ],
-          ))
-        ],
+          ),
+        ),
+        Positioned.fill(
+            child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    final routerDelegate =
+                        ref.read(gamesRouterDelegateProvider);
+
+                    routerDelegate.currentConf = routerDelegate.currentConf
+                        .copyWith(detailsGameUrl: Optional.value(game.link));
+                  },
+                ))),
+      ],
+    );
+  }
+}
+
+class GameName extends StatelessWidget {
+  const GameName({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: innerElementsPadding),
+      child: Text(
+        game.name,
+        style: Theme.of(context).textTheme.headline5,
+        maxLines: 2,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+}
+
+class Comments extends StatelessWidget {
+  const Comments({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: innerElementsPadding),
+      child: Text(
+        game.numberOfComments!.toString() +
+            (game.numberOfComments! > 1 ? " comentarios" : " comentario"),
+        style: Theme.of(context).textTheme.caption,
+      ),
+    );
+  }
+}
+
+class Stars extends StatelessWidget {
+  const Stars({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: innerElementsPadding),
+      child: RatingBarIndicator(
+        itemBuilder: (context, index) => const Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
+        rating: game.stars!,
+        itemSize: 25.0,
+      ),
+    );
+  }
+}
+
+class Price extends StatelessWidget {
+  const Price({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: innerElementsPadding),
+      child: Text(
+        game.price!.toStringAsFixed(2) + " €",
+        style: Theme.of(context)
+            .textTheme
+            .subtitle2!
+            .copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

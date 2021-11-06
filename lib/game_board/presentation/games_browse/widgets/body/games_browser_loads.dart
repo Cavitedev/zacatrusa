@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
+import '../../../../application/browser/browser_notifier.dart';
 import '../../../core/feedback_errors_loading/internet_feedback_widgets.dart';
 
 class GamesBrowserLoads extends ConsumerWidget {
@@ -14,7 +14,7 @@ class GamesBrowserLoads extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, _) {
         final feedback =
-            ref.watch(zacatrusBrowserNotifierProvider).loadingFeedback;
+            ref.watch(browserNotifierProvider).loadingFeedback;
 
         if (feedback != null) {
           return SliverToBoxAdapter(
