@@ -15,10 +15,13 @@ class GamesBrowseSliverGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double mainAxisExtent =
+        MediaQuery.of(context).textScaleFactor * 85 + 200;
+
     return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 256,
-        mainAxisExtent: 300,
+        mainAxisExtent: mainAxisExtent,
         mainAxisSpacing: listSpacing,
         crossAxisSpacing: listSpacing,
       ),
@@ -51,39 +54,110 @@ class ListGameItem extends StatelessWidget {
               game.image!.imageLink!,
               height: 150,
               width: 150,
+              semanticLabel: game.image?.imageAlt,
             ),
           Flexible(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                game.name,
-                style: Theme.of(context).textTheme.headline5,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (game.numberOfComments != null)
-                Text(game.numberOfComments!.toString() +
-                    (game.numberOfComments! > 1
-                        ? " comentarios"
-                        : " comentario")),
-              if (game.stars != null)
-                RatingBarIndicator(
-                  itemBuilder: (context, index) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  rating: game.stars!,
-                  itemSize: 25.0,
-                ),
-              if (game.price != null)
-                Text(
-                  game.price!.toString() + " €",
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+              GameName(game: game),
+              if (game.numberOfComments != null) Comments(game: game),
+              if (game.stars != null) Stars(game: game),
+              if (game.price != null) Price(game: game),
             ],
           ))
         ],
+      ),
+    );
+  }
+}
+
+class GameName extends StatelessWidget {
+  const GameName({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: innerElementsPadding),
+      child: Text(
+        game.name,
+        style: Theme.of(context).textTheme.headline5,
+        maxLines: 2,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+}
+
+class Comments extends StatelessWidget {
+  const Comments({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: innerElementsPadding),
+      child: Text(
+        game.numberOfComments!.toString() +
+            (game.numberOfComments! > 1 ? " comentarios" : " comentario"),
+        style: Theme.of(context).textTheme.caption,
+      ),
+    );
+  }
+}
+
+class Stars extends StatelessWidget {
+  const Stars({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: innerElementsPadding),
+      child: RatingBarIndicator(
+        itemBuilder: (context, index) => const Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
+        rating: game.stars!,
+        itemSize: 25.0,
+      ),
+    );
+  }
+}
+
+class Price extends StatelessWidget {
+  const Price({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final GameOverview game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: innerElementsPadding),
+      child: Text(
+        game.price!.toStringAsFixed(2) + " €",
+        style: Theme.of(context)
+            .textTheme
+            .subtitle2!
+            .copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }
