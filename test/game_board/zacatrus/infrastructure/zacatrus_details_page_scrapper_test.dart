@@ -23,6 +23,10 @@ void main() {
       expect(result.isRight(), isTrue);
 
       final ZacatrusDetailsPageData data = result.getRight()!;
+
+      final imagesCarousel = data.imagesCarousel!;
+
+      expect(imagesCarousel.items.length, 11);
     });
   });
 }

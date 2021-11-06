@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:zacatrusa/game_board/infrastructure/core/scrapping_failures.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/details_page/images_carousel.dart';
 
 import '../../../core/multiple_result.dart';
 import '../../infrastructure/core/internet_feedback.dart';
@@ -42,10 +45,38 @@ class ZacatrusDetailsPageScapper {
       ZacatrusDetailsPageData pageData = ZacatrusDetailsPageData();
       final dom.Element mainContent = doc.getElementById("maincontent")!;
 
-
+      pageData.imagesCarousel = _parseImageCarousel(mainContent);
       return Right(pageData);
     } catch (_) {
       return Left(ParsingFailure(url: url));
+    }
+  }
+
+  ImagesCarousel? _parseImageCarousel(dom.Element mainContent) {
+    try {
+      List<CarouselItem> carouselItems = [];
+
+      final List<dom.Element> elementsToAnalyze =
+          mainContent.getElementsByClassName("product media")[0].children;
+
+      final jsonScript1 = json.decode(elementsToAnalyze[3].text);
+      final List<dynamic> jsonData =
+          jsonScript1["[data-gallery-role=gallery-placeholder]"]
+              ["mage/gallery/gallery"]["data"];
+
+      for (Map carouselData in jsonData) {
+        final item = CarouselItem(
+          image: carouselData["full"],
+          semantics: "Unánimo imagen ${carouselItems.length}",
+          video: carouselData["videoUrl"],
+          isMain: carouselData["isMain"],
+        );
+        carouselItems.add(item);
+      }
+
+      return ImagesCarousel(items: carouselItems);
+    } catch (_) {
+      // No found
     }
   }
 }
