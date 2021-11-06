@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../constants/app_margins.dart';
 import '../../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
-import '../../../../zacatrus/domain/game_overview.dart';
+import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 import '../../games_browse.dart';
 import '../sort_list_grid_switcher_row/list_grid_switcher.dart';
 import 'games_browse_sliver_grid.dart';

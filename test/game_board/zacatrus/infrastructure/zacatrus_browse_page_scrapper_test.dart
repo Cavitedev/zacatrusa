@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/scrapping_failures.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
@@ -17,12 +17,12 @@ void main() {
     test("Default object loads page", () async {
       final ZacatrusBrowsePageScapper scrapper = container.read(zacatrusBrowsePageScrapperProvider);
 
-      final result =
+      final httpCall =
           scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init());
 
-      final firstRes = await result.skip(1).first;
+      final result = await httpCall.skip(1).first;
 
-      final pageDate = firstRes.getRight()!;
+      final pageDate = result.getRight()!;
       final listGames = pageDate.games;
 
       expect(listGames.length, 24);

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
 
-import '../../../../zacatrus/domain/game_overview.dart';
+import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 
 class GamesBrowseSliverList extends StatelessWidget {
   const GamesBrowseSliverList({

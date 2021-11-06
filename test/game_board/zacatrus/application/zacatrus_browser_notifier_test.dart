@@ -3,9 +3,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:zacatrusa/core/multiple_result.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
 import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/zacatrus_browse_page_data.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/zacatrus_browse_page_data.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
 
 class MockZacatrusScrapper extends Mock implements ZacatrusBrowsePageScapper {}

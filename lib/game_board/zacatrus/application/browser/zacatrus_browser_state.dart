@@ -1,7 +1,6 @@
 import '../../../../core/optional.dart';
-
 import '../../../infrastructure/core/internet_feedback.dart';
-import '../../domain/game_overview.dart';
+import '../../domain/browse_page/game_overview.dart';
 import '../../domain/url/zacatrus_url_composer.dart';
 
 class ZacatrusBrowserState {
