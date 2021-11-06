@@ -31,7 +31,7 @@ class GamesBrowse extends ConsumerWidget {
               const GamesBrowseSliverAppBar(),
               SortListGridSwitcherRow(
                 onViewChange: (listOrGrid) {
-                  ref.read(listGridViewProvider).state = listOrGrid;
+                  ref.read(listGridViewProvider.notifier).state = listOrGrid;
                 },
               ),
               const GamesBrowserLoadedGames(),

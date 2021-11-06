@@ -30,7 +30,7 @@ class GamesBrowserLoadedGames extends ConsumerWidget {
         final listOrGridView = ref.watch(listGridViewProvider);
         return SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: listPadding),
-            sliver: _gamesOverviewBody(listOrGridView.state, gamesOverviews));
+            sliver: _gamesOverviewBody(listOrGridView, gamesOverviews));
       },
     );
   }
