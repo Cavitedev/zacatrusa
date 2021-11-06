@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 
 import '../../domain/url/zacatrus_url_composer.dart';
 import '../../infrastructure/zacatrus_scrapper.dart';
@@ -21,6 +23,13 @@ class ZacatrusBrowserNotifier extends StateNotifier<ZacatrusBrowserState> {
   StreamSubscription? subscription;
 
   void loadGames() {
+    if (state.allGamesFetched) {
+      state = state.copyWith(
+          loadingFeedback:
+              NoMoreGamesFailure(url: state.urlComposer.buildUrl()));
+      return;
+    }
+
     subscription?.cancel();
     subscription =
         scrapper.getGamesOverviews(state.urlComposer).listen((event) {
@@ -28,7 +37,12 @@ class ZacatrusBrowserNotifier extends StateNotifier<ZacatrusBrowserState> {
         state = state.copyWith(loadingFeedback: event.getLeft()!);
       }, (right) {
         state = state
-            .copyWith(urlComposer: state.urlComposer.nextPage())
+            .copyWith(
+              urlComposer: state.urlComposer.nextPage(),
+              gamesFound: state.gamesFound != null
+                  ? null
+                  : Optional.value(event.getRight()!.amount),
+            )
             .addGames(event.getRight()!.games);
       });
     })
@@ -45,13 +59,20 @@ class ZacatrusBrowserNotifier extends StateNotifier<ZacatrusBrowserState> {
   }
 
   void clear() {
-    state = state.copyWith(games: [], urlComposer: state.urlComposer.copyWith(pageNum: const ZacatrusPageIndex(1)));
+    state = state.copyWith(
+        games: [],
+        gamesFound: const Optional.value(null),
+        urlComposer:
+            state.urlComposer.copyWith(pageNum: const ZacatrusPageIndex(1)));
     loadGames();
   }
 
   void changeFilters(ZacatrusUrlBrowserComposer composer) {
-    state =
-        state.copyWith(urlComposer: composer, games: [], loadingFeedback: null);
+    state = state.copyWith(
+        urlComposer: composer,
+        games: [],
+        gamesFound: const Optional.value(null),
+        loadingFeedback: null);
     loadGames();
   }
 }

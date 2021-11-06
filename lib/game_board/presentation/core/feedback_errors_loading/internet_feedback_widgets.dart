@@ -32,16 +32,20 @@ La conexión con $url se repetirá automáticamente""";
 Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}""";
       }
 
-      else if (feedback is Parsingfailure) {
-        txt = """No aparecen juegos en la búsqueda, error de parseo""";
-      }
-
       return Text(txt);
+    } else if (feedback is ScrappingFailure) {
+      if (feedback is ParsingFailure) {
+        txt = """No aparecen juegos en la búsqueda, error de parseo""";
+        return Text(txt);
+      } else if (feedback is NoGamesFailure) {
+        return const Text("No games found");
+      } else if (feedback is NoMoreGamesFailure) {
+        return const Text("There are no more games");
+      }
     } else if (feedback is InternetLoading) {
       txt = "Loading $url";
       return Loading(msg: txt);
-    }
-     else if (feedback is InternetReloading) {
+    } else if (feedback is InternetReloading) {
       txt = "Retrying to load $url";
       return Loading(msg: txt);
     }

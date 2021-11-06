@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
+import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_scrapper.dart';
 
 void main() {
@@ -44,6 +46,19 @@ void main() {
       expect(game1.stars, isNotNull);
 
       expect(game1.price, isNotNull);
+    });
+
+    test("Returns no games found on not matching filters", () async {
+      final ZacatrusScapper scrapper = container.read(zacatrusScrapperProvider);
+
+      final result =
+          scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init().copyWith(
+        pageNum: const ZacatrusPageIndex(999999),
+      ));
+
+      final firstRes = await result.skip(1).first;
+      final failure = firstRes.getLeft()!;
+      expect(failure, isA<NoGamesFailure>());
     });
   });
 }

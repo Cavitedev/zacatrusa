@@ -49,20 +49,29 @@ class ZacatrusScapper {
       dom.Document doc, String url) {
     final shopListDiv = doc.getElementById(_idDivAllProductsData);
     if (shopListDiv == null) {
-      return Left(Parsingfailure(url: url));
+      return Left(ParsingFailure(url: url));
     }
 
-    final int? amount = _parseAmountGames(shopListDiv);
+    try {
+      if (shopListDiv.getElementsByClassName("message info empty").isNotEmpty) {
+        return Left(NoGamesFailure(url: url));
+      }
 
-    final gameListDom = shopListDiv.getElementsByClassName(_productItems).first;
-    final List<GameOverview> games = _parseGameList(gameListDom);
+      final int? amount = _parseAmountGames(shopListDiv);
 
-    final ZacatrusBrowsePageData data = ZacatrusBrowsePageData(
-      games: games,
-      amount: amount,
-    );
+      final gameListDom =
+          shopListDiv.getElementsByClassName(_productItems).first;
+      final List<GameOverview> games = _parseGameList(gameListDom);
 
-    return Right(data);
+      final ZacatrusBrowsePageData data = ZacatrusBrowsePageData(
+        games: games,
+        amount: amount,
+      );
+
+      return Right(data);
+    } catch (_) {
+      return Left(ParsingFailure(url: url));
+    }
   }
 
   int? _parseAmountGames(dom.Element productListDiv) {
