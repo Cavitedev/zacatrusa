@@ -98,19 +98,20 @@ class ListGameItem extends ConsumerWidget {
                         rating: game.stars!,
                         itemSize: 25.0,
                       ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            5, innerElementsPadding, 0, innerElementsPadding),
-                        child: Text(
-                          game.price!.toStringAsFixed(2) + " €",
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle2!
-                              .copyWith(fontWeight: FontWeight.w600),
+                    if (game.price != null)
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                              5, innerElementsPadding, 0, innerElementsPadding),
+                          child: Text(
+                            game.price!.toStringAsFixed(2) + " €",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               )

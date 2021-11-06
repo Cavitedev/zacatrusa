@@ -42,7 +42,7 @@ class ZacatrusBrowsePageScapper {
 
   static const String _idDivAllProductsData = "amasty-shopby-product-list";
   static const String _productItems = "product-items";
-  static const String _itemDetails = "product-item-details";
+  static const String _itemDetails = "product-item-summary";
   static const String _itemDetailsName = "product-item-name";
 
   Either<InternetFeedback, ZacatrusBrowsePageData> _parseBrowserPage(

@@ -11,7 +11,7 @@ void main() {
     container = ProviderContainer();
   });
 
-  group("Scrap details page", () {
+  group("Scrap summary page", () {
     test("Scrap first game Unánimo", () async {
       final ZacatrusDetailsPageScapper scrapper =
           container.read(zacatrusDetailsPageScrapperProvider);

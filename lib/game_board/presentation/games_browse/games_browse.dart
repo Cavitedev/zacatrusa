@@ -64,7 +64,4 @@ class GamesBrowse extends ConsumerWidget {
     }
     return false;
   }
-
 }
-
-
