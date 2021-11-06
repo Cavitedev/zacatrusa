@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -17,6 +18,7 @@ class GamesBrowseSliverGrid extends StatelessWidget {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 256,
+        mainAxisExtent: 300,
         mainAxisSpacing: listSpacing,
         crossAxisSpacing: listSpacing,
       ),
@@ -45,10 +47,10 @@ class ListGameItem extends StatelessWidget {
       child: Column(
         children: [
           if (game.image != null)
-            Image.network(
+            ExtendedImage.network(
               game.image!.imageLink!,
-              height: 100,
-              width: 100,
+              height: 150,
+              width: 150,
             ),
           Flexible(
               child: Column(
