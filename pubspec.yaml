@@ -37,6 +37,10 @@ dependencies:
   connectivity_plus: ^2.0.2
   mocktail: ^0.2.0
   flutter_rating_bar: ^4.0.0
+  window_size:
+    git:
+      url: git://github.com/google/flutter-desktop-embedding.git
+      path: plugins/window_size
 
 dev_dependencies:
   flutter_test:

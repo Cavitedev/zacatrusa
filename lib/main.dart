@@ -1,11 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:window_size/window_size.dart';
 
 import 'constants/app_constants.dart';
 import 'game_board/presentation/core/routing/game_route_information_parser.dart';
 import 'game_board/presentation/core/routing/games_router_delegate.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    setWindowMinSize(const Size(350, 350));
+    setWindowMaxSize(Size.infinite);
+  }
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
