@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
 
 import '../../../../core/string_helper.dart';
+import '../../../application/browser/browser_notifier.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'games_routing_configuration.dart';
 
@@ -19,7 +19,7 @@ class GameRouteInformationParser
   Future<GamesRoutingConfiguration> parseRouteInformation(
       RouteInformation routeInformation) async {
     if (routeInformation.location == null || routeInformation.location == "/") {
-      ref.read(zacatrusBrowserNotifierProvider.notifier).loadGames();
+      ref.read(browserNotifierProvider.notifier).loadGames();
       return GamesRoutingConfiguration.home();
     }
 
@@ -34,9 +34,8 @@ class GameRouteInformationParser
       return result;
     }
 
-    String detailsGame = location.substring(
-        location.lastIndexOf("/") + 1, location.lastIndexOf("."));
-    return GamesRoutingConfiguration.details(detailsGame: detailsGame);
+    String detailsGame = "https://zacatrus.es$location";
+    return GamesRoutingConfiguration.details(detailsGameUrl: detailsGame);
   }
 
   @override
@@ -49,6 +48,6 @@ class GameRouteInformationParser
     } else if (configuration.settings == true) {
       return const RouteInformation(location: "settings");
     }
-    return RouteInformation(location: configuration.detailsGame!);
+    return RouteInformation(location: configuration.detailsGameUrl!);
   }
 }

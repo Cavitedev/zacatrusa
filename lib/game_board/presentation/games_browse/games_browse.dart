@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
+import '../../application/browser/browser_notifier.dart';
 import 'games_browse_sliver_app_bar.dart';
 import 'widgets/body/games_browser_loaded_games.dart';
 import 'widgets/body/games_browser_loads.dart';
@@ -20,7 +20,7 @@ class GamesBrowse extends ConsumerWidget {
         semanticsLabel: "Recargar juegos de mesa",
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
         onRefresh: () async {
-          ref.read(zacatrusBrowserNotifierProvider.notifier).clear();
+          ref.read(browserNotifierProvider.notifier).clear();
         },
         child: NotificationListener<ScrollUpdateNotification>(
           onNotification: (ScrollNotification scrollInfo) {
@@ -55,9 +55,9 @@ class GamesBrowse extends ConsumerWidget {
 
   bool _onScroll(ScrollNotification scrollInfo, WidgetRef ref) {
     if (scrollInfo.metrics.pixels > scrollInfo.metrics.maxScrollExtent - 300 &&
-        ref.read(zacatrusBrowserNotifierProvider).isLoaded) {
+        ref.read(browserNotifierProvider).isLoaded) {
       final zacatrusBrowserNotifier =
-          ref.read(zacatrusBrowserNotifierProvider.notifier);
+          ref.read(browserNotifierProvider.notifier);
 
       zacatrusBrowserNotifier.nextPageIfNotLoading();
       return true;

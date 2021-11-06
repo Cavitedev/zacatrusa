@@ -1,10 +1,10 @@
-import '../../../../core/optional.dart';
-import '../../../infrastructure/core/internet_feedback.dart';
-import '../../domain/browse_page/game_overview.dart';
-import '../../domain/url/zacatrus_url_composer.dart';
+import '../../../core/optional.dart';
+import '../../infrastructure/core/internet_feedback.dart';
+import '../../zacatrus/domain/browse_page/game_overview.dart';
+import '../../zacatrus/domain/url/zacatrus_url_composer.dart';
 
-class ZacatrusBrowserState {
-  const ZacatrusBrowserState({
+class BrowserState {
+  const BrowserState({
     required this.urlComposer,
     required this.games,
     this.loadingFeedback,
@@ -16,12 +16,12 @@ class ZacatrusBrowserState {
   final InternetFeedback? loadingFeedback;
   final int? gamesFound;
 
-  factory ZacatrusBrowserState.init() {
-    return ZacatrusBrowserState(
+  factory BrowserState.init() {
+    return BrowserState(
         urlComposer: ZacatrusUrlBrowserComposer.init(), games: []);
   }
 
-  ZacatrusBrowserState addGames(List<GameOverview> addedGames) {
+  BrowserState addGames(List<GameOverview> addedGames) {
     return copyWith(games: [...games, ...addedGames], loadingFeedback: null);
   }
 
@@ -32,7 +32,7 @@ class ZacatrusBrowserState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ZacatrusBrowserState &&
+      other is BrowserState &&
           runtimeType == other.runtimeType &&
           urlComposer == other.urlComposer &&
           games == other.games &&
@@ -56,13 +56,13 @@ class ZacatrusBrowserState {
     return 'ZacatrusBrowserState{urlComposer: $urlComposer, games: $games, loadingFeedback: $loadingFeedback, gamesFound: $gamesFound}';
   }
 
-  ZacatrusBrowserState copyWith({
+  BrowserState copyWith({
     ZacatrusUrlBrowserComposer? urlComposer,
     List<GameOverview>? games,
     InternetFeedback? loadingFeedback,
     Optional<int?>? gamesFound,
   }) {
-    return ZacatrusBrowserState(
+    return BrowserState(
       urlComposer: urlComposer ?? this.urlComposer,
       games: games ?? this.games,
       loadingFeedback: loadingFeedback,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../constants/app_margins.dart';
-import '../../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
+import '../../../../application/browser/browser_notifier.dart';
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 import '../../games_browse.dart';
 import '../sort_list_grid_switcher_row/list_grid_switcher.dart';
@@ -18,7 +18,7 @@ class GamesBrowserLoadedGames extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Consumer(
       builder: (context, ref, _) {
-        final loadedGames = ref.watch(zacatrusBrowserNotifierProvider).games;
+        final loadedGames = ref.watch(browserNotifierProvider).games;
         return _sucessBody([...loadedGames]);
       },
     );

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:zacatrusa/core/multiple_result.dart';
+import 'package:zacatrusa/game_board/application/browser/browser_notifier.dart';
 import 'package:zacatrusa/game_board/infrastructure/core/internet_feedback.dart';
-import 'package:zacatrusa/game_board/zacatrus/application/browser/zacatrus_browser_notifier.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/zacatrus_browse_page_data.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
@@ -13,7 +13,7 @@ class MockZacatrusScrapper extends Mock implements ZacatrusBrowsePageScapper {}
 void main() {
   late ZacatrusBrowsePageScapper scrapper;
 
-  late ZacatrusBrowserNotifier notifier;
+  late BrowserNotifier notifier;
 
   setUp(() {
     scrapper = MockZacatrusScrapper();
@@ -24,7 +24,7 @@ void main() {
         () async {
       _mockScrapper(scrapper);
 
-      notifier = ZacatrusBrowserNotifier(scrapper: scrapper);
+      notifier = BrowserNotifier(scrapper: scrapper);
       notifier.nextPageIfNotLoading();
       notifier.nextPageIfNotLoading();
       await Future.delayed(const Duration(milliseconds: 400));
@@ -37,7 +37,7 @@ void main() {
         () async {
       _mockScrapper(scrapper);
 
-      notifier = ZacatrusBrowserNotifier(scrapper: scrapper);
+      notifier = BrowserNotifier(scrapper: scrapper);
       notifier.nextPageIfNotLoading();
       await Future.delayed(const Duration(milliseconds: 200));
       notifier.nextPageIfNotLoading();
@@ -68,7 +68,7 @@ void main() {
       ZacatrusUrlBrowserComposer urlComposer2 = urlComposer1.nextPage();
       _mockScrapperSingleCall(scrapper, urlComposer2, gameOverview2);
 
-      notifier = ZacatrusBrowserNotifier(scrapper: scrapper);
+      notifier = BrowserNotifier(scrapper: scrapper);
       notifier.loadGames();
       await Future.delayed(const Duration(milliseconds: 200));
       notifier.nextPageIfNotLoading();

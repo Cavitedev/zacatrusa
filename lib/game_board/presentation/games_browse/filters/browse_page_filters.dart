@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
+
+import '../../../application/browser/browser_notifier.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 
 class BrowsePageFilters extends ConsumerStatefulWidget {
@@ -18,7 +19,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters> {
   @override
   void initState() {
     super.initState();
-    urlComposer = ref.read(zacatrusBrowserNotifierProvider).urlComposer;
+    urlComposer = ref.read(browserNotifierProvider).urlComposer;
   }
 
   @override
@@ -31,7 +32,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters> {
         ElevatedButton(
             onPressed: () {
               ref
-                  .read(zacatrusBrowserNotifierProvider.notifier)
+                  .read(browserNotifierProvider.notifier)
                   .changeFilters(urlComposer);
               Navigator.pop(context);
             },

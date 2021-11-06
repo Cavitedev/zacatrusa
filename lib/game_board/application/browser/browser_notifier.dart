@@ -2,22 +2,22 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/optional.dart';
-import '../../../infrastructure/core/scrapping_failures.dart';
-import '../../domain/url/filters/zacatrus_page_query_parameter.dart';
-import '../../domain/url/zacatrus_url_composer.dart';
-import '../../infrastructure/zacatrus_browse_page_scrapper.dart';
-import 'zacatrus_browser_state.dart';
+import '../../../core/optional.dart';
+import '../../infrastructure/core/scrapping_failures.dart';
+import '../../zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
+import '../../zacatrus/domain/url/zacatrus_url_composer.dart';
+import '../../zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
+import 'browser_state.dart';
 
-final zacatrusBrowserNotifierProvider =
-    StateNotifierProvider<ZacatrusBrowserNotifier, ZacatrusBrowserState>(
-        (ref) => ZacatrusBrowserNotifier(
+final browserNotifierProvider =
+    StateNotifierProvider<BrowserNotifier, BrowserState>(
+        (ref) => BrowserNotifier(
             scrapper: ref.read(zacatrusBrowsePageScrapperProvider)));
 
-class ZacatrusBrowserNotifier extends StateNotifier<ZacatrusBrowserState> {
-  ZacatrusBrowserNotifier({
+class BrowserNotifier extends StateNotifier<BrowserState> {
+  BrowserNotifier({
     required this.scrapper,
-  }) : super(ZacatrusBrowserState.init());
+  }) : super(BrowserState.init());
 
   final ZacatrusBrowsePageScapper scrapper;
   StreamSubscription? subscription;

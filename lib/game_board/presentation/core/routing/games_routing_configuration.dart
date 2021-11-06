@@ -1,16 +1,17 @@
+import '../../../../core/optional.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 
 class GamesRoutingConfiguration {
   ZacatrusUrlBrowserComposer? filterComposer;
   bool settings;
-  String? detailsGame;
+  String? detailsGameUrl;
 
   GamesRoutingConfiguration.home({
     this.filterComposer,
   })  : settings = false,
-        detailsGame = null;
+        detailsGameUrl = null;
 
-  GamesRoutingConfiguration.details({this.detailsGame})
+  GamesRoutingConfiguration.details({this.detailsGameUrl})
       : filterComposer = null,
         settings = false;
 
@@ -18,12 +19,11 @@ class GamesRoutingConfiguration {
 
   // ZacatrusUrlBrowserComposer? get filterComposer => _filterComposer;
 
-  bool isHome() => settings == false && detailsGame == null;
-
+  bool isHome() => settings == false && detailsGameUrl == null;
 
   @override
   String toString() {
-    return 'GamesRoutingConfiguration{filterComposer: $filterComposer, settings: $settings, detailsGame: $detailsGame}';
+    return 'GamesRoutingConfiguration{filterComposer: $filterComposer, settings: $settings, detailsGame: $detailsGameUrl}';
   }
 
   @override
@@ -33,9 +33,29 @@ class GamesRoutingConfiguration {
           runtimeType == other.runtimeType &&
           filterComposer == other.filterComposer &&
           settings == other.settings &&
-          detailsGame == other.detailsGame;
+          detailsGameUrl == other.detailsGameUrl;
 
   @override
   int get hashCode =>
-      filterComposer.hashCode ^ settings.hashCode ^ detailsGame.hashCode;
+      filterComposer.hashCode ^ settings.hashCode ^ detailsGameUrl.hashCode;
+
+  GamesRoutingConfiguration copyWith({
+    Optional<ZacatrusUrlBrowserComposer?>? filterComposer,
+    bool? settings,
+    Optional<String?>? detailsGameUrl,
+  }) {
+    return GamesRoutingConfiguration._(
+      filterComposer:
+          filterComposer == null ? this.filterComposer : filterComposer.value,
+      settings: settings ?? this.settings,
+      detailsGameUrl:
+          detailsGameUrl == null ? this.detailsGameUrl : detailsGameUrl.value,
+    );
+  }
+
+  GamesRoutingConfiguration._({
+    this.filterComposer,
+    required this.settings,
+    this.detailsGameUrl,
+  });
 }

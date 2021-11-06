@@ -1,6 +1,9 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
 import '../../../../../constants/app_margins.dart';
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
@@ -36,7 +39,7 @@ class GamesBrowseSliverGrid extends StatelessWidget {
   }
 }
 
-class ListGameItem extends StatelessWidget {
+class ListGameItem extends ConsumerWidget {
   const ListGameItem({
     Key? key,
     required this.game,
@@ -45,29 +48,45 @@ class ListGameItem extends StatelessWidget {
   final GameOverview game;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          if (game.image != null)
-            ExtendedImage.network(
-              game.image!.imageLink!,
-              height: 150,
-              width: 150,
-              semanticLabel: game.image?.imageAlt,
-            ),
-          Flexible(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Stack(
+      children: [
+        Card(
+          child: Column(
             children: [
-              GameName(game: game),
-              if (game.numberOfComments != null) Comments(game: game),
-              if (game.stars != null) Stars(game: game),
-              if (game.price != null) Price(game: game),
+              if (game.image != null)
+                ExtendedImage.network(
+                  game.image!.imageLink!,
+                  height: 150,
+                  width: 150,
+                  semanticLabel: game.image?.imageAlt,
+                ),
+              Flexible(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GameName(game: game),
+                  if (game.numberOfComments != null) Comments(game: game),
+                  if (game.stars != null) Stars(game: game),
+                  if (game.price != null) Price(game: game),
+                ],
+              ))
             ],
-          ))
-        ],
-      ),
+          ),
+        ),
+        Positioned.fill(
+            child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    final routerDelegate =
+                        ref.read(gamesRouterDelegateProvider);
+
+                    routerDelegate.currentConf = routerDelegate.currentConf
+                        .copyWith(detailsGameUrl: Optional.value(game.link));
+                  },
+                ))),
+      ],
     );
   }
 }

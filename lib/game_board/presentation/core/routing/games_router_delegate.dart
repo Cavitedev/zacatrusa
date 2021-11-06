@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/game_board/presentation/game_details/game_details.dart';
 
-import '../../../zacatrus/application/browser/zacatrus_browser_notifier.dart';
+import '../../../application/browser/browser_notifier.dart';
 import '../../games_browse/games_browse.dart';
 import 'games_routing_configuration.dart';
 
@@ -23,10 +24,12 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
 
   GamesRoutingConfiguration _currentConf;
 
+  GamesRoutingConfiguration get currentConf => _currentConf;
+
   set currentConf(GamesRoutingConfiguration conf) {
     if (conf.filterComposer != null) {
       ref
-          .read(zacatrusBrowserNotifierProvider.notifier)
+          .read(browserNotifierProvider.notifier)
           .changeFilters(conf.filterComposer!);
     }
     _currentConf = conf;
@@ -36,8 +39,14 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      pages: const [
-        MaterialPage(key: ValueKey("Games Browse"), child: GamesBrowse())
+      pages: [
+        const MaterialPage(key: ValueKey("Games Browse"), child: GamesBrowse()),
+        if (_currentConf.detailsGameUrl != null)
+          MaterialPage(
+              key: ValueKey(_currentConf.detailsGameUrl),
+              child: GameDetails(
+                url: _currentConf.detailsGameUrl!,
+              ))
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
@@ -57,8 +66,8 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
       _currentConf.settings = false;
       notifyListeners();
       return Future.value(true);
-    } else if (_currentConf.detailsGame != null) {
-      // _currentConf.detailsPage = null;
+    } else if (_currentConf.detailsGameUrl != null) {
+      _currentConf.detailsGameUrl = null;
       notifyListeners();
       return Future.value(true);
     }
@@ -73,6 +82,4 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
     notifyListeners();
     return Future.value(null);
   }
-
-
 }
