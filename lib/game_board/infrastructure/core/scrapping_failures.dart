@@ -1,4 +1,4 @@
-import '../../infrastructure/core/internet_feedback.dart';
+import 'internet_feedback.dart';
 
 abstract class ScrappingFailure extends InternetFeedback{
   ScrappingFailure({required String url}) : super(url: url);

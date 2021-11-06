@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:zacatrusa/game_board/infrastructure/core/scrapping_failures.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/game_overview.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
-import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_failures.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_browse_page_scrapper.dart';
 
 void main() {

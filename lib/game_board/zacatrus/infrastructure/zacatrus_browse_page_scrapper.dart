@@ -5,11 +5,11 @@ import '../../../core/multiple_result.dart';
 import '../../../core/string_helper.dart';
 import '../../domain/image_data.dart';
 import '../../infrastructure/core/internet_feedback.dart';
+import '../../infrastructure/core/scrapping_failures.dart';
 import '../../infrastructure/http_loader.dart';
 import '../domain/game_overview.dart';
 import '../domain/url/zacatrus_url_composer.dart';
 import '../domain/zacatrus_browse_page_data.dart';
-import 'zacatrus_browse_failures.dart';
 
 final zacatrusBrowsePageScrapperProvider = Provider((ref) => ZacatrusBrowsePageScapper(ref: ref));
 

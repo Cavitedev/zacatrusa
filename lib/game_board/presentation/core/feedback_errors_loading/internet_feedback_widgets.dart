@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../infrastructure/core/internet_feedback.dart';
-import '../../../zacatrus/infrastructure/zacatrus_browse_failures.dart';
+import '../../../infrastructure/core/scrapping_failures.dart';
 import 'error_widget_with_image.dart';
 import 'loading.dart';
 

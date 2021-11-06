@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/optional.dart';
+import '../../../infrastructure/core/scrapping_failures.dart';
 import '../../domain/url/filters/zacatrus_page_query_parameter.dart';
 import '../../domain/url/zacatrus_url_composer.dart';
-import '../../infrastructure/zacatrus_browse_failures.dart';
 import '../../infrastructure/zacatrus_browse_page_scrapper.dart';
 import 'zacatrus_browser_state.dart';
 
