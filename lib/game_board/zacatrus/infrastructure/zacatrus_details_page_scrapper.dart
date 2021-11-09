@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:zacatrusa/game_board/zacatrus/domain/details_page/review_url/review_url.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 
 import '../../../core/multiple_result.dart';
 import '../../../core/string_helper.dart';
@@ -54,6 +56,7 @@ class ZacatrusDetailsPageScapper {
       pageData.gameDescription = _parseGameDescription(doc);
       pageData.overviewDescription = _parseOverviewDescription(mainContent);
       pageData.gameDataSheet = _parseGameDataSheet(doc);
+      pageData.reviewsUrl = _parseReviews(doc);
 
       return Right(pageData);
     } catch (_) {
@@ -261,6 +264,29 @@ class ZacatrusDetailsPageScapper {
           sheet.languageDependency = content;
           break;
       }
+    } catch (_) {
+      //No found
+    }
+  }
+
+  ReviewUrl? _parseReviews(dom.Document doc) {
+    try {
+      final outElementCounter = doc.getElementById("tab-label-reviews-title");
+      final counterElement = outElementCounter!.children[0];
+      int reviewsAmount = counterElement.text.toNum().toInt();
+
+      final reviewsDiv = doc.getElementById("reviews");
+      final dom.Element? scriptData =
+          reviewsDiv!.getElementsByTagName("script")[0];
+
+      final Map<String, dynamic> jsonContent = json.decode(scriptData!.text);
+      final String url = jsonContent["*"]["Magento_Review/js/process-reviews"]
+          ["productReviewUrl"];
+
+      return ReviewUrl(
+          url: url,
+          numberOfReviews: reviewsAmount,
+          pageIndex: const ZacatrusPageIndex(1));
     } catch (_) {
       //No found
     }
