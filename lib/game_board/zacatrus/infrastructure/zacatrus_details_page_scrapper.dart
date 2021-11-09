@@ -50,6 +50,7 @@ class ZacatrusDetailsPageScapper {
 
       pageData.gameOverview = _parseGameOverview(mainContent, url);
       pageData.imagesCarousel = _parseImageCarousel(mainContent);
+      pageData.gameplayDetails = _parseGameplayDetails(doc);
 
       return Right(pageData);
     } catch (_) {
@@ -165,6 +166,16 @@ class ZacatrusDetailsPageScapper {
       }
 
       return ImagesCarousel(items: carouselItems);
+    } catch (_) {
+      // No found
+    }
+  }
+
+  String? _parseGameplayDetails(dom.Document document) {
+    try {
+      dom.Element outerDiv = document.getElementById("description")!;
+      dom.Element innerDiv = outerDiv.children[0];
+      return innerDiv.text.trim();
     } catch (_) {
       // No found
     }

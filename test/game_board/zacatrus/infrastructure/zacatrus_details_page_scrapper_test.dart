@@ -37,6 +37,8 @@ void main() {
       expect(gameOverview.stars, 4.75);
       expect(gameOverview.price, 9.95);
       expect(gameOverview.numberOfComments, 16);
+
+      expect(data.gameplayDetails, isNotNull);
     });
   });
 }
