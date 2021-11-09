@@ -1,7 +1,7 @@
 import '../../url/filters/zacatrus_page_query_parameter.dart';
 
-class ReviewUrl {
-  const ReviewUrl({
+class ReviewsUrl {
+  const ReviewsUrl({
     required this.url,
     required this.numberOfReviews,
     required this.pageIndex,
@@ -12,7 +12,7 @@ class ReviewUrl {
   final int numberOfReviews;
   final ZacatrusPageIndex pageIndex;
 
-  ReviewUrl nextPage() {
+  ReviewsUrl nextPage() {
     return copyWith(pageIndex: pageIndex.copyWithNextPage());
   }
 
@@ -20,12 +20,12 @@ class ReviewUrl {
     return "$url?${pageIndex.toParam()}limit=$_reviewsPerPage";
   }
 
-  ReviewUrl copyWith({
+  ReviewsUrl copyWith({
     String? url,
     int? numberOfComments,
     ZacatrusPageIndex? pageIndex,
   }) {
-    return ReviewUrl(
+    return ReviewsUrl(
       url: url ?? this.url,
       numberOfReviews: numberOfComments ?? numberOfReviews,
       pageIndex: pageIndex ?? this.pageIndex,

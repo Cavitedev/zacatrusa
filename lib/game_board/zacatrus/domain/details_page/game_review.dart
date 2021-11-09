@@ -2,14 +2,14 @@ class GameReview {
   GameReview({
     this.title,
     this.stars,
-    this.details,
+    this.description,
     this.author,
     this.date,
   });
 
   String? title;
   double? stars;
-  String? details;
+  String? description;
   String? author;
   String? date;
 }

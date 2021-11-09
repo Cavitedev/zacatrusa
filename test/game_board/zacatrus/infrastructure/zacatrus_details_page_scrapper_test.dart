@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_data_sheet.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_overview_details.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/review_url/review_url.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/details_page/reviews/reviews_url.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/details_page/zacatrus_details_page_data.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_details_page_scrapper.dart';
 
@@ -59,7 +59,7 @@ void main() {
       expect(sheet.languageDependency, isNotNull);
 
       expect(data.reviewsUrl, isNotNull);
-      ReviewUrl reviewUrl = data.reviewsUrl!;
+      ReviewsUrl reviewUrl = data.reviewsUrl!;
       expect(reviewUrl.numberOfReviews, greaterThanOrEqualTo(16));
       expect(reviewUrl.url,
           "https://zacatrus.es/review/product/listAjax/id/19636/");

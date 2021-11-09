@@ -11,7 +11,7 @@ import '../../infrastructure/http_loader.dart';
 import '../domain/details_page/game_data_sheet.dart';
 import '../domain/details_page/game_overview_details.dart';
 import '../domain/details_page/images_carousel.dart';
-import '../domain/details_page/review_url/review_url.dart';
+import '../domain/details_page/reviews/reviews_url.dart';
 import '../domain/details_page/zacatrus_details_page_data.dart';
 import '../domain/url/filters/zacatrus_page_query_parameter.dart';
 
@@ -269,7 +269,7 @@ class ZacatrusDetailsPageScapper {
     }
   }
 
-  ReviewUrl? _parseReviews(dom.Document doc) {
+  ReviewsUrl? _parseReviews(dom.Document doc) {
     try {
       final outElementCounter = doc.getElementById("tab-label-reviews-title");
       final counterElement = outElementCounter!.children[0];
@@ -283,7 +283,7 @@ class ZacatrusDetailsPageScapper {
       final String url = jsonContent["*"]["Magento_Review/js/process-reviews"]
           ["productReviewUrl"];
 
-      return ReviewUrl(
+      return ReviewsUrl(
           url: url,
           numberOfReviews: reviewsAmount,
           pageIndex: const ZacatrusPageIndex(1));
