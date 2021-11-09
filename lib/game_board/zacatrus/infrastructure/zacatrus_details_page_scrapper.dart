@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:zacatrusa/core/string_helper.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/scrapping_failures.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_overview_details.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/images_carousel.dart';
 
 import '../../../core/multiple_result.dart';
+import '../../../core/string_helper.dart';
 import '../../infrastructure/core/internet_feedback.dart';
+import '../../infrastructure/core/scrapping_failures.dart';
 import '../../infrastructure/http_loader.dart';
+import '../domain/details_page/game_data_sheet.dart';
+import '../domain/details_page/game_overview_details.dart';
+import '../domain/details_page/images_carousel.dart';
 import '../domain/details_page/zacatrus_details_page_data.dart';
 
 final zacatrusDetailsPageScrapperProvider =
@@ -52,6 +53,7 @@ class ZacatrusDetailsPageScapper {
       pageData.imagesCarousel = _parseImageCarousel(mainContent);
       pageData.gameDescription = _parseGameDescription(doc);
       pageData.overviewDescription = _parseOverviewDescription(mainContent);
+      pageData.gameDataSheet = _parseGameDataSheet(doc);
 
       return Right(pageData);
     } catch (_) {
@@ -190,6 +192,77 @@ class ZacatrusDetailsPageScapper {
       return innerDiv.text.trim();
     } catch (_) {
       // No found
+    }
+  }
+
+  GameDataSheet? _parseGameDataSheet(dom.Document doc) {
+    GameDataSheet sheet = GameDataSheet();
+    try {
+      final dom.Element table =
+          doc.getElementById("product-attribute-specs-table")!;
+      final dom.Element tbody = table.children[1];
+      final List<dom.Element> rowsOfTable = tbody.children;
+
+      for (final dom.Element row in rowsOfTable) {
+        _updateGameSheetWithTableRow(row, sheet);
+      }
+    } catch (_) {}
+    return sheet;
+  }
+
+  void _updateGameSheetWithTableRow(dom.Element row, GameDataSheet sheet) {
+    try {
+      final dom.Element rowContent = row.children[1];
+      final String? kindOfRow = rowContent.attributes["data-th"];
+      if (kindOfRow == null) {
+        return;
+      }
+      final String content = rowContent.text;
+      switch (kindOfRow) {
+        case "Autor":
+          sheet.authors = content;
+          break;
+        case "BGG":
+          sheet.bgg = content.toNum().toInt();
+          break;
+        case "Mecánica":
+          sheet.mechanic = content;
+          break;
+        case "Temática":
+          sheet.theme = content;
+          break;
+        case "Si buscas...":
+          sheet.siBuscas = content;
+          break;
+        case "Edad":
+          sheet.ageRanges = content;
+          break;
+        case "Núm. jugadores":
+          sheet.numPlayers = content;
+          break;
+        case "Tiempo de juego":
+          sheet.gameplayDuration = content;
+          break;
+        case "Complejidad":
+          sheet.complexity = content;
+          break;
+        case "Editorial":
+          sheet.editorial = content;
+          break;
+        case "Contenido":
+          sheet.content = rowContent.children[0].children
+              .map((child) => child.text)
+              .toList();
+          break;
+        case "Idioma":
+          sheet.language = content;
+          break;
+        case "Dependencia del idioma":
+          sheet.languageDependency = content;
+          break;
+      }
+    } catch (_) {
+      //No found
     }
   }
 }
