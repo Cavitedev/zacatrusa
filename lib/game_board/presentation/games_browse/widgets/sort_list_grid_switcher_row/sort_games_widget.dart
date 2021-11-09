@@ -60,7 +60,6 @@ class _SortGamesWidget extends ConsumerState<SortGamesWidget> {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 value,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           );

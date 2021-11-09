@@ -22,11 +22,7 @@ class SortListGridSwitcherRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Flexible(
-              flex: 6,
               child: SortGamesWidget(),
-            ),
-            const Spacer(
-              flex: 5,
             ),
             ListGridSwitcher(onViewChange: onViewChange),
           ],
