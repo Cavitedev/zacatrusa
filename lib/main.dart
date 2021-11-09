@@ -36,7 +36,10 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
           appBarTheme: const AppBarTheme(color: Color.fromRGBO(76, 176, 86, 1)),
           errorColor: Colors.redAccent.shade400,
-          textTheme: const TextTheme(headline5: TextStyle(fontSize: 20))),
+          textTheme: const TextTheme(
+            headline5: TextStyle(fontSize: 20),
+            headline4: TextStyle(fontSize: 28, color: Colors.black),
+          )),
     );
   }
 }

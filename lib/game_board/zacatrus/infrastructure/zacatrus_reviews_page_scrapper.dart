@@ -74,7 +74,7 @@ class ZacatrusReviewPageScrapper {
     try {
       final dom.Element titleElement =
           liReview.getElementsByClassName("review-title")[0];
-      String title = titleElement.text;
+      String title = titleElement.text.trim();
       return title;
     } catch (_) {
       //No data
@@ -98,7 +98,7 @@ class ZacatrusReviewPageScrapper {
       final dom.Element descriptionsElement =
           liReview.getElementsByClassName("review-content")[0];
       String descriptions = descriptionsElement.text;
-      return descriptions;
+      return descriptions.trim();
     } catch (_) {
       //No data
     }
@@ -109,7 +109,7 @@ class ZacatrusReviewPageScrapper {
       final dom.Element authorElement = liReview
           .getElementsByClassName("review-author")[0]
           .getElementsByClassName("review-details-value")[0];
-      String author = authorElement.text;
+      String author = authorElement.text.trim();
       return author;
     } catch (_) {
       //No data
@@ -121,7 +121,7 @@ class ZacatrusReviewPageScrapper {
       final dom.Element dateElement = liReview
           .getElementsByClassName("review-date")[0]
           .getElementsByClassName("review-details-value")[0];
-      String date = dateElement.text;
+      String date = dateElement.text.trim();
       return date;
     } catch (_) {
       //No data
