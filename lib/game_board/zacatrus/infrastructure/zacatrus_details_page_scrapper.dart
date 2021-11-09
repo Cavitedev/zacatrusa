@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/review_url/review_url.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 
 import '../../../core/multiple_result.dart';
 import '../../../core/string_helper.dart';
@@ -13,7 +11,9 @@ import '../../infrastructure/http_loader.dart';
 import '../domain/details_page/game_data_sheet.dart';
 import '../domain/details_page/game_overview_details.dart';
 import '../domain/details_page/images_carousel.dart';
+import '../domain/details_page/review_url/review_url.dart';
 import '../domain/details_page/zacatrus_details_page_data.dart';
+import '../domain/url/filters/zacatrus_page_query_parameter.dart';
 
 final zacatrusDetailsPageScrapperProvider =
     Provider((ref) => ZacatrusDetailsPageScapper(ref: ref));

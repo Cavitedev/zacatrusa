@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/application/browser/browser_notifier.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_order.dart';
+
+import '../../../../../core/optional.dart';
+import '../../../../application/browser/browser_notifier.dart';
+import '../../../../zacatrus/domain/url/filters/zacatrus_order.dart';
 
 class SortGamesWidget extends ConsumerStatefulWidget {
   const SortGamesWidget({

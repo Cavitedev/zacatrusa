@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/game_details.dart';
 
 import '../../../application/browser/browser_notifier.dart';
+import '../../game_details/game_details.dart';
 import '../../games_browse/games_browse.dart';
 import 'games_routing_configuration.dart';
 

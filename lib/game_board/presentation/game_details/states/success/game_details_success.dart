@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/characterictics/characterictics_page.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/purchase/purchase_page.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/reviews/reviews_page.dart';
 
 import '../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
+import 'pages/characterictics/characterictics_page.dart';
+import 'pages/purchase/purchase_page.dart';
+import 'pages/reviews/reviews_page.dart';
 import 'pages/summary/summay_page.dart';
 
 final StateProvider<int> detailsBottomNavigationProvider =

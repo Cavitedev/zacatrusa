@@ -1,14 +1,14 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/price.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/reviews_number.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/star_bars_indicator.dart';
 
 import '../../../../../constants/app_margins.dart';
+import '../../../../../core/optional.dart';
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
+import '../../../core/routing/games_router_delegate.dart';
+import '../../../core/widgets/price.dart';
+import '../../../core/widgets/reviews_number.dart';
+import '../../../core/widgets/star_bars_indicator.dart';
 
 class GamesBrowseSliverGrid extends StatelessWidget {
   const GamesBrowseSliverGrid({

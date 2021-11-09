@@ -27,7 +27,7 @@ class ReviewUrl {
   }) {
     return ReviewUrl(
       url: url ?? this.url,
-      numberOfReviews: numberOfComments ?? this.numberOfReviews,
+      numberOfReviews: numberOfComments ?? numberOfReviews,
       pageIndex: pageIndex ?? this.pageIndex,
     );
   }
