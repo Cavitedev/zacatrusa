@@ -5,10 +5,11 @@ class ZacatrusDetailsPageData {
   ZacatrusDetailsPageData({
     this.imagesCarousel,
     required this.gameOverview,
-    this.gameplayDetails,
+    this.gameDescription,
   });
 
   ImagesCarousel? imagesCarousel;
   GameOverviewDetails gameOverview;
-  String? gameplayDetails;
+  String? gameDescription;
+  String? overviewDescription;
 }
