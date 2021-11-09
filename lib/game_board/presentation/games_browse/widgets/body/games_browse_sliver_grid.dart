@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/price.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/reviews_number.dart';
 import 'package:zacatrusa/game_board/presentation/core/widgets/star_bars_indicator.dart';
 
 import '../../../../../constants/app_margins.dart';
@@ -66,13 +68,24 @@ class ListGameItem extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GameName(game: game),
-                  if (game.numberOfComments != null) Comments(game: game),
+                  if (game.numberOfReviews != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          5, 0, 0, innerElementsPadding),
+                      child: ReviewsNumber(
+                        numberReviews: game.numberOfReviews!,
+                      ),
+                    ),
                   if (game.stars != null)
                     Padding(
                         padding:
                             const EdgeInsets.only(top: innerElementsPadding),
                         child: StarsBarIndicator(stars: game.stars!)),
-                  if (game.price != null) Price(game: game),
+                  if (game.price != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: innerElementsPadding),
+                      child: PriceText(price: game.price!),
+                    ),
                 ],
               ))
             ],
@@ -113,50 +126,6 @@ class GameName extends StatelessWidget {
         maxLines: 2,
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-}
-
-class Comments extends StatelessWidget {
-  const Comments({
-    Key? key,
-    required this.game,
-  }) : super(key: key);
-
-  final GameOverview game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: innerElementsPadding),
-      child: Text(
-        game.numberOfComments!.toString() +
-            (game.numberOfComments! > 1 ? " comentarios" : " comentario"),
-        style: Theme.of(context).textTheme.caption,
-      ),
-    );
-  }
-}
-
-class Price extends StatelessWidget {
-  const Price({
-    Key? key,
-    required this.game,
-  }) : super(key: key);
-
-  final GameOverview game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: innerElementsPadding),
-      child: Text(
-        game.price!.toStringAsFixed(2) + " €",
-        style: Theme.of(context)
-            .textTheme
-            .subtitle2!
-            .copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

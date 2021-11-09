@@ -173,7 +173,7 @@ class ZacatrusBrowsePageScapper {
         final commentsElement = commentsElements.first.children.first;
         final String comments = commentsElement.text;
 
-        gameOverview.numberOfComments = comments.toNum().toInt();
+        gameOverview.numberOfReviews = comments.toNum().toInt();
       }
     } catch (_) {
       //Not found
