@@ -5,6 +5,7 @@ import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_order.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
@@ -163,6 +164,17 @@ void main() {
       final output = urlComposer.buildUrl();
 
       expect(output, "https://zacatrus.es/juegos-de-mesa/ankama.html");
+    });
+
+    test('Order returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          order: const Optional.value(ZacatrusOrder(
+              value: ZacatrusOrderValues.ratingValue, isDesc: true)));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output,
+          "https://zacatrus.es/juegos-de-mesa.html?product_list_dir=desc&product_list_order=rating_summary");
     });
 
     test(

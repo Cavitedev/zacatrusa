@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_order.dart';
 
 import '../../../../core/optional.dart';
 import 'filters/zacatrus_categoria_filter.dart';
@@ -13,18 +14,18 @@ import 'filters/zacatrus_tematica_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
-  const ZacatrusUrlBrowserComposer({
-    required this.productsPerPage,
-    required this.pageNum,
-    this.siBuscas,
-    this.categoria,
-    this.tematica,
-    this.edades,
-    this.numJugadores,
-    this.precio,
-    this.mecanica,
-    this.editorial,
-  });
+  const ZacatrusUrlBrowserComposer(
+      {required this.productsPerPage,
+      required this.pageNum,
+      this.siBuscas,
+      this.categoria,
+      this.tematica,
+      this.edades,
+      this.numJugadores,
+      this.precio,
+      this.mecanica,
+      this.editorial,
+      this.order});
 
   factory ZacatrusUrlBrowserComposer.init() {
     return const ZacatrusUrlBrowserComposer(
@@ -142,6 +143,7 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusRangoPrecioFilter? precio;
   final ZacatrusMecanicaFilter? mecanica;
   final ZacatrusEditorialFilter? editorial;
+  final ZacatrusOrder? order;
 
   String buildUrl() {
     String categoriaAddition =
@@ -168,7 +170,7 @@ class ZacatrusUrlBrowserComposer {
     final String pathUrl = '$rawUrl$categoriaAddition$pathJoin2.html';
 
     final String params =
-        "${pageNum.toParam()}${edades?.toUrl() ?? ""}${precio?.toUrl() ?? ""}${productsPerPage.toParam()}";
+        "${pageNum.toParam()}${edades?.toUrl() ?? ""}${precio?.toUrl() ?? ""}${productsPerPage.toParam()}${order?.toUrl() ?? ""}";
 
     String url = "$pathUrl?$params";
 
@@ -208,7 +210,8 @@ class ZacatrusUrlBrowserComposer {
           numJugadores == other.numJugadores &&
           precio == other.precio &&
           mecanica == other.mecanica &&
-          editorial == other.editorial;
+          editorial == other.editorial &&
+          order == other.order;
 
   @override
   int get hashCode =>
@@ -221,7 +224,8 @@ class ZacatrusUrlBrowserComposer {
       numJugadores.hashCode ^
       precio.hashCode ^
       mecanica.hashCode ^
-      editorial.hashCode;
+      editorial.hashCode ^
+      order.hashCode;
 
   @override
   String toString() {
@@ -239,6 +243,7 @@ class ZacatrusUrlBrowserComposer {
     Optional<ZacatrusRangoPrecioFilter?>? precio,
     Optional<ZacatrusMecanicaFilter?>? mecanica,
     Optional<ZacatrusEditorialFilter?>? editorial,
+    Optional<ZacatrusOrder?>? order,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
@@ -255,6 +260,7 @@ class ZacatrusUrlBrowserComposer {
       mecanica: mecanica?.isValid ?? false ? mecanica!.value : this.mecanica,
       editorial:
           editorial?.isValid ?? false ? editorial!.value : this.editorial,
+      order: order?.isValid ?? false ? order!.value : this.order,
     );
   }
 }
