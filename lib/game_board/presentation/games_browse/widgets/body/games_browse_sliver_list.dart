@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/star_bars_indicator.dart';
 
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 
@@ -90,14 +90,7 @@ class ListGameItem extends ConsumerWidget {
                             game.numberOfComments!.toString() + " comentario"),
                       ),
                     if (game.stars != null)
-                      RatingBarIndicator(
-                        itemBuilder: (context, index) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        rating: game.stars!,
-                        itemSize: 25.0,
-                      ),
+                      StarsBarIndicator(stars: game.stars!),
                     if (game.price != null)
                       Flexible(
                         child: Padding(
