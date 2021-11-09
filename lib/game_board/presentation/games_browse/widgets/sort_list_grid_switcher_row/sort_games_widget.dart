@@ -39,7 +39,10 @@ class _SortGamesWidget extends State<SortGamesWidget> {
           ].map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(value),
+              ),
             );
           }).toList()),
     );
