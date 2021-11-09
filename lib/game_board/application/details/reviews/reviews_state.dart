@@ -1,3 +1,5 @@
+import 'package:zacatrusa/core/optional.dart';
+
 import '../../../infrastructure/core/internet_feedback.dart';
 import '../../../zacatrus/domain/details_page/game_review.dart';
 
@@ -33,25 +35,13 @@ class ReviewsState {
 
   ReviewsState copyWith({
     List<GameReview>? gameReviews,
-    InternetFeedback? internetFeedback,
+    Optional<InternetFeedback?>? internetFeedback,
   }) {
     return ReviewsState(
       gameReviews: gameReviews ?? this.gameReviews,
-      internetFeedback: internetFeedback ?? this.internetFeedback,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'gameReviews': gameReviews,
-      'internetFeedback': internetFeedback,
-    };
-  }
-
-  factory ReviewsState.fromMap(Map<String, dynamic> map) {
-    return ReviewsState(
-      gameReviews: map['gameReviews'] as List<GameReview>,
-      internetFeedback: map['internetFeedback'] as InternetFeedback,
+      internetFeedback: internetFeedback == null
+          ? this.internetFeedback
+          : internetFeedback.value,
     );
   }
 

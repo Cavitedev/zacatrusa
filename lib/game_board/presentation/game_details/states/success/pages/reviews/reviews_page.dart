@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
+import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/internet_feedback_widgets.dart';
 import 'package:zacatrusa/game_board/presentation/core/widgets/star_bars_indicator.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_review.dart';
 
@@ -27,18 +28,43 @@ class ReviewsPage extends ConsumerWidget {
 
     final ReviewsState state = ref.watch(reviewsNotifierProvider(reviewsUrl!));
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Text("Comentarios\n"),
-          ...state.gameReviews
-              .map((review) => Review(
-                    review: review,
-                  ))
-              .toList()
-        ],
+    return RefreshIndicator(
+      semanticsValue: "Recargar comentarios",
+      onRefresh: () async {
+        ref.read(reviewsNotifierProvider(reviewsUrl!).notifier).clear();
+      },
+      child: NotificationListener<ScrollUpdateNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          return _onScroll(scrollInfo, ref, reviewsUrl!);
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text("Comentarios (${reviewsUrl!.numberOfReviews}) \n"),
+              ...state.gameReviews
+                  .map((review) => Review(
+                        review: review,
+                      ))
+                  .toList(),
+              if (state.internetFeedback != null)
+                InternetFeedbackWidget(feedback: state.internetFeedback!)
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  bool _onScroll(
+      ScrollNotification scrollInfo, WidgetRef ref, ReviewsUrl reviewsUrl) {
+    if (scrollInfo.metrics.pixels > scrollInfo.metrics.maxScrollExtent - 300) {
+      final zacatrusBrowserNotifier =
+          ref.read(reviewsNotifierProvider(reviewsUrl).notifier);
+
+      zacatrusBrowserNotifier.nextPageIfNotLoading();
+      return true;
+    }
+    return false;
   }
 }
 
@@ -52,47 +78,44 @@ class Review extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: listSpacing),
-      child: Card(
+    return Card(
+      child: Container(
+        margin: const EdgeInsets.all(listSpacing),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Flexible(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (review.author != null)
-                    Text(
-                      review.author!,
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                  if (review.stars != null)
-                    StarsBarIndicator(stars: review.stars!),
-                  if (review.date != null)
-                    Text(
-                      review.date!,
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                if (review.author != null)
+                  Text(
+                    review.author!,
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                if (review.stars != null)
+                  StarsBarIndicator(stars: review.stars!),
+                if (review.date != null)
+                  Text(
+                    review.date!,
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+              ],
             ),
             if (review.title != null)
-              Flexible(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: listSpacing),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: innerElementsPadding),
                 child: Text(
                   review.title!,
                   style: Theme.of(context).textTheme.headline4,
                 ),
-              )),
+              ),
             if (review.description != null)
-              Flexible(
-                  child: Text(
+              Text(
                 review.description!,
                 style: Theme.of(context).textTheme.bodyText1,
-              )),
+              ),
           ],
         ),
       ),
