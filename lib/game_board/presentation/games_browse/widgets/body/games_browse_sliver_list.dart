@@ -44,12 +44,12 @@ class ListGameItem extends ConsumerWidget {
       children: [
         Card(
           child: Row(
-            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (game.image != null && game.image!.imageLink != null)
                 ExtendedImage.network(
                   game.image!.imageLink!,
+                  fit: BoxFit.fill,
                   width: min(200, MediaQuery.of(context).size.width / 2.2),
                   semanticLabel: game.image?.imageAlt,
                 ),

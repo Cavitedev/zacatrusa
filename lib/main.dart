@@ -10,7 +10,8 @@ import 'game_board/presentation/core/routing/games_router_delegate.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  if (!Platform.environment.containsKey('FLUTTER_TEST') &&
+      (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     setWindowMinSize(const Size(350, 350));
     setWindowMaxSize(Size.infinite);
   }

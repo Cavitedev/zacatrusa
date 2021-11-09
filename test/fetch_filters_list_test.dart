@@ -26,10 +26,10 @@ void main() {
     dom.Element tematicaDiv = collapsibleFilters[0];
 
     final dom.Element ol = tematicaDiv.getElementsByTagName("ol")[0];
-    final Map<String, String> siBscas = _getLabelLinkCategories(ol);
+    final Map<String, String> siBuscas = _getLabelLinkCategories(ol);
 
-    print(siBscas);
-    expect(siBscas.length, 12);
+    print(siBuscas);
+    expect(siBuscas.length, 12);
   });
 
   test("Fetch categorias", () async {
@@ -92,7 +92,7 @@ void main() {
     final Map<String, String> editoriales = _getLabelLinkCategories(ol);
 
     print(editoriales);
-    expect(editoriales.length, 190);
+    expect(editoriales.length, 192);
   });
 }
 
