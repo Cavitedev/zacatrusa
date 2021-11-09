@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/application/browser/browser_notifier.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_order.dart';
 
-class SortGamesWidget extends StatefulWidget {
+class SortGamesWidget extends ConsumerStatefulWidget {
   const SortGamesWidget({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SortGamesWidget> createState() => _SortGamesWidget();
+  ConsumerState<SortGamesWidget> createState() => _SortGamesWidget();
 }
 
-class _SortGamesWidget extends State<SortGamesWidget> {
-  String initOrder = 'Más vendidos';
+class _SortGamesWidget extends ConsumerState<SortGamesWidget> {
+  String initOrder = categoriesUrl.keys.first;
+
+  static Map<String, ZacatrusOrder> categoriesUrl = {
+    "Más Vendidos": const ZacatrusOrder(
+        value: ZacatrusOrderValues.bestSellers, isDesc: true),
+    "Más Baratos":
+        const ZacatrusOrder(value: ZacatrusOrderValues.price, isDesc: false),
+    "Más Nuevos":
+        const ZacatrusOrder(value: ZacatrusOrderValues.newest, isDesc: true),
+    "Mayor Número de Comentarios": const ZacatrusOrder(
+        value: ZacatrusOrderValues.reviewCount, isDesc: true),
+    "Mejor Valorados": const ZacatrusOrder(
+        value: ZacatrusOrderValues.ratingValue, isDesc: true),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -21,30 +38,34 @@ class _SortGamesWidget extends State<SortGamesWidget> {
           borderRadius: const BorderRadius.all(Radius.circular(5.0))),
       height: 35,
       child: DropdownButton<String>(
-          value: initOrder,
-          icon: const Icon(Icons.arrow_drop_down),
-          underline: Container(),
-          onChanged: (String? newOrder) {
-            setState(() {
-              initOrder = newOrder!;
-            });
-          },
-          dropdownColor: Colors.grey[200],
-          items: <String>[
-            'Más vendidos',
-            'Precio',
-            'Nuevo',
-            'Número de comentarios',
-            'Mejor valorados'
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(value),
+        value: initOrder,
+        isExpanded: true,
+        icon: const Icon(Icons.arrow_drop_down),
+        underline: Container(),
+        onChanged: (String? newOrder) {
+          setState(() {
+            initOrder = newOrder!;
+          });
+
+          ref.read(browserNotifierProvider.notifier).changeFilters(ref
+              .read(browserNotifierProvider)
+              .urlComposer
+              .copyWith(order: Optional.value(categoriesUrl[newOrder])));
+        },
+        dropdownColor: Colors.grey[200],
+        items: categoriesUrl.keys.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                value,
+                overflow: TextOverflow.ellipsis,
               ),
-            );
-          }).toList()),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
