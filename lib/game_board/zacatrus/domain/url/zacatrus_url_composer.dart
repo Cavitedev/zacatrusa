@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_order.dart';
 
 import '../../../../core/optional.dart';
 import 'filters/zacatrus_categoria_filter.dart';
@@ -7,6 +6,7 @@ import 'filters/zacatrus_edades_filter.dart';
 import 'filters/zacatrus_editorial_filter.dart';
 import 'filters/zacatrus_mecanica_filter.dart';
 import 'filters/zacatrus_num_jugadores_filter.dart';
+import 'filters/zacatrus_order.dart';
 import 'filters/zacatrus_page_query_parameter.dart';
 import 'filters/zacatrus_rango_precio_filter.dart';
 import 'filters/zacatrus_si_buscas_filter.dart';
@@ -45,6 +45,7 @@ class ZacatrusUrlBrowserComposer {
     ZacatrusRangoPrecioFilter? precio;
     ZacatrusMecanicaFilter? mecanica;
     ZacatrusEditorialFilter? editorial;
+    ZacatrusOrder? order;
 
     url = url.replaceAll(".html", "");
     final Uri uri = Uri.parse(url);
@@ -115,6 +116,13 @@ class ZacatrusUrlBrowserComposer {
       if (precioParam != null) {
         precio = ZacatrusRangoPrecioFilter.url(precioParameter: precioParam);
       }
+
+      final String? orderParam = uri.queryParameters["product_list_order"];
+      if (orderParam != null) {
+        final String? isDesc = uri.queryParameters["product_list_dir"];
+
+        order = ZacatrusOrder.url(orderParam: orderParam, isDescParam: isDesc);
+      }
     }
 
     return ZacatrusUrlBrowserComposer(
@@ -127,7 +135,8 @@ class ZacatrusUrlBrowserComposer {
         editorial: editorial,
         mecanica: mecanica,
         precio: precio,
-        tematica: tematica);
+        tematica: tematica,
+        order: order);
   }
 
   static const String rawUrl = "https://zacatrus.es/juegos-de-mesa";
