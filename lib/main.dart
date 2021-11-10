@@ -41,6 +41,8 @@ class MyApp extends ConsumerWidget {
             headline4: TextStyle(fontSize: 28, color: Colors.black),
             headline3: TextStyle(
                 fontSize: 36, color: Colors.black, letterSpacing: 0.5),
+            headline2:
+                TextStyle(fontSize: 44, color: Colors.black, letterSpacing: 1),
           )),
     );
   }

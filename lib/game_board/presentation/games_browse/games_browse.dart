@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/app_drawer.dart';
 
 import '../../application/browser/browser_notifier.dart';
 import 'games_browse_sliver_app_bar.dart';
@@ -11,11 +12,15 @@ import 'widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 final listGridViewProvider = StateProvider((_) => ListGrid.list);
 
 class GamesBrowse extends ConsumerWidget {
-  const GamesBrowse({Key? key}) : super(key: key);
+  GamesBrowse({Key? key}) : super(key: key);
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: const AppDrawer(),
       body: RefreshIndicator(
         semanticsLabel: "Recargar juegos de mesa",
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
