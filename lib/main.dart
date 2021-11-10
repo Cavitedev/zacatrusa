@@ -39,6 +39,8 @@ class MyApp extends ConsumerWidget {
           textTheme: const TextTheme(
             headline5: TextStyle(fontSize: 20),
             headline4: TextStyle(fontSize: 28, color: Colors.black),
+            headline3: TextStyle(
+                fontSize: 36, color: Colors.black, letterSpacing: 0.5),
           )),
     );
   }

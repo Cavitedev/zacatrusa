@@ -40,7 +40,20 @@ class ReviewsPage extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("Comentarios (${reviewsUrl!.numberOfReviews}) \n"),
+              SizedBox(
+                width: double.infinity,
+                child: Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(innerElementsPadding),
+                    child: Text(
+                      "Comentarios (${reviewsUrl!.numberOfReviews})",
+                      style: Theme.of(context).textTheme.headline3,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
               ...state.gameReviews
                   .map((review) => Review(
                         review: review,
@@ -85,8 +98,11 @@ class Review extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.spaceAround,
+              runSpacing: 4,
+              spacing: 16,
               children: [
                 if (review.author != null)
                   Text(
@@ -109,6 +125,7 @@ class Review extends StatelessWidget {
                 child: Text(
                   review.title!,
                   style: Theme.of(context).textTheme.headline4,
+                  textAlign: TextAlign.center,
                 ),
               ),
             if (review.description != null)
