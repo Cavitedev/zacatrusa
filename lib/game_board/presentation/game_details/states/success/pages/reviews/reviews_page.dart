@@ -60,7 +60,11 @@ class ReviewsPage extends ConsumerWidget {
                       ))
                   .toList(),
               if (state.internetFeedback != null)
-                InternetFeedbackWidget(feedback: state.internetFeedback!)
+                Padding(
+                  padding: const EdgeInsets.all(generalPadding),
+                  child:
+                      InternetFeedbackWidget(feedback: state.internetFeedback!),
+                )
             ],
           ),
         ),
