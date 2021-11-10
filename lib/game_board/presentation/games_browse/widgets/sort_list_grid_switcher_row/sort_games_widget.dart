@@ -37,7 +37,6 @@ class _SortGamesWidget extends ConsumerState<SortGamesWidget> {
           color: Colors.grey[200],
           border: Border.all(color: Colors.grey),
           borderRadius: const BorderRadius.all(Radius.circular(5.0))),
-      height: 35,
       child: DropdownButton<String>(
         value: initOrder,
         isExpanded: true,
@@ -61,6 +60,9 @@ class _SortGamesWidget extends ConsumerState<SortGamesWidget> {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
           );
