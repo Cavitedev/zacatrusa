@@ -40,6 +40,7 @@ class _SortGamesWidget extends ConsumerState<SortGamesWidget> {
       child: DropdownButton<String>(
         value: initOrder,
         isExpanded: true,
+        alignment: Alignment.centerLeft,
         icon: const Icon(Icons.arrow_drop_down),
         underline: Container(),
         onChanged: (String? newOrder) {
