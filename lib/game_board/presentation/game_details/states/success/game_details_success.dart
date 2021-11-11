@@ -29,7 +29,7 @@ class GameDetailsSuccess extends ConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(generalPadding),
-        child: data.imagesCarousel,
+        child: _getBody(navigationIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationIndex,
