@@ -23,8 +23,6 @@ class ReviewsNotifier extends StateNotifier<ReviewsState> {
   ReviewsUrl reviewUrl;
 
   StreamSubscription? subscription;
-  int reviewsRetrieved = 0;
-  int nonValidReviews = 0;
 
   void loadReviews() {
     if (reviewUrl.numberOfReviews <= state.gameReviews.length) {

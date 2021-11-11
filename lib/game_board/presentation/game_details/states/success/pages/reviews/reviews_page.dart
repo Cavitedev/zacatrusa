@@ -110,7 +110,7 @@ class Review extends StatelessWidget {
               runSpacing: 4,
               spacing: 16,
               children: [
-                if (review.author != null)
+                if (GameReview.isElementValid(review.author))
                   Text(
                     review.author!,
                     style: Theme.of(context).textTheme.subtitle2,
@@ -124,7 +124,7 @@ class Review extends StatelessWidget {
                   ),
               ],
             ),
-            if (review.title != null)
+            if (GameReview.isElementValid(review.title))
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: innerElementsPadding),
