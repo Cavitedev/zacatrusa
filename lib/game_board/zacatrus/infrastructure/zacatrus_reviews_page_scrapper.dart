@@ -44,7 +44,7 @@ class ZacatrusReviewPageScrapper {
           doc.getElementsByClassName("items review-items")[0].children;
       for (final lireview in liReviews) {
         GameReview? review = _parseReview(lireview);
-        if (review != null) {
+        if (review != null && review.isValid()) {
           reviews.add(review);
         }
       }

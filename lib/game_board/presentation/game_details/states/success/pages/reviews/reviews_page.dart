@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_margins.dart';
-import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/internet_feedback_widgets.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/star_bars_indicator.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/reviews/game_review.dart';
 
+import '../../../../../../../constants/app_margins.dart';
 import '../../../../../../application/details/reviews/reviews_notifier.dart';
 import '../../../../../../application/details/reviews/reviews_state.dart';
+import '../../../../../../zacatrus/domain/details_page/reviews/game_review.dart';
 import '../../../../../../zacatrus/domain/details_page/reviews/reviews_url.dart';
+import '../../../../../core/feedback_errors_loading/internet_feedback_widgets.dart';
+import '../../../../../core/widgets/star_bars_indicator.dart';
 
 class ReviewsPage extends ConsumerWidget {
   const ReviewsPage({this.reviewsUrl, Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class ReviewsPage extends ConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(innerElementsPadding),
                     child: Text(
-                      "Comentarios (${reviewsUrl!.numberOfReviews})",
+                      "Comentarios (${state.actualAmountOfReviews ?? reviewsUrl!.numberOfReviews})",
                       style: Theme.of(context).textTheme.headline3,
                       textAlign: TextAlign.center,
                     ),
@@ -55,7 +55,6 @@ class ReviewsPage extends ConsumerWidget {
                 ),
               ),
               ...state.gameReviews
-                  .where((review) => review.isValid())
                   .map((review) => Review(
                         review: review,
                       ))
