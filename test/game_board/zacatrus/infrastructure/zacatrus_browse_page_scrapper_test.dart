@@ -15,7 +15,8 @@ void main() {
 
   group("Get Games Overview", () {
     test("Default object loads page", () async {
-      final ZacatrusBrowsePageScapper scrapper = container.read(zacatrusBrowsePageScrapperProvider);
+      final ZacatrusBrowsePageScapper scrapper =
+          container.read(zacatrusBrowsePageScrapperProvider);
 
       final httpCall =
           scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init());
@@ -41,7 +42,7 @@ void main() {
       expect(game1.image!.imageLink, isNotNull);
       expect(game1.image!.imageAlt, isNotNull);
 
-      expect(game1.numberOfComments, isNotNull);
+      expect(game1.numberOfReviews, isNotNull);
 
       expect(game1.stars, isNotNull);
 
@@ -49,7 +50,8 @@ void main() {
     });
 
     test("Returns no games found on not matching filters", () async {
-      final ZacatrusBrowsePageScapper scrapper = container.read(zacatrusBrowsePageScrapperProvider);
+      final ZacatrusBrowsePageScapper scrapper =
+          container.read(zacatrusBrowsePageScrapperProvider);
 
       final result =
           scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init().copyWith(

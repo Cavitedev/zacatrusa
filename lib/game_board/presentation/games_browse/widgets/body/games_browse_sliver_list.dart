@@ -3,13 +3,15 @@ import 'dart:math';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_margins.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
+import '../../../../../constants/app_margins.dart';
+import '../../../../../core/optional.dart';
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
+import '../../../core/routing/games_router_delegate.dart';
+import '../../../core/widgets/price.dart';
+import '../../../core/widgets/reviews_number.dart';
+import '../../../core/widgets/star_bars_indicator.dart';
 
 class GamesBrowseSliverList extends StatelessWidget {
   const GamesBrowseSliverList({
@@ -44,12 +46,12 @@ class ListGameItem extends ConsumerWidget {
       children: [
         Card(
           child: Row(
-            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (game.image != null && game.image!.imageLink != null)
                 ExtendedImage.network(
                   game.image!.imageLink!,
+                  fit: BoxFit.fill,
                   width: min(200, MediaQuery.of(context).size.width / 2.2),
                   semanticLabel: game.image?.imageAlt,
                 ),
@@ -68,48 +70,23 @@ class ListGameItem extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (game.numberOfComments != null &&
-                        game.numberOfComments! > 1)
+                    if (game.numberOfReviews != null &&
+                        game.numberOfReviews! > 1)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(
                             5, 0, 0, innerElementsPadding),
-                        child: Text(
-                          game.numberOfComments!.toString() +
-                              (game.numberOfComments! > 1
-                                  ? " comentarios"
-                                  : " comentario"),
-                          style: Theme.of(context).textTheme.caption,
+                        child: ReviewsNumber(
+                          numberReviews: game.numberOfReviews!,
                         ),
-                      ),
-                    if (game.numberOfComments != null &&
-                        game.numberOfComments == 1)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            5, 0, 0, innerElementsPadding),
-                        child: Text(
-                            game.numberOfComments!.toString() + " comentario"),
                       ),
                     if (game.stars != null)
-                      RatingBarIndicator(
-                        itemBuilder: (context, index) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        rating: game.stars!,
-                        itemSize: 25.0,
-                      ),
+                      StarsBarIndicator(stars: game.stars!),
                     if (game.price != null)
                       Flexible(
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(
                               5, innerElementsPadding, 0, innerElementsPadding),
-                          child: Text(
-                            game.price!.toStringAsFixed(2) + " €",
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(fontWeight: FontWeight.w600),
-                          ),
+                          child: PriceText(price: game.price!),
                         ),
                       ),
                   ],

@@ -6,6 +6,7 @@ import 'filters/zacatrus_edades_filter.dart';
 import 'filters/zacatrus_editorial_filter.dart';
 import 'filters/zacatrus_mecanica_filter.dart';
 import 'filters/zacatrus_num_jugadores_filter.dart';
+import 'filters/zacatrus_order.dart';
 import 'filters/zacatrus_page_query_parameter.dart';
 import 'filters/zacatrus_rango_precio_filter.dart';
 import 'filters/zacatrus_si_buscas_filter.dart';
@@ -13,18 +14,18 @@ import 'filters/zacatrus_tematica_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
-  const ZacatrusUrlBrowserComposer({
-    required this.productsPerPage,
-    required this.pageNum,
-    this.siBuscas,
-    this.categoria,
-    this.tematica,
-    this.edades,
-    this.numJugadores,
-    this.precio,
-    this.mecanica,
-    this.editorial,
-  });
+  const ZacatrusUrlBrowserComposer(
+      {required this.productsPerPage,
+      required this.pageNum,
+      this.siBuscas,
+      this.categoria,
+      this.tematica,
+      this.edades,
+      this.numJugadores,
+      this.precio,
+      this.mecanica,
+      this.editorial,
+      this.order});
 
   factory ZacatrusUrlBrowserComposer.init() {
     return const ZacatrusUrlBrowserComposer(
@@ -44,6 +45,7 @@ class ZacatrusUrlBrowserComposer {
     ZacatrusRangoPrecioFilter? precio;
     ZacatrusMecanicaFilter? mecanica;
     ZacatrusEditorialFilter? editorial;
+    ZacatrusOrder? order;
 
     url = url.replaceAll(".html", "");
     final Uri uri = Uri.parse(url);
@@ -114,6 +116,13 @@ class ZacatrusUrlBrowserComposer {
       if (precioParam != null) {
         precio = ZacatrusRangoPrecioFilter.url(precioParameter: precioParam);
       }
+
+      final String? orderParam = uri.queryParameters["product_list_order"];
+      if (orderParam != null) {
+        final String? isDesc = uri.queryParameters["product_list_dir"];
+
+        order = ZacatrusOrder.url(orderParam: orderParam, isDescParam: isDesc);
+      }
     }
 
     return ZacatrusUrlBrowserComposer(
@@ -126,7 +135,8 @@ class ZacatrusUrlBrowserComposer {
         editorial: editorial,
         mecanica: mecanica,
         precio: precio,
-        tematica: tematica);
+        tematica: tematica,
+        order: order);
   }
 
   static const String rawUrl = "https://zacatrus.es/juegos-de-mesa";
@@ -142,6 +152,7 @@ class ZacatrusUrlBrowserComposer {
   final ZacatrusRangoPrecioFilter? precio;
   final ZacatrusMecanicaFilter? mecanica;
   final ZacatrusEditorialFilter? editorial;
+  final ZacatrusOrder? order;
 
   String buildUrl() {
     String categoriaAddition =
@@ -168,7 +179,7 @@ class ZacatrusUrlBrowserComposer {
     final String pathUrl = '$rawUrl$categoriaAddition$pathJoin2.html';
 
     final String params =
-        "${pageNum.toParam()}${edades?.toUrl() ?? ""}${precio?.toUrl() ?? ""}${productsPerPage.toParam()}";
+        "${pageNum.toParam()}${edades?.toUrl() ?? ""}${precio?.toUrl() ?? ""}${productsPerPage.toParam()}${order?.toUrl() ?? ""}";
 
     String url = "$pathUrl?$params";
 
@@ -208,7 +219,8 @@ class ZacatrusUrlBrowserComposer {
           numJugadores == other.numJugadores &&
           precio == other.precio &&
           mecanica == other.mecanica &&
-          editorial == other.editorial;
+          editorial == other.editorial &&
+          order == other.order;
 
   @override
   int get hashCode =>
@@ -221,7 +233,8 @@ class ZacatrusUrlBrowserComposer {
       numJugadores.hashCode ^
       precio.hashCode ^
       mecanica.hashCode ^
-      editorial.hashCode;
+      editorial.hashCode ^
+      order.hashCode;
 
   @override
   String toString() {
@@ -239,6 +252,7 @@ class ZacatrusUrlBrowserComposer {
     Optional<ZacatrusRangoPrecioFilter?>? precio,
     Optional<ZacatrusMecanicaFilter?>? mecanica,
     Optional<ZacatrusEditorialFilter?>? editorial,
+    Optional<ZacatrusOrder?>? order,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
@@ -255,6 +269,7 @@ class ZacatrusUrlBrowserComposer {
       mecanica: mecanica?.isValid ?? false ? mecanica!.value : this.mecanica,
       editorial:
           editorial?.isValid ?? false ? editorial!.value : this.editorial,
+      order: order?.isValid ?? false ? order!.value : this.order,
     );
   }
 }

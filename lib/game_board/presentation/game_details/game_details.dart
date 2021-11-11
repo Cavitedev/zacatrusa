@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_margins.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/game_details_success.dart';
 
+import '../../../constants/app_margins.dart';
 import '../../application/details/details_notifier.dart';
 import '../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
 import '../core/feedback_errors_loading/internet_feedback_widgets.dart';
+import 'states/success/game_details_success.dart';
 
 class GameDetails extends ConsumerWidget {
   const GameDetails({

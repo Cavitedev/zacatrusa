@@ -68,11 +68,13 @@ class BrowserNotifier extends StateNotifier<BrowserState> {
   }
 
   void changeFilters(ZacatrusUrlBrowserComposer composer) {
-    state = state.copyWith(
-        urlComposer: composer.copyWith(pageNum: const ZacatrusPageIndex(1)),
-        games: [],
-        gamesFound: const Optional.value(null),
-        loadingFeedback: null);
-    loadGames();
+    if (state.urlComposer != composer) {
+      state = state.copyWith(
+          urlComposer: composer.copyWith(pageNum: const ZacatrusPageIndex(1)),
+          games: [],
+          gamesFound: const Optional.value(null),
+          loadingFeedback: null);
+      loadGames();
+    }
   }
 }

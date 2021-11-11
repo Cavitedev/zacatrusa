@@ -2,15 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:zacatrusa/core/string_helper.dart';
-import 'package:zacatrusa/game_board/infrastructure/core/scrapping_failures.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_overview_details.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/images_carousel.dart';
 
 import '../../../core/multiple_result.dart';
+import '../../../core/string_helper.dart';
 import '../../infrastructure/core/internet_feedback.dart';
+import '../../infrastructure/core/scrapping_failures.dart';
 import '../../infrastructure/http_loader.dart';
+import '../domain/details_page/game_data_sheet.dart';
+import '../domain/details_page/game_overview_details.dart';
+import '../domain/details_page/images_carousel.dart';
+import '../domain/details_page/reviews/reviews_url.dart';
 import '../domain/details_page/zacatrus_details_page_data.dart';
+import '../domain/url/filters/zacatrus_page_query_parameter.dart';
 
 final zacatrusDetailsPageScrapperProvider =
     Provider((ref) => ZacatrusDetailsPageScapper(ref: ref));
@@ -50,6 +53,10 @@ class ZacatrusDetailsPageScapper {
 
       pageData.gameOverview = _parseGameOverview(mainContent, url);
       pageData.imagesCarousel = _parseImageCarousel(mainContent);
+      pageData.gameDescription = _parseGameDescription(doc);
+      pageData.overviewDescription = _parseOverviewDescription(mainContent);
+      pageData.gameDataSheet = _parseGameDataSheet(doc);
+      pageData.reviewsUrl = _parseReviews(doc);
 
       return Right(pageData);
     } catch (_) {
@@ -121,7 +128,7 @@ class ZacatrusDetailsPageScapper {
         final commentsElement = commentsElements.first.children.first;
         final String comments = commentsElement.text;
 
-        gameOverview.numberOfComments = comments.toNum().toInt();
+        gameOverview.numberOfReviews = comments.toNum().toInt();
       }
     } catch (_) {
       //Not found
@@ -167,6 +174,121 @@ class ZacatrusDetailsPageScapper {
       return ImagesCarousel(items: carouselItems);
     } catch (_) {
       // No found
+    }
+  }
+
+  String? _parseGameDescription(dom.Document document) {
+    try {
+      dom.Element outerDiv = document.getElementById("description")!;
+      dom.Element innerDiv = outerDiv.children[0];
+      return innerDiv.text.trim();
+    } catch (_) {
+      // No found
+    }
+  }
+
+  String? _parseOverviewDescription(dom.Element mainContent) {
+    try {
+      dom.Element outerDiv =
+          mainContent.getElementsByClassName("product attribute overview")[0];
+      dom.Element innerDiv = outerDiv.children[0];
+      return innerDiv.text.trim();
+    } catch (_) {
+      // No found
+    }
+  }
+
+  GameDataSheet? _parseGameDataSheet(dom.Document doc) {
+    GameDataSheet sheet = GameDataSheet();
+    try {
+      final dom.Element table =
+          doc.getElementById("product-attribute-specs-table")!;
+      final dom.Element tbody = table.children[1];
+      final List<dom.Element> rowsOfTable = tbody.children;
+
+      for (final dom.Element row in rowsOfTable) {
+        _updateGameSheetWithTableRow(row, sheet);
+      }
+    } catch (_) {}
+    return sheet;
+  }
+
+  void _updateGameSheetWithTableRow(dom.Element row, GameDataSheet sheet) {
+    try {
+      final dom.Element rowContent = row.children[1];
+      final String? kindOfRow = rowContent.attributes["data-th"];
+      if (kindOfRow == null) {
+        return;
+      }
+      final String content = rowContent.text;
+      switch (kindOfRow) {
+        case "Autor":
+          sheet.authors = content;
+          break;
+        case "BGG":
+          sheet.bgg = content.toNum().toInt();
+          break;
+        case "Mecánica":
+          sheet.mechanic = content;
+          break;
+        case "Temática":
+          sheet.theme = content;
+          break;
+        case "Si buscas...":
+          sheet.siBuscas = content;
+          break;
+        case "Edad":
+          sheet.ageRanges = content;
+          break;
+        case "Núm. jugadores":
+          sheet.numPlayers = content;
+          break;
+        case "Tiempo de juego":
+          sheet.gameplayDuration = content;
+          break;
+        case "Complejidad":
+          sheet.complexity = content;
+          break;
+        case "Editorial":
+          sheet.editorial = content;
+          break;
+        case "Contenido":
+          sheet.content = rowContent.children[0].children
+              .map((child) => child.text)
+              .toList();
+          break;
+        case "Idioma":
+          sheet.language = content;
+          break;
+        case "Dependencia del idioma":
+          sheet.languageDependency = content;
+          break;
+      }
+    } catch (_) {
+      //No found
+    }
+  }
+
+  ReviewsUrl? _parseReviews(dom.Document doc) {
+    try {
+      final outElementCounter = doc.getElementById("tab-label-reviews-title");
+      final counterElement = outElementCounter!.children[0];
+      int reviewsAmount = counterElement.text.toNum().toInt();
+
+      final reviewsDiv = doc.getElementById("reviews");
+      final dom.Element? scriptData =
+          reviewsDiv!.getElementsByTagName("script")[0];
+
+      final Map<String, dynamic> jsonContent = json.decode(scriptData!.text);
+      final String url = jsonContent["*"]["Magento_Review/js/process-reviews"]
+          ["productReviewUrl"];
+
+      return ReviewsUrl(
+          url: url,
+          numberOfReviews: reviewsAmount,
+          pageIndex: const ZacatrusPageIndex(1));
+    } catch (_) {
+      //No found
     }
   }
 }

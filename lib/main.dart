@@ -10,7 +10,8 @@ import 'game_board/presentation/core/routing/games_router_delegate.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  if (!Platform.environment.containsKey('FLUTTER_TEST') &&
+      (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     setWindowMinSize(const Size(350, 350));
     setWindowMaxSize(Size.infinite);
   }
@@ -33,9 +34,16 @@ class MyApp extends ConsumerWidget {
       backButtonDispatcher: RootBackButtonDispatcher(),
       routeInformationParser: routeInformationParser,
       theme: ThemeData(
-          appBarTheme: const AppBarTheme(color: Color.fromRGBO(76, 176, 86, 1)),
+          primarySwatch: Colors.green,
           errorColor: Colors.redAccent.shade400,
-          textTheme: const TextTheme(headline5: TextStyle(fontSize: 20))),
+          textTheme: const TextTheme(
+            headline5: TextStyle(fontSize: 20),
+            headline4: TextStyle(fontSize: 28, color: Colors.black),
+            headline3: TextStyle(
+                fontSize: 36, color: Colors.black, letterSpacing: 0.5),
+            headline2:
+                TextStyle(fontSize: 44, color: Colors.black, letterSpacing: 1),
+          )),
     );
   }
 }

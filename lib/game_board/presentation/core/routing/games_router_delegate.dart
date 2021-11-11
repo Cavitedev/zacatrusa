@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/game_details.dart';
+import 'package:zacatrusa/game_board/presentation/settings/settings_page.dart';
 
 import '../../../application/browser/browser_notifier.dart';
+import '../../game_details/game_details.dart';
 import '../../games_browse/games_browse.dart';
 import 'games_routing_configuration.dart';
 
@@ -40,38 +41,42 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   Widget build(BuildContext context) {
     return Navigator(
       pages: [
-        const MaterialPage(key: ValueKey("Games Browse"), child: GamesBrowse()),
+        MaterialPage(key: const ValueKey("Games Browse"), child: GamesBrowse()),
         if (_currentConf.detailsGameUrl != null)
           MaterialPage(
               key: ValueKey(_currentConf.detailsGameUrl),
               child: GameDetails(
                 url: _currentConf.detailsGameUrl!,
-              ))
+              )),
+        if (_currentConf.settings)
+          const MaterialPage(key: ValueKey("Settings"), child: SettingsPage())
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
           return false;
         }
 
-        popRoute();
-
-        return true;
+        return onPopRoute();
       },
     );
   }
 
-  @override
-  Future<bool> popRoute() {
+  bool onPopRoute() {
     if (_currentConf.settings == true) {
       _currentConf.settings = false;
       notifyListeners();
-      return Future.value(true);
+      return true;
     } else if (_currentConf.detailsGameUrl != null) {
       _currentConf.detailsGameUrl = null;
       notifyListeners();
-      return Future.value(true);
+      return true;
     }
-    return Future.value(false);
+    return false;
+  }
+
+  @override
+  Future<bool> popRoute() {
+    return Future.value(onPopRoute());
   }
 
   @override
