@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/game_details_null_data.dart';
 
 import '../../../../../constants/app_margins.dart';
 import '../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
@@ -57,7 +58,10 @@ class GameDetailsSuccess extends ConsumerWidget {
       case 0:
         return const SummaryPage();
       case 1:
-        return const CharactericticsPage();
+        if (data.gameDataSheet != null) {
+          return CharactericticsPage(gameDataSheet: data.gameDataSheet!);
+        }
+        break;
       case 2:
         return ReviewsPage(
           reviewsUrl: data.reviewsUrl,
@@ -65,5 +69,6 @@ class GameDetailsSuccess extends ConsumerWidget {
       case 3:
         return const PurchasePage();
     }
+    return const GameDetailsNullData();
   }
 }
