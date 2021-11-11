@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../constants/app_margins.dart';
+import '../../../../../constants/app_margins_and_sizes.dart';
 import 'list_grid_switcher.dart';
 import 'sort_games_widget.dart';
 

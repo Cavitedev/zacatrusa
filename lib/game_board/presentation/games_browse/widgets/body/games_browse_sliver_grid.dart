@@ -2,7 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../constants/app_margins.dart';
+import '../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../../core/optional.dart';
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 import '../../../core/routing/games_router_delegate.dart';

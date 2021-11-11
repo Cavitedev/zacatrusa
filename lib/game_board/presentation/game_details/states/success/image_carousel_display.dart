@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
 
 import '../../../../zacatrus/domain/details_page/images_carousel.dart';
 
@@ -25,6 +26,8 @@ class _ImagesCarouselDisplayState extends State<ImagesCarouselDisplay> {
         InkWell(
           child: const Icon(
             Icons.arrow_back,
+            size: mediumIconSize,
+            semanticLabel: "Imagen anterior",
           ),
           onTap: () {
             setState(() {
@@ -39,7 +42,6 @@ class _ImagesCarouselDisplayState extends State<ImagesCarouselDisplay> {
         Flexible(
           child: ExtendedImage.network(
             widget.carousel.items[index].image,
-            clipBehavior: Clip.hardEdge,
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.3,
           ),
@@ -47,6 +49,8 @@ class _ImagesCarouselDisplayState extends State<ImagesCarouselDisplay> {
         InkWell(
           child: const Icon(
             Icons.arrow_forward,
+            size: mediumIconSize,
+            semanticLabel: "Siguiente imagen",
           ),
           onTap: () {
             setState(() {
