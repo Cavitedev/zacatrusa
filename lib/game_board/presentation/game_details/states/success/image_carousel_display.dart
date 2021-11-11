@@ -1,10 +1,13 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
+import '../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../zacatrus/domain/details_page/images_carousel.dart';
 
-class ImagesCarouselDisplay extends StatefulWidget {
+class ImagesCarouselDisplay extends ConsumerStatefulWidget {
   const ImagesCarouselDisplay({
     required this.carousel,
     Key? key,
@@ -16,11 +19,12 @@ class ImagesCarouselDisplay extends StatefulWidget {
   _ImagesCarouselDisplayState createState() => _ImagesCarouselDisplayState();
 }
 
-class _ImagesCarouselDisplayState extends State<ImagesCarouselDisplay> {
+class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
   int index = 0;
 
   @override
   Widget build(BuildContext context) {
+    var item = widget.carousel.items[index];
     return Row(
       children: [
         InkWell(
@@ -40,10 +44,24 @@ class _ImagesCarouselDisplayState extends State<ImagesCarouselDisplay> {
           },
         ),
         Flexible(
-          child: ExtendedImage.network(
-            widget.carousel.items[index].image,
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.3,
+          child: GestureDetector(
+            child: Hero(
+              tag: item.image,
+              child: ExtendedImage.network(
+                item.image,
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.3,
+              ),
+            ),
+            onTap: () {
+              final router = ref.read(gamesRouterDelegateProvider);
+              router.currentConf = router.currentConf
+                  .copyWith(imageLoaded: Optional.value(item.image));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => SlidePage(url: item.image)));
+            },
           ),
         ),
         InkWell(

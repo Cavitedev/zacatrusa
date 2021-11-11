@@ -5,6 +5,7 @@ class GamesRoutingConfiguration {
   ZacatrusUrlBrowserComposer? filterComposer;
   bool settings;
   String? detailsGameUrl;
+  String? imageLoaded;
 
   GamesRoutingConfiguration.home({
     this.filterComposer,
@@ -43,6 +44,7 @@ class GamesRoutingConfiguration {
     Optional<ZacatrusUrlBrowserComposer?>? filterComposer,
     bool? settings,
     Optional<String?>? detailsGameUrl,
+    Optional<String?>? imageLoaded,
   }) {
     return GamesRoutingConfiguration._(
       filterComposer:
@@ -50,12 +52,13 @@ class GamesRoutingConfiguration {
       settings: settings ?? this.settings,
       detailsGameUrl:
           detailsGameUrl == null ? this.detailsGameUrl : detailsGameUrl.value,
+      imageLoaded: imageLoaded == null ? this.imageLoaded : imageLoaded.value,
     );
   }
 
-  GamesRoutingConfiguration._({
-    this.filterComposer,
-    required this.settings,
-    this.detailsGameUrl,
-  });
+  GamesRoutingConfiguration._(
+      {this.filterComposer,
+      required this.settings,
+      this.detailsGameUrl,
+      this.imageLoaded});
 }
