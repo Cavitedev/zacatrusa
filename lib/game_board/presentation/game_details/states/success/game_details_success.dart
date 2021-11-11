@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/characterictics/characterictics_page.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/purchase/purchase_page.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/reviews/reviews_page.dart';
 
+import '../../../../../constants/app_margins.dart';
 import '../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
+import 'pages/characterictics/characterictics_page.dart';
+import 'pages/purchase/purchase_page.dart';
+import 'pages/reviews/reviews_page.dart';
 import 'pages/summary/summay_page.dart';
 
 final StateProvider<int> detailsBottomNavigationProvider =
@@ -26,7 +27,10 @@ class GameDetailsSuccess extends ConsumerWidget {
       appBar: AppBar(
         title: Text(data.gameOverview.name),
       ),
-      body: _getBody(navigationIndex),
+      body: Padding(
+        padding: const EdgeInsets.all(generalPadding),
+        child: _getBody(navigationIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationIndex,
         onTap: (newIndex) {
@@ -55,7 +59,9 @@ class GameDetailsSuccess extends ConsumerWidget {
       case 1:
         return const CharactericticsPage();
       case 2:
-        return const ReviewsPage();
+        return ReviewsPage(
+          reviewsUrl: data.reviewsUrl,
+        );
       case 3:
         return const PurchasePage();
     }

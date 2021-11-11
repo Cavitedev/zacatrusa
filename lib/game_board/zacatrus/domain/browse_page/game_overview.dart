@@ -5,7 +5,7 @@ class GameOverview {
     this.name = "Error recuperando juego",
     this.link,
     this.image,
-    this.numberOfComments,
+    this.numberOfReviews,
     this.stars,
     this.price,
   });
@@ -13,7 +13,7 @@ class GameOverview {
   String name;
   String? link;
   ImageData? image;
-  int? numberOfComments;
+  int? numberOfReviews;
   double? stars;
   double? price;
 

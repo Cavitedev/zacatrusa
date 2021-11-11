@@ -5,6 +5,7 @@ import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_order.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
@@ -165,6 +166,17 @@ void main() {
       expect(output, "https://zacatrus.es/juegos-de-mesa/ankama.html");
     });
 
+    test('Order returns right url', () {
+      final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+          order: const Optional.value(ZacatrusOrder(
+              value: ZacatrusOrderValues.ratingValue, isDesc: true)));
+
+      final output = urlComposer.buildUrl();
+
+      expect(output,
+          "https://zacatrus.es/juegos-de-mesa.html?product_list_dir=desc&product_list_order=rating_summary");
+    });
+
     test(
         'Si buscas, temática, num jugadores, mecánica, editorial returns right url',
         () {
@@ -311,6 +323,18 @@ void main() {
                   values: ["de 3 a 6 años", "de 6 a 8 años"]))));
     });
 
+    test("home page with sorting returns right composer", () {
+      const String url =
+          "https://zacatrus.es/juegos-de-mesa.html?product_list_order=rating_summary";
+
+      final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+      expect(
+          result,
+          ZacatrusUrlBrowserComposer.init().copyWith(
+              order: const Optional.value(ZacatrusOrder(
+                  value: ZacatrusOrderValues.ratingValue, isDesc: false))));
+    });
+
     test("home page with precio returns right composer", () {
       const String url =
           "https://zacatrus.es/juegos-de-mesa.html?price=181.00-270.00";
@@ -327,7 +351,7 @@ void main() {
   group("From url to composer and from composer to url", () {
     test("Full case 1", () {
       const givenUrl =
-          "https://zacatrus.es/juegos-de-mesa/dados/fiesta-abstracto-habilidad-asmodee.html?edad=73%2C72%2C71%2C70%2C1614&price=8.00-25.00";
+          "https://zacatrus.es/juegos-de-mesa/dados/fiesta-abstracto-habilidad-asmodee.html?edad=73%2C72%2C71%2C70%2C1614&price=8.00-25.00&product_list_dir=desc&product_list_order=price";
 
       final composer = ZacatrusUrlBrowserComposer.fromUrl(givenUrl);
       final builtUrl = composer.buildUrl();

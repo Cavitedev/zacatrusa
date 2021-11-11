@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:zacatrusa/game_board/zacatrus/domain/browse_page/zacatrus_browse_page_data.dart';
 
 import '../../../core/multiple_result.dart';
 import '../../../core/string_helper.dart';
@@ -9,6 +8,7 @@ import '../../infrastructure/core/internet_feedback.dart';
 import '../../infrastructure/core/scrapping_failures.dart';
 import '../../infrastructure/http_loader.dart';
 import '../domain/browse_page/game_overview.dart';
+import '../domain/browse_page/zacatrus_browse_page_data.dart';
 import '../domain/url/zacatrus_url_composer.dart';
 
 final zacatrusBrowsePageScrapperProvider =
@@ -173,7 +173,7 @@ class ZacatrusBrowsePageScapper {
         final commentsElement = commentsElements.first.children.first;
         final String comments = commentsElement.text;
 
-        gameOverview.numberOfComments = comments.toNum().toInt();
+        gameOverview.numberOfReviews = comments.toNum().toInt();
       }
     } catch (_) {
       //Not found
