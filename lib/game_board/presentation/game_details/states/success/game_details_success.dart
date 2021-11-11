@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-<<<<<<< HEAD
-import 'pages/characterictics/characterictics_page.dart';
-import 'pages/purchase/purchase_page.dart';
-import 'pages/reviews/reviews_page.dart';
-=======
->>>>>>> master
 
 import '../../../../../constants/app_margins.dart';
 import '../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
@@ -33,14 +27,10 @@ class GameDetailsSuccess extends ConsumerWidget {
       appBar: AppBar(
         title: Text(data.gameOverview.name),
       ),
-<<<<<<< HEAD
-      body: data.imagesCarousel,
-=======
       body: Padding(
         padding: const EdgeInsets.all(generalPadding),
-        child: _getBody(navigationIndex),
+        child: data.imagesCarousel,
       ),
->>>>>>> master
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationIndex,
         onTap: (newIndex) {
