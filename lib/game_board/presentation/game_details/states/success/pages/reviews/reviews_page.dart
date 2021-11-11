@@ -30,61 +30,39 @@ class ReviewsPage extends ConsumerWidget {
 
     final ReviewsState state = ref.watch(reviewsNotifierProvider(reviewsUrl!));
 
-    return RefreshIndicator(
-      semanticsValue: "Recargar comentarios",
-      onRefresh: () async {
-        ref.read(reviewsNotifierProvider(reviewsUrl!).notifier).clear();
-      },
-      child: NotificationListener<ScrollUpdateNotification>(
-        onNotification: (ScrollNotification scrollInfo) {
-          return _onScroll(scrollInfo, ref, reviewsUrl!);
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Card(
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(innerElementsPadding),
-                    child: Text(
-                      "Comentarios (${state.actualAmountOfReviews ?? reviewsUrl!.numberOfReviews})",
-                      style: Theme.of(context).textTheme.headline3,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        if (index == 0) {
+          return SizedBox(
+            width: double.infinity,
+            child: Card(
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(innerElementsPadding),
+                child: Text(
+                  "Comentarios (${state.actualAmountOfReviews ?? reviewsUrl!.numberOfReviews})",
+                  style: Theme.of(context).textTheme.headline3,
+                  textAlign: TextAlign.center,
                 ),
               ),
-              ...state.gameReviews
-                  .map((review) => Review(
-                        review: review,
-                      ))
-                  .toList(),
-              if (state.internetFeedback != null)
-                Padding(
-                  padding: const EdgeInsets.all(generalPadding),
-                  child:
-                      InternetFeedbackWidget(feedback: state.internetFeedback!),
-                )
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        } else if (index <= state.gameReviews.length) {
+          return Review(review: state.gameReviews[index - 1]);
+        }
+        if (isThereFeedback(state)) {
+          return Padding(
+            padding: const EdgeInsets.all(generalPadding),
+            child: InternetFeedbackWidget(feedback: state.internetFeedback!),
+          );
+        }
+      },
+          childCount:
+              state.gameReviews.length + (isThereFeedback(state) ? 2 : 1)),
     );
   }
 
-  bool _onScroll(
-      ScrollNotification scrollInfo, WidgetRef ref, ReviewsUrl reviewsUrl) {
-    if (scrollInfo.metrics.pixels > scrollInfo.metrics.maxScrollExtent - 300) {
-      final zacatrusBrowserNotifier =
-          ref.read(reviewsNotifierProvider(reviewsUrl).notifier);
-
-      zacatrusBrowserNotifier.nextPageIfNotLoading();
-      return true;
-    }
-    return false;
-  }
+  bool isThereFeedback(ReviewsState state) => state.internetFeedback != null;
 }
 
 class Review extends StatelessWidget {
