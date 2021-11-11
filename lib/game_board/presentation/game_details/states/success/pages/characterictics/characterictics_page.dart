@@ -9,42 +9,44 @@ class CharactericticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(),
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      columnWidths: const {
-        0: FixedColumnWidth(120),
-      },
-      children: [
-        if (gameDataSheet.authors != null)
-          _rowOfTable("Autor", gameDataSheet.authors!),
-        if (gameDataSheet.bgg != null)
-          _rowOfTable("BGG", gameDataSheet.bgg!.toString()),
-        if (gameDataSheet.mechanic != null)
-          _rowOfTable("Mecánica", gameDataSheet.mechanic!.toString()),
-        if (gameDataSheet.theme != null)
-          _rowOfTable("Temática", gameDataSheet.theme!.toString()),
-        if (gameDataSheet.siBuscas != null)
-          _rowOfTable("Si buscas...", gameDataSheet.siBuscas!.toString()),
-        if (gameDataSheet.ageRanges != null)
-          _rowOfTable("Edad", gameDataSheet.ageRanges!.toString()),
-        if (gameDataSheet.gameplayDuration != null)
-          _rowOfTable(
-              "Tiempo de juego", gameDataSheet.gameplayDuration!.toString()),
-        if (gameDataSheet.measurements != null)
-          _rowOfTable("Medidas", gameDataSheet.measurements!.toString()),
-        if (gameDataSheet.complexity != null)
-          _rowOfTable("Complejidad", gameDataSheet.complexity!.toString()),
-        if (gameDataSheet.editorial != null)
-          _rowOfTable("Editorial", gameDataSheet.editorial!.toString()),
-        if (gameDataSheet.content != null)
-          _rowOfTable("Contenido", gameDataSheet.content!.toString()),
-        if (gameDataSheet.language != null)
-          _rowOfTable("Idioma", gameDataSheet.language!.toString()),
-        if (gameDataSheet.languageDependency != null)
-          _rowOfTable("Dependencia del idioma",
-              gameDataSheet.languageDependency!.toString()),
-      ],
+    return SliverToBoxAdapter(
+      child: Table(
+        border: TableBorder.all(),
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        columnWidths: const {
+          0: FixedColumnWidth(120),
+        },
+        children: [
+          if (gameDataSheet.authors != null)
+            _rowOfTable("Autor", gameDataSheet.authors!),
+          if (gameDataSheet.bgg != null)
+            _rowOfTable("BGG", gameDataSheet.bgg!.toString()),
+          if (gameDataSheet.mechanic != null)
+            _rowOfTable("Mecánica", gameDataSheet.mechanic!.toString()),
+          if (gameDataSheet.theme != null)
+            _rowOfTable("Temática", gameDataSheet.theme!.toString()),
+          if (gameDataSheet.siBuscas != null)
+            _rowOfTable("Si buscas...", gameDataSheet.siBuscas!.toString()),
+          if (gameDataSheet.ageRanges != null)
+            _rowOfTable("Edad", gameDataSheet.ageRanges!.toString()),
+          if (gameDataSheet.gameplayDuration != null)
+            _rowOfTable(
+                "Tiempo de juego", gameDataSheet.gameplayDuration!.toString()),
+          if (gameDataSheet.measurements != null)
+            _rowOfTable("Medidas", gameDataSheet.measurements!.toString()),
+          if (gameDataSheet.complexity != null)
+            _rowOfTable("Complejidad", gameDataSheet.complexity!.toString()),
+          if (gameDataSheet.editorial != null)
+            _rowOfTable("Editorial", gameDataSheet.editorial!.toString()),
+          if (gameDataSheet.content != null)
+            _rowOfTable("Contenido", gameDataSheet.content!.toString()),
+          if (gameDataSheet.language != null)
+            _rowOfTable("Idioma", gameDataSheet.language!.toString()),
+          if (gameDataSheet.languageDependency != null)
+            _rowOfTable("Dependencia del idioma",
+                gameDataSheet.languageDependency!.toString()),
+        ],
+      ),
     );
   }
 

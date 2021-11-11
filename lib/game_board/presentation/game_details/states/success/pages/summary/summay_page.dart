@@ -5,6 +5,6 @@ class SummaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("Resumen"));
+    return SliverToBoxAdapter(child: Container(child: Text("Resumen")));
   }
 }

@@ -17,12 +17,14 @@ class ReviewsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (reviewsUrl == null) {
-      return Text(
-        "No se pudo cargar los comentarios",
-        style: Theme.of(context)
-            .textTheme
-            .headline6!
-            .copyWith(color: Theme.of(context).errorColor),
+      return SliverToBoxAdapter(
+        child: Text(
+          "No se pudo cargar los comentarios",
+          style: Theme.of(context)
+              .textTheme
+              .headline6!
+              .copyWith(color: Theme.of(context).errorColor),
+        ),
       );
     }
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/pages/game_details_null_data.dart';
 
 import '../../../../../constants/app_margins.dart';
 import '../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
 import 'pages/characterictics/characterictics_page.dart';
+import 'pages/game_details_null_data.dart';
 import 'pages/purchase/purchase_page.dart';
 import 'pages/reviews/reviews_page.dart';
 import 'pages/summary/summay_page.dart';
@@ -25,12 +25,16 @@ class GameDetailsSuccess extends ConsumerWidget {
     final int navigationIndex = ref.watch(detailsBottomNavigationProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(data.gameOverview.name),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(generalPadding),
-        child: _getBody(navigationIndex),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: Text(data.gameOverview.name),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(generalPadding),
+            sliver: _getBody(navigationIndex),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationIndex,
@@ -53,7 +57,7 @@ class GameDetailsSuccess extends ConsumerWidget {
     );
   }
 
-  Widget? _getBody(int index) {
+  Widget _getBody(int index) {
     switch (index) {
       case 0:
         return const SummaryPage();
@@ -69,6 +73,6 @@ class GameDetailsSuccess extends ConsumerWidget {
       case 3:
         return const PurchasePage();
     }
-    return const GameDetailsNullData();
+    return const SliverToBoxAdapter(child: GameDetailsNullData());
   }
 }
