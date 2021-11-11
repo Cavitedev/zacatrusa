@@ -88,8 +88,10 @@ class ZacatrusDetailsPageScapper {
   void _getAvailable(
       dom.Element detailsElement, GameOverviewDetails gameOverview) {
     try {
-      final availableResultElements =
-          detailsElement.getElementsByClassName("stock available");
+      final availableResultElements = detailsElement
+          .getElementsByClassName("product-info-stock-sku")
+          .first
+          .children;
       if (availableResultElements.isNotEmpty) {
         final availableResultElement = availableResultElements.first;
         final spanElements = availableResultElement.children;
@@ -245,6 +247,9 @@ class ZacatrusDetailsPageScapper {
           break;
         case "Tiempo de juego":
           sheet.gameplayDuration = content;
+          break;
+        case "Medidas":
+          sheet.measurements = content;
           break;
         case "Complejidad":
           sheet.complexity = content;
