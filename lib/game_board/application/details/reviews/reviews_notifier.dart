@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 
+import '../../../../core/optional.dart';
 import '../../../zacatrus/domain/details_page/reviews/reviews_url.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import '../../../zacatrus/infrastructure/zacatrus_reviews_page_scrapper.dart';
 import 'reviews_state.dart';
 
@@ -23,6 +23,8 @@ class ReviewsNotifier extends StateNotifier<ReviewsState> {
   ReviewsUrl reviewUrl;
 
   StreamSubscription? subscription;
+  int reviewsRetrieved = 0;
+  int nonValidReviews = 0;
 
   void loadReviews() {
     if (reviewUrl.numberOfReviews <= state.gameReviews.length) {

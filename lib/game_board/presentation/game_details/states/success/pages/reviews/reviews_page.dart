@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins.dart';
 import 'package:zacatrusa/game_board/presentation/core/feedback_errors_loading/internet_feedback_widgets.dart';
 import 'package:zacatrusa/game_board/presentation/core/widgets/star_bars_indicator.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_review.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/details_page/reviews/game_review.dart';
 
 import '../../../../../../application/details/reviews/reviews_notifier.dart';
 import '../../../../../../application/details/reviews/reviews_state.dart';
@@ -55,6 +55,7 @@ class ReviewsPage extends ConsumerWidget {
                 ),
               ),
               ...state.gameReviews
+                  .where((review) => review.isValid())
                   .map((review) => Review(
                         review: review,
                       ))
@@ -98,6 +99,7 @@ class Review extends StatelessWidget {
     return Card(
       child: Container(
         margin: const EdgeInsets.all(listSpacing),
+        width: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,

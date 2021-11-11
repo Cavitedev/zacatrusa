@@ -6,7 +6,7 @@ import '../../../core/string_helper.dart';
 import '../../infrastructure/core/internet_feedback.dart';
 import '../../infrastructure/core/scrapping_failures.dart';
 import '../../infrastructure/http_loader.dart';
-import '../domain/details_page/game_review.dart';
+import '../domain/details_page/reviews/game_review.dart';
 
 final zacatrusReviewPageScrapperProvider =
     Provider((ref) => ZacatrusReviewPageScrapper(ref));

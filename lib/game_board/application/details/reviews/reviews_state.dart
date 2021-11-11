@@ -1,7 +1,7 @@
 import 'package:zacatrusa/core/optional.dart';
 
 import '../../../infrastructure/core/internet_feedback.dart';
-import '../../../zacatrus/domain/details_page/game_review.dart';
+import '../../../zacatrus/domain/details_page/reviews/game_review.dart';
 
 class ReviewsState {
   final List<GameReview> gameReviews;
