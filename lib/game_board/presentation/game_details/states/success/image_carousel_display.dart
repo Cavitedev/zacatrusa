@@ -22,74 +22,127 @@ class ImagesCarouselDisplay extends ConsumerStatefulWidget {
 
 class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
   int index = 0;
+  bool canSwipe = true;
+  late final ExtendedPageController carouselController;
+
+  static const swipeDuration = Duration(milliseconds: 300);
+  static const swipeCurve = Curves.easeInOutCirc;
+
+  @override
+  void initState() {
+    super.initState();
+    carouselController = ExtendedPageController(
+      initialPage: 0,
+      pageSpacing: 50,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    carouselController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var item = widget.carousel.items[index];
+    final double imageHeight = MediaQuery.of(context).size.height * 0.3;
     return Row(
       children: [
         InkWell(
-          child: const Icon(
-            Icons.arrow_back,
-            size: mediumIconSize,
-            semanticLabel: "Imagen anterior",
+          child: SizedBox(
+            height: imageHeight,
+            child: const Icon(
+              Icons.arrow_back,
+              size: mediumIconSize,
+              semanticLabel: "Imagen anterior",
+            ),
           ),
           onTap: () {
-            setState(() {
-              if (index > 0) {
-                index--;
-              } else if (index == 0) {
-                index = widget.carousel.items.length - 1;
-              }
-            });
+            late int nextIndex;
+            if (index > 0) {
+              nextIndex = index - 1;
+            } else if (index == 0) {
+              nextIndex = widget.carousel.items.length - 1;
+            }
+
+            carouselController.animateToPage(nextIndex,
+                duration: swipeDuration, curve: swipeCurve);
           },
         ),
-        Flexible(
-          child: GestureDetector(
-            child: Hero(
-              tag: item.image,
-              child: Stack(
-                children: [
-                  ExtendedImage.network(
-                    item.image,
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.3,
+        Expanded(
+          child: SizedBox(
+            width: double.infinity,
+            height: imageHeight,
+            child: ExtendedImageGesturePageView.builder(
+              // key: ValueKey(widget.carousel.hashCode),
+              physics: const BouncingScrollPhysics(),
+              itemCount: widget.carousel.items.length,
+              controller: carouselController,
+              canScrollPage: (GestureDetails? gesture) {
+                return false;
+              },
+              onPageChanged: (newPage) {
+                setState(() {
+                  index = newPage;
+                });
+              },
+              itemBuilder: (context, index) {
+                final item = widget.carousel.items[index];
+                return GestureDetector(
+                  child: Hero(
+                    tag: item.image,
+                    child: Stack(
+                      children: [
+                        ExtendedImage.network(
+                          item.image,
+                          key: ValueKey(item.image),
+                          width: double.infinity,
+                          height: imageHeight,
+                          mode: ExtendedImageMode.gesture,
+                        ),
+                        if (item.video != null)
+                          const Positioned.fill(
+                              child: Align(
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.play_circle,
+                              size: 72,
+                              semanticLabel: "Reproducir vídeo",
+                            ),
+                          ))
+                      ],
+                    ),
                   ),
-                  if (item.video != null)
-                    const Positioned.fill(
-                        child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.play_circle,
-                        size: 72,
-                        semanticLabel: "Reproducir vídeo",
-                      ),
-                    ))
-                ],
-              ),
-            ),
-            onTap: () {
-              if (item.video != null) {
-                launch(item.video!);
-                return;
-              }
+                  onTap: () {
+                    canSwipe = false;
+                    if (item.video != null) {
+                      launch(item.video!);
+                      return;
+                    }
 
-              final router = ref.read(gamesRouterDelegateProvider);
-              router.currentConf = router.currentConf
-                  .copyWith(imageLoaded: Optional.value(item.image));
-            },
+                    final router = ref.read(gamesRouterDelegateProvider);
+                    router.currentConf = router.currentConf
+                        .copyWith(imageLoaded: Optional.value(item.image));
+                  },
+                );
+              },
+            ),
           ),
         ),
         InkWell(
-          child: const Icon(
-            Icons.arrow_forward,
-            size: mediumIconSize,
-            semanticLabel: "Siguiente imagen",
+          child: SizedBox(
+            height: imageHeight,
+            child: const Icon(
+              Icons.arrow_forward,
+              size: mediumIconSize,
+              semanticLabel: "Siguiente imagen",
+            ),
           ),
           onTap: () {
-            setState(() {
-              index = (index + 1) % widget.carousel.items.length;
-            });
+            carouselController.animateToPage(
+                (index + 1) % widget.carousel.items.length,
+                duration: swipeDuration,
+                curve: swipeCurve);
           },
         ),
       ],

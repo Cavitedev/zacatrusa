@@ -21,6 +21,8 @@ class GameDetailsSuccessBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Key carouselKey = ValueKey(data.imagesCarousel.hashCode);
+
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -30,7 +32,10 @@ class GameDetailsSuccessBody extends ConsumerWidget {
           SliverPadding(
             padding: const EdgeInsets.all(generalPadding),
             sliver: SliverToBoxAdapter(
-                child: ImagesCarouselDisplay(carousel: data.imagesCarousel!)),
+                child: ImagesCarouselDisplay(
+              carousel: data.imagesCarousel!,
+              key: carouselKey,
+            )),
           ),
         SliverPadding(
           padding: const EdgeInsets.all(generalPadding),

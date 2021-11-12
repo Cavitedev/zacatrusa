@@ -3,7 +3,6 @@ class ImagesCarousel {
     required this.items,
   });
   List<CarouselItem> items;
-  int index = 0;
 
   CarouselItem get mainItem =>
       items.firstWhere((item) => item.isMain, orElse: () => items.first);
