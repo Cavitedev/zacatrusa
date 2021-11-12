@@ -114,7 +114,7 @@ class Review extends StatelessWidget {
                 ),
               ),
             if (review.description != null)
-              Text(
+              SelectableText(
                 review.description!,
                 style: Theme.of(context).textTheme.bodyText1,
               ),
