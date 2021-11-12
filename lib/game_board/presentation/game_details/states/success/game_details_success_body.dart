@@ -58,7 +58,9 @@ class GameDetailsSuccessBody extends ConsumerWidget {
           reviewsUrl: data.reviewsUrl,
         );
       case 3:
-        return const PurchasePage();
+        return PurchasePage(
+          data: data,
+        );
     }
     return const SliverToBoxAdapter(child: GameDetailsNullData());
   }
