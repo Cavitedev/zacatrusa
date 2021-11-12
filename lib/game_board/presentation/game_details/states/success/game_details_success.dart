@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../constants/app_margins.dart';
+import '../../../../application/details/reviews/reviews_notifier.dart';
+import '../../../../zacatrus/domain/details_page/reviews/reviews_url.dart';
 import '../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
-import 'pages/characterictics/characterictics_page.dart';
-import 'pages/purchase/purchase_page.dart';
-import 'pages/reviews/reviews_page.dart';
-import 'pages/summary/summay_page.dart';
-
-final StateProvider<int> detailsBottomNavigationProvider =
-    StateProvider<int>((_) => 0);
+import 'game_details_bottom_navigation_bar.dart';
+import 'game_details_success_body.dart';
 
 class GameDetailsSuccess extends ConsumerWidget {
   const GameDetailsSuccess({
@@ -18,52 +14,45 @@ class GameDetailsSuccess extends ConsumerWidget {
   }) : super(key: key);
 
   final ZacatrusDetailsPageData data;
+  static const int reviewsNavigationIndex = 2;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final int navigationIndex = ref.watch(detailsBottomNavigationProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(data.gameOverview.name),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(generalPadding),
-        child: _getBody(navigationIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationIndex,
-        onTap: (newIndex) {
-          ref.read(detailsBottomNavigationProvider.notifier).state = newIndex;
-        },
-        unselectedItemColor: Colors.black26,
-        selectedItemColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.summarize_outlined), label: "Resumen"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.article_outlined), label: "Características"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.reviews_outlined), label: "Comentarios"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart_outlined), label: "Compra"),
-        ],
-      ),
+      body: reviewsNavigationIndex == reviewsNavigationIndex
+          ? RefreshIndicator(
+              semanticsValue: "Recargar comentarios",
+              onRefresh: () async {
+                ref
+                    .read(reviewsNotifierProvider(data.reviewsUrl!).notifier)
+                    .clear();
+              },
+              child: NotificationListener<ScrollUpdateNotification>(
+                onNotification: (ScrollNotification scrollInfo) {
+                  return _onScroll(scrollInfo, ref, data.reviewsUrl!);
+                },
+                child: GameDetailsSuccessBody(
+                  data: data,
+                ),
+              ),
+            )
+          : GameDetailsSuccessBody(data: data),
+      bottomNavigationBar:
+          GameDetailsBottomNavigationBar(navigationIndex: navigationIndex),
     );
   }
 
-  Widget? _getBody(int index) {
-    switch (index) {
-      case 0:
-        return const SummaryPage();
-      case 1:
-        return const CharactericticsPage();
-      case 2:
-        return ReviewsPage(
-          reviewsUrl: data.reviewsUrl,
-        );
-      case 3:
-        return const PurchasePage();
+  bool _onScroll(
+      ScrollNotification scrollInfo, WidgetRef ref, ReviewsUrl reviewsUrl) {
+    if (scrollInfo.metrics.pixels > scrollInfo.metrics.maxScrollExtent - 300) {
+      final zacatrusBrowserNotifier =
+          ref.read(reviewsNotifierProvider(reviewsUrl).notifier);
+
+      zacatrusBrowserNotifier.nextPageIfNotLoading();
+      return true;
     }
+    return false;
   }
 }

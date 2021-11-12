@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/settings/settings_page.dart';
 
 import '../../../application/browser/browser_notifier.dart';
 import '../../game_details/game_details.dart';
 import '../../games_browse/games_browse.dart';
+import '../../settings/settings_page.dart';
+import '../widgets/slide_page.dart';
 import 'games_routing_configuration.dart';
 
 final gamesRouterDelegateProvider = Provider((ref) => GamesRouterDelegate(ref));
@@ -26,6 +27,8 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   GamesRoutingConfiguration _currentConf;
 
   GamesRoutingConfiguration get currentConf => _currentConf;
+
+  final HeroController heroC = HeroController();
 
   set currentConf(GamesRoutingConfiguration conf) {
     if (conf.filterComposer != null) {
@@ -49,7 +52,13 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
                 url: _currentConf.detailsGameUrl!,
               )),
         if (_currentConf.settings)
-          const MaterialPage(key: ValueKey("Settings"), child: SettingsPage())
+          const MaterialPage(key: ValueKey("Settings"), child: SettingsPage()),
+        if (_currentConf.imageLoaded != null)
+          MaterialPage(
+              key: ValueKey("Image ${_currentConf.imageLoaded}"),
+              child: SlidePage(
+                url: _currentConf.imageLoaded,
+              ))
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
@@ -62,7 +71,11 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   }
 
   bool onPopRoute() {
-    if (_currentConf.settings == true) {
+    if (_currentConf.imageLoaded != null) {
+      _currentConf.imageLoaded = null;
+      notifyListeners();
+      return true;
+    } else if (_currentConf.settings == true) {
       _currentConf.settings = false;
       notifyListeners();
       return true;

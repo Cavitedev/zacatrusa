@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../constants/app_margins.dart';
+import '../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../application/browser/browser_notifier.dart';
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 import '../../games_browse.dart';

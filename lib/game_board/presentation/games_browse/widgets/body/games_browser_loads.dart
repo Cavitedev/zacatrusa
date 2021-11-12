@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_margins.dart';
+import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
 
 import '../../../../application/browser/browser_notifier.dart';
 import '../../../core/feedback_errors_loading/internet_feedback_widgets.dart';

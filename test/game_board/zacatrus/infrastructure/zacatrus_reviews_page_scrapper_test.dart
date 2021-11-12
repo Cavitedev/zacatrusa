@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_review.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/details_page/reviews/game_review.dart';
 import 'package:zacatrusa/game_board/zacatrus/infrastructure/zacatrus_reviews_page_scrapper.dart';
 
 void main() {

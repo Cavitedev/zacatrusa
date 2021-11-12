@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 
+import '../../../../core/optional.dart';
 import '../../../zacatrus/domain/details_page/reviews/reviews_url.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_page_query_parameter.dart';
 import '../../../zacatrus/infrastructure/zacatrus_reviews_page_scrapper.dart';
 import 'reviews_state.dart';
 
@@ -23,9 +23,10 @@ class ReviewsNotifier extends StateNotifier<ReviewsState> {
   ReviewsUrl reviewUrl;
 
   StreamSubscription? subscription;
+  int maxReviewsThatCouldLoad = 0;
 
   void loadReviews() {
-    if (reviewUrl.numberOfReviews <= state.gameReviews.length) {
+    if (_allReviewsHaveBeenLoaded()) {
       return;
     }
 
@@ -34,9 +35,15 @@ class ReviewsNotifier extends StateNotifier<ReviewsState> {
       event.when((left) {
         state = state.copyWith(internetFeedback: Optional.value(left));
       }, (right) {
+        maxReviewsThatCouldLoad += 50;
+        int? actualAmountOfReviews;
+        if (maxReviewsThatCouldLoad >= reviewUrl.numberOfReviews) {
+          actualAmountOfReviews = [...state.gameReviews, ...right].length;
+        }
         state = state.copyWith(
             gameReviews: [...state.gameReviews, ...right],
-            internetFeedback: const Optional.value(null));
+            internetFeedback: const Optional.value(null),
+            actualAmountOfReviews: Optional.value(actualAmountOfReviews));
         reviewUrl = reviewUrl.nextPage();
       });
     })
@@ -44,6 +51,9 @@ class ReviewsNotifier extends StateNotifier<ReviewsState> {
         subscription = null;
       });
   }
+
+  bool _allReviewsHaveBeenLoaded() =>
+      reviewUrl.numberOfReviews <= maxReviewsThatCouldLoad;
 
   void nextPageIfNotLoading() {
     if (subscription == null) {
@@ -53,8 +63,11 @@ class ReviewsNotifier extends StateNotifier<ReviewsState> {
 
   void clear() {
     state = state.copyWith(
-        gameReviews: [], internetFeedback: const Optional.value(null));
+        gameReviews: [],
+        internetFeedback: const Optional.value(null),
+        actualAmountOfReviews: const Optional.value(null));
     reviewUrl = reviewUrl.copyWith(pageIndex: const ZacatrusPageIndex(1));
+    maxReviewsThatCouldLoad = 0;
     loadReviews();
   }
 }

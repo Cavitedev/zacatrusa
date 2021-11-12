@@ -5,6 +5,6 @@ class PurchasePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("Compra"));
+    return SliverToBoxAdapter(child: Container(child: Text("Compra")));
   }
 }

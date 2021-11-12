@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../constants/app_margins.dart';
+import '../../../../constants/app_margins_and_sizes.dart';
 
 class ErrorWidgetWithImage extends StatelessWidget {
   const ErrorWidgetWithImage({

@@ -35,7 +35,9 @@ void main() {
       final GameOverviewDetails gameOverview = data.gameOverview;
       expect(gameOverview.name, "Unánimo");
       expect(gameOverview.link, link);
-      expect(gameOverview.available, "Disponible");
+      bool validAvailable = gameOverview.available == "Disponible" ||
+          gameOverview.available == "No está disponible";
+      expect(validAvailable, isTrue);
       expect(gameOverview.stars, 4.75);
       expect(gameOverview.price, 9.95);
       expect(gameOverview.numberOfReviews, 16);
@@ -54,6 +56,7 @@ void main() {
       expect(sheet.ageRanges, isNotNull);
       expect(sheet.numPlayers, isNotNull);
       expect(sheet.gameplayDuration, isNotNull);
+      expect(sheet.measurements, isNotNull);
       expect(sheet.complexity, isNotNull);
       expect(sheet.language, isNotNull);
       expect(sheet.languageDependency, isNotNull);
