@@ -42,7 +42,12 @@ class GameDetailsSuccessBody extends ConsumerWidget {
   Widget _getBody(int index) {
     switch (index) {
       case 0:
-        return const SummaryPage();
+        if (data.overviewDescription != null) {
+          return SummaryPage(
+            overviewDescription: data.overviewDescription!,
+          );
+        }
+        break;
       case 1:
         if (data.gameDataSheet != null) {
           return CharactericticsPage(gameDataSheet: data.gameDataSheet!);
