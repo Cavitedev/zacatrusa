@@ -54,41 +54,44 @@ class ListGameItem extends ConsumerWidget {
     return Stack(
       children: [
         Card(
-          child: Column(
-            children: [
-              if (game.image != null)
-                ExtendedImage.network(
-                  game.image!.imageLink!,
-                  height: 150,
-                  width: 150,
-                  semanticLabel: game.image?.imageAlt,
-                ),
-              Flexible(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GameName(game: game),
-                  if (game.numberOfReviews != null)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                          5, 0, 0, innerElementsPadding),
-                      child: ReviewsNumber(
-                        numberReviews: game.numberOfReviews!,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                if (game.image != null)
+                  ExtendedImage.network(
+                    game.image!.imageLink!,
+                    height: 150,
+                    width: 150,
+                    semanticLabel: game.image?.imageAlt,
+                  ),
+                Flexible(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GameName(game: game),
+                    if (game.numberOfReviews != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            5, innerElementsPadding, 0, 0),
+                        child: ReviewsNumber(
+                          numberReviews: game.numberOfReviews!,
+                        ),
                       ),
-                    ),
-                  if (game.stars != null)
-                    Padding(
-                        padding:
-                            const EdgeInsets.only(top: innerElementsPadding),
-                        child: StarsBarIndicator(stars: game.stars!)),
-                  if (game.price != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: innerElementsPadding),
-                      child: PriceText(price: game.price!),
-                    ),
-                ],
-              ))
-            ],
+                    if (game.stars != null)
+                      Padding(
+                          padding:
+                              const EdgeInsets.only(top: innerElementsPadding),
+                          child: StarsBarIndicator(stars: game.stars!)),
+                    if (game.price != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: innerElementsPadding),
+                        child: PriceText(price: game.price!),
+                      ),
+                  ],
+                ))
+              ],
+            ),
           ),
         ),
         Positioned.fill(
@@ -122,7 +125,7 @@ class GameName extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: innerElementsPadding),
       child: Text(
         game.name,
-        style: Theme.of(context).textTheme.headline5,
+        style: Theme.of(context).textTheme.headline6,
         maxLines: 2,
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
