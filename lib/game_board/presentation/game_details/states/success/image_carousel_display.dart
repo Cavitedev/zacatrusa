@@ -1,12 +1,15 @@
+import 'dart:math';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
 import '../../../../../constants/app_margins_and_sizes.dart';
+import '../../../../../core/optional.dart';
 import '../../../../zacatrus/domain/details_page/images_carousel.dart';
+import '../../../core/routing/games_router_delegate.dart';
 
 class ImagesCarouselDisplay extends ConsumerStatefulWidget {
   const ImagesCarouselDisplay({
@@ -21,9 +24,7 @@ class ImagesCarouselDisplay extends ConsumerStatefulWidget {
 }
 
 class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
-  int index = 0;
-  bool canSwipe = true;
-  late final ExtendedPageController carouselController;
+  late final CarouselController carouselController;
 
   static const swipeDuration = Duration(milliseconds: 300);
   static const swipeCurve = Curves.easeInOutCirc;
@@ -31,121 +32,103 @@ class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
   @override
   void initState() {
     super.initState();
-    carouselController = ExtendedPageController(
-      initialPage: 0,
-      pageSpacing: 50,
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    carouselController.dispose();
+    carouselController = CarouselController();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double imageHeight = MediaQuery.of(context).size.height * 0.3;
-    return Row(
-      children: [
-        InkWell(
-          child: SizedBox(
-            height: imageHeight,
-            child: const Icon(
-              Icons.arrow_back,
-              size: mediumIconSize,
-              semanticLabel: "Imagen anterior",
+    final screenSize = MediaQuery.of(context).size;
+    final double imageHeight =
+        min(screenSize.height * 0.5, (screenSize.width - 100) / (16 / 9));
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: generalPadding),
+      child: SizedBox(
+        height: imageHeight,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              child: const SizedBox(
+                height: double.infinity,
+                child: Icon(
+                  Icons.arrow_back,
+                  size: mediumIconSize,
+                  semanticLabel: "Imagen anterior",
+                ),
+              ),
+              onTap: () {
+                carouselController.previousPage(
+                    duration: swipeDuration, curve: swipeCurve);
+              },
             ),
-          ),
-          onTap: () {
-            late int nextIndex;
-            if (index > 0) {
-              nextIndex = index - 1;
-            } else if (index == 0) {
-              nextIndex = widget.carousel.items.length - 1;
-            }
-
-            carouselController.animateToPage(nextIndex,
-                duration: swipeDuration, curve: swipeCurve);
-          },
-        ),
-        Expanded(
-          child: SizedBox(
-            width: double.infinity,
-            height: imageHeight,
-            child: ExtendedImageGesturePageView.builder(
-              // key: ValueKey(widget.carousel.hashCode),
-              physics: const BouncingScrollPhysics(),
-              itemCount: widget.carousel.items.length,
-              controller: carouselController,
-              canScrollPage: (GestureDetails? gesture) {
-                return false;
-              },
-              onPageChanged: (newPage) {
-                setState(() {
-                  index = newPage;
-                });
-              },
-              itemBuilder: (context, index) {
-                final item = widget.carousel.items[index];
-                return GestureDetector(
-                  child: Hero(
-                    tag: item.image,
-                    child: Stack(
-                      children: [
-                        ExtendedImage.network(
-                          item.image,
-                          key: ValueKey(item.image),
-                          width: double.infinity,
-                          height: imageHeight,
-                          mode: ExtendedImageMode.gesture,
+            Expanded(
+              child: CarouselSlider.builder(
+                itemCount: widget.carousel.items.length,
+                carouselController: carouselController,
+                options: CarouselOptions(
+                    aspectRatio: 16 / 9,
+                    enlargeCenterPage: true,
+                    viewportFraction: 0.8),
+                itemBuilder: (context, itemIndex, pageViewIndex) {
+                  final item = widget.carousel.items[itemIndex];
+                  return GestureDetector(
+                    child: Hero(
+                      tag: item.image,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: SizedBox(
+                          child: Stack(
+                            children: [
+                              ExtendedImage.network(
+                                item.image,
+                                key: ValueKey(item.image),
+                              ),
+                              if (item.video != null)
+                                const Positioned.fill(
+                                    child: Align(
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.play_circle,
+                                    size: 72,
+                                    semanticLabel: "Reproducir vídeo",
+                                  ),
+                                ))
+                            ],
+                          ),
                         ),
-                        if (item.video != null)
-                          const Positioned.fill(
-                              child: Align(
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.play_circle,
-                              size: 72,
-                              semanticLabel: "Reproducir vídeo",
-                            ),
-                          ))
-                      ],
+                      ),
                     ),
-                  ),
-                  onTap: () {
-                    canSwipe = false;
-                    if (item.video != null) {
-                      launch(item.video!);
-                      return;
-                    }
+                    onTap: () {
+                      if (item.video != null) {
+                        launch(item.video!);
+                        return;
+                      }
 
-                    final router = ref.read(gamesRouterDelegateProvider);
-                    router.currentConf = router.currentConf
-                        .copyWith(imageLoaded: Optional.value(item.image));
-                  },
-                );
+                      final router = ref.read(gamesRouterDelegateProvider);
+                      router.currentConf = router.currentConf
+                          .copyWith(imageLoaded: Optional.value(item.image));
+                    },
+                  );
+                },
+              ),
+            ),
+            InkWell(
+              child: const SizedBox(
+                height: double.infinity,
+                child: Icon(
+                  Icons.arrow_forward,
+                  size: mediumIconSize,
+                  semanticLabel: "Siguiente imagen",
+                ),
+              ),
+              onTap: () {
+                carouselController.nextPage(
+                    duration: swipeDuration, curve: swipeCurve);
               },
             ),
-          ),
+          ],
         ),
-        InkWell(
-          child: SizedBox(
-            height: imageHeight,
-            child: const Icon(
-              Icons.arrow_forward,
-              size: mediumIconSize,
-              semanticLabel: "Siguiente imagen",
-            ),
-          ),
-          onTap: () {
-            carouselController.animateToPage(
-                (index + 1) % widget.carousel.items.length,
-                duration: swipeDuration,
-                curve: swipeCurve);
-          },
-        ),
-      ],
+      ),
     );
   }
 }

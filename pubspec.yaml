@@ -38,6 +38,7 @@ dependencies:
   mocktail: ^0.2.0
   flutter_rating_bar: ^4.0.0
   url_launcher: ^6.0.12
+  carousel_slider: ^4.0.0
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
