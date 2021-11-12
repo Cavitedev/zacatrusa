@@ -66,38 +66,15 @@ class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
                 itemCount: widget.carousel.items.length,
                 carouselController: carouselController,
                 options: CarouselOptions(
-                    aspectRatio: 16 / 9,
-                    enlargeCenterPage: true,
-                    viewportFraction: 0.8),
+                  aspectRatio: 16 / 9,
+                  enlargeCenterPage: true,
+                  viewportFraction: 1,
+                  initialPage: widget.carousel.indexOfMainItem,
+                ),
                 itemBuilder: (context, itemIndex, pageViewIndex) {
                   final item = widget.carousel.items[itemIndex];
                   return GestureDetector(
-                    child: Hero(
-                      tag: item.image,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: SizedBox(
-                          child: Stack(
-                            children: [
-                              ExtendedImage.network(
-                                item.image,
-                                key: ValueKey(item.image),
-                              ),
-                              if (item.video != null)
-                                const Positioned.fill(
-                                    child: Align(
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.play_circle,
-                                    size: 72,
-                                    semanticLabel: "Reproducir vídeo",
-                                  ),
-                                ))
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: ImageOfCarousel(item: item),
                     onTap: () {
                       if (item.video != null) {
                         launch(item.video!);
@@ -127,6 +104,45 @@ class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ImageOfCarousel extends StatelessWidget {
+  const ImageOfCarousel({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final CarouselItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: item.image,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: SizedBox(
+          child: Stack(
+            children: [
+              ExtendedImage.network(
+                item.image,
+                key: ValueKey(item.image),
+              ),
+              if (item.video != null)
+                const Positioned.fill(
+                    child: Align(
+                  alignment: Alignment.center,
+                  child: Icon(
+                    Icons.play_circle,
+                    size: 72,
+                    semanticLabel: "Reproducir vídeo",
+                  ),
+                ))
+            ],
+          ),
         ),
       ),
     );

@@ -4,8 +4,13 @@ class ImagesCarousel {
   });
   List<CarouselItem> items;
 
-  CarouselItem get mainItem =>
-      items.firstWhere((item) => item.isMain, orElse: () => items.first);
+  int get indexOfMainItem {
+    int mainIndex = items.indexWhere((item) => item.isMain);
+    if (mainIndex == -1) {
+      return 0;
+    }
+    return mainIndex;
+  }
 }
 
 class CarouselItem {
