@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/details_page/game_data_sheet.dart';
+
+import '../../../../../../zacatrus/domain/details_page/game_data_sheet.dart';
 
 class CharactericticsPage extends StatelessWidget {
   const CharactericticsPage({required this.gameDataSheet, Key? key})

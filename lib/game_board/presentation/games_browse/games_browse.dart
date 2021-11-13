@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/app_drawer.dart';
 
 import '../../application/browser/browser_notifier.dart';
+import 'app_drawer.dart';
 import 'games_browse_sliver_app_bar.dart';
 import 'widgets/body/games_browser_loaded_games.dart';
 import 'widgets/body/games_browser_loads.dart';

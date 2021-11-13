@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/filters/tab_widgets/radio_button_filter_list.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/filters/tab_widgets/slider_filter.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/filters/tab_widgets/summary_filters.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
+import '../../../../constants/app_margins_and_sizes.dart';
+import '../../../../core/optional.dart';
 import '../../../application/browser/browser_notifier.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
+import '../../../zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'tab_widgets/checkbox_filter_list.dart';
+import 'tab_widgets/radio_button_filter_list.dart';
+import 'tab_widgets/slider_filter.dart';
+import 'tab_widgets/summary_filters.dart';
 
 class BrowsePageFilters extends ConsumerStatefulWidget {
   const BrowsePageFilters({

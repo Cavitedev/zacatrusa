@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/outlined_input_field.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/voice_to_speech_button.dart';
+
+import '../../../../../constants/app_margins_and_sizes.dart';
+import '../../../core/widgets/outlined_input_field.dart';
+import '../../../core/widgets/voice_to_speech_button.dart';
 
 class RadioButtonListFilter extends StatefulWidget {
   const RadioButtonListFilter({

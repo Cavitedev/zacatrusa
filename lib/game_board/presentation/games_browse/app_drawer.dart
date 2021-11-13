@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_constants.dart';
-import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
+
+import '../../../constants/app_constants.dart';
+import '../core/routing/games_router_delegate.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({Key? key}) : super(key: key);
