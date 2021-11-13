@@ -166,11 +166,13 @@ class RadioButtonListFilter extends StatefulWidget {
 
 class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
   String? selected;
+  late List<String> filteredCategories;
 
   @override
   void initState() {
     super.initState();
-    widget.initialCategory;
+    selected = widget.initialCategory;
+    filteredCategories = widget.categories;
   }
 
   @override
@@ -181,13 +183,22 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
           widget.filterName,
           style: Theme.of(context).textTheme.headline4,
         ),
+        TextField(
+          onChanged: (value) {
+            setState(() {
+              filteredCategories = widget.categories
+                  .where((category) => category.contains(value))
+                  .toList();
+            });
+          },
+        ),
         Expanded(
           child: Scrollbar(
             child: ListView.builder(
-              itemCount: widget.categories.length,
+              itemCount: filteredCategories.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                final category = widget.categories[index];
+                final category = filteredCategories[index];
                 return RadioListTile<String?>(
                   toggleable: true,
                   groupValue: selected,
