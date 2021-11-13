@@ -36,6 +36,10 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
           primarySwatch: Colors.green,
           errorColor: Colors.redAccent.shade400,
+          tabBarTheme: const TabBarTheme(
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.black38,
+          ),
           textTheme: const TextTheme(
             headline6: TextStyle(fontSize: 20),
             headline5: TextStyle(fontSize: 24),
