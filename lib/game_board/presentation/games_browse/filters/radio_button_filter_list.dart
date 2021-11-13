@@ -69,11 +69,12 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
               },
             ),
           ),
-        VoiceToSpeechButton(
-          onWordHeard: (textHeard) {
-            textController.text = textHeard;
-          },
-        ),
+        if (widget.searchEnabled)
+          VoiceToSpeechButton(
+            onWordHeard: (textHeard) {
+              textController.text = textHeard;
+            },
+          ),
         Expanded(
           child: Scrollbar(
             controller: scrollController,
