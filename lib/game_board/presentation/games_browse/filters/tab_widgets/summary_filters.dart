@@ -33,8 +33,7 @@ class SummaryFilters extends StatelessWidget {
           if (urlComposer.siBuscas != null)
             SummaryFilterElement(
               labelName: "Si Buscas: ",
-              valueName: "Familiaressss",
-              // valueName: urlComposer.siBuscas!.value,
+              valueName: urlComposer.siBuscas!.value,
               onClear: () {
                 onComposerUpdate(urlComposer.copyWith(
                   siBuscas: const Optional.value(null),
