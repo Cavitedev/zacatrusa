@@ -37,7 +37,8 @@ class MyApp extends ConsumerWidget {
           primarySwatch: Colors.green,
           errorColor: Colors.redAccent.shade400,
           textTheme: const TextTheme(
-            headline5: TextStyle(fontSize: 20),
+            headline6: TextStyle(fontSize: 20),
+            headline5: TextStyle(fontSize: 24),
             headline4: TextStyle(fontSize: 28, color: Colors.black),
             headline3: TextStyle(
                 fontSize: 36, color: Colors.black, letterSpacing: 0.5),

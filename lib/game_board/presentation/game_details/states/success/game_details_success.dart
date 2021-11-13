@@ -21,7 +21,7 @@ class GameDetailsSuccess extends ConsumerWidget {
     final int navigationIndex = ref.watch(detailsBottomNavigationProvider);
 
     return Scaffold(
-      body: reviewsNavigationIndex == reviewsNavigationIndex
+      body: navigationIndex == reviewsNavigationIndex
           ? RefreshIndicator(
               semanticsValue: "Recargar comentarios",
               onRefresh: () async {

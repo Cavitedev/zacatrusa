@@ -27,11 +27,10 @@ class GameDetailsSuccessBody extends ConsumerWidget {
           title: Text(data.gameOverview.name),
         ),
         if (data.imagesCarousel != null)
-          SliverPadding(
-            padding: const EdgeInsets.all(generalPadding),
-            sliver: SliverToBoxAdapter(
-                child: ImagesCarouselDisplay(carousel: data.imagesCarousel!)),
-          ),
+          SliverToBoxAdapter(
+              child: ImagesCarouselDisplay(
+            carousel: data.imagesCarousel!,
+          )),
         SliverPadding(
           padding: const EdgeInsets.all(generalPadding),
           sliver: _getBody(ref.watch(detailsBottomNavigationProvider)),
@@ -43,7 +42,12 @@ class GameDetailsSuccessBody extends ConsumerWidget {
   Widget _getBody(int index) {
     switch (index) {
       case 0:
-        return const SummaryPage();
+        if (data.overviewDescription != null) {
+          return SummaryPage(
+            overviewDescription: data.overviewDescription!,
+          );
+        }
+        break;
       case 1:
         if (data.gameDataSheet != null) {
           return CharactericticsPage(gameDataSheet: data.gameDataSheet!);
@@ -54,7 +58,9 @@ class GameDetailsSuccessBody extends ConsumerWidget {
           reviewsUrl: data.reviewsUrl,
         );
       case 3:
-        return const PurchasePage();
+        return PurchasePage(
+          data: data,
+        );
     }
     return const SliverToBoxAdapter(child: GameDetailsNullData());
   }

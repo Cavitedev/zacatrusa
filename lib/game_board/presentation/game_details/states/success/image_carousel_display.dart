@@ -1,12 +1,15 @@
+import 'dart:math';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
 
 import '../../../../../constants/app_margins_and_sizes.dart';
+import '../../../../../core/optional.dart';
 import '../../../../zacatrus/domain/details_page/images_carousel.dart';
+import '../../../core/routing/games_router_delegate.dart';
 
 class ImagesCarouselDisplay extends ConsumerStatefulWidget {
   const ImagesCarouselDisplay({
@@ -21,78 +24,127 @@ class ImagesCarouselDisplay extends ConsumerStatefulWidget {
 }
 
 class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
-  int index = 0;
+  late final CarouselController carouselController;
+
+  static const swipeDuration = Duration(milliseconds: 300);
+  static const swipeCurve = Curves.easeInOutCirc;
+
+  @override
+  void initState() {
+    super.initState();
+    carouselController = CarouselController();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var item = widget.carousel.items[index];
-    return Row(
-      children: [
-        InkWell(
-          child: const Icon(
-            Icons.arrow_back,
-            size: mediumIconSize,
-            semanticLabel: "Imagen anterior",
-          ),
-          onTap: () {
-            setState(() {
-              if (index > 0) {
-                index--;
-              } else if (index == 0) {
-                index = widget.carousel.items.length - 1;
-              }
-            });
-          },
-        ),
-        Flexible(
-          child: GestureDetector(
-            child: Hero(
-              tag: item.image,
-              child: Stack(
-                children: [
-                  ExtendedImage.network(
-                    item.image,
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.3,
-                  ),
-                  if (item.video != null)
-                    const Positioned.fill(
-                        child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.play_circle,
-                        size: 72,
-                        semanticLabel: "Reproducir vídeo",
-                      ),
-                    ))
-                ],
+    final screenSize = MediaQuery.of(context).size;
+    final double imageHeight =
+        min(screenSize.height * 0.5, (screenSize.width - 100) / (16 / 9));
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: generalPadding),
+      child: SizedBox(
+        height: imageHeight,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              child: const SizedBox(
+                height: double.infinity,
+                child: Icon(
+                  Icons.arrow_back,
+                  size: mediumIconSize,
+                  semanticLabel: "Imagen anterior",
+                ),
+              ),
+              onTap: () {
+                carouselController.previousPage(
+                    duration: swipeDuration, curve: swipeCurve);
+              },
+            ),
+            Expanded(
+              child: CarouselSlider.builder(
+                itemCount: widget.carousel.items.length,
+                carouselController: carouselController,
+                options: CarouselOptions(
+                  aspectRatio: 16 / 9,
+                  enlargeCenterPage: true,
+                  viewportFraction: 1,
+                  initialPage: widget.carousel.indexOfMainItem,
+                ),
+                itemBuilder: (context, itemIndex, pageViewIndex) {
+                  final item = widget.carousel.items[itemIndex];
+                  return GestureDetector(
+                    child: ImageOfCarousel(item: item),
+                    onTap: () {
+                      if (item.video != null) {
+                        launch(item.video!);
+                        return;
+                      }
+
+                      final router = ref.read(gamesRouterDelegateProvider);
+                      router.currentConf = router.currentConf
+                          .copyWith(imageLoaded: Optional.value(item.image));
+                    },
+                  );
+                },
               ),
             ),
-            onTap: () {
-              if (item.video != null) {
-                launch(item.video!);
-                return;
-              }
+            InkWell(
+              child: const SizedBox(
+                height: double.infinity,
+                child: Icon(
+                  Icons.arrow_forward,
+                  size: mediumIconSize,
+                  semanticLabel: "Siguiente imagen",
+                ),
+              ),
+              onTap: () {
+                carouselController.nextPage(
+                    duration: swipeDuration, curve: swipeCurve);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-              final router = ref.read(gamesRouterDelegateProvider);
-              router.currentConf = router.currentConf
-                  .copyWith(imageLoaded: Optional.value(item.image));
-            },
+class ImageOfCarousel extends StatelessWidget {
+  const ImageOfCarousel({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final CarouselItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: item.image,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: SizedBox(
+          child: Stack(
+            children: [
+              ExtendedImage.network(
+                item.image,
+                key: ValueKey(item.image),
+              ),
+              if (item.video != null)
+                const Positioned.fill(
+                    child: Align(
+                  alignment: Alignment.center,
+                  child: Icon(
+                    Icons.play_circle,
+                    size: 72,
+                    semanticLabel: "Reproducir vídeo",
+                  ),
+                ))
+            ],
           ),
         ),
-        InkWell(
-          child: const Icon(
-            Icons.arrow_forward,
-            size: mediumIconSize,
-            semanticLabel: "Siguiente imagen",
-          ),
-          onTap: () {
-            setState(() {
-              index = (index + 1) % widget.carousel.items.length;
-            });
-          },
-        ),
-      ],
+      ),
     );
   }
 }
