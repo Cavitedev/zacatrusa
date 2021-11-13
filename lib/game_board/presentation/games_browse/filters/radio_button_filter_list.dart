@@ -25,12 +25,20 @@ class RadioButtonListFilter extends StatefulWidget {
 class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
   String? selected;
   late List<String> filteredCategories;
+  late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
     selected = widget.initialCategory;
     filteredCategories = widget.categories;
+    scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
   }
 
   @override
@@ -59,7 +67,9 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
           ),
         Expanded(
           child: Scrollbar(
+            controller: scrollController,
             child: ListView.builder(
+              controller: scrollController,
               itemCount: filteredCategories.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {

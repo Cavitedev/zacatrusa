@@ -52,14 +52,14 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
           TabBar(
             isScrollable: true,
             tabs: const [
-              Tab(child: Text("Si Buscas")),
-              Tab(child: Text("Categoría")),
-              Tab(child: Text("Temática")),
-              Tab(child: Text("Edad")),
-              Tab(child: Text("Número de Jugadores")),
-              Tab(child: Text("Precio")),
-              Tab(child: Text("Mecánica")),
-              Tab(child: Text("Editorial"))
+              Tab(text: "Si Buscas"),
+              Tab(text: "Categoría"),
+              Tab(text: "Temática"),
+              Tab(text: "Edad"),
+              Tab(text: "Número de Jugadores"),
+              Tab(text: "Precio"),
+              Tab(text: "Mecánica"),
+              Tab(text: "Editorial")
             ],
             controller: tabController,
           ),
@@ -150,6 +150,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   },
                 ),
                 RadioButtonListFilter(
+                  key: ValueKey("Mecánica"),
                   filterName: "Mecánica",
                   categories: ZacatrusMecanicaFilter.categories.toList(),
                   initialCategory: urlComposer.mecanica?.value,
@@ -164,6 +165,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   },
                 ),
                 RadioButtonListFilter(
+                  key: ValueKey("Editorial"),
                   filterName: "Editorial",
                   categories: ZacatrusEditorialFilter.categories.toList(),
                   initialCategory: urlComposer.editorial?.value,
