@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
+import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
 import '../../../application/browser/browser_notifier.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
@@ -23,7 +27,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 9, vsync: this);
+    tabController = TabController(length: 8, vsync: this);
     urlComposer = ref.read(browserNotifierProvider).urlComposer;
   }
 
@@ -41,12 +45,11 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
           TabBar(
             isScrollable: true,
             tabs: const [
-              Tab(child: Text("Si buscas")),
+              Tab(child: Text("Si Buscas")),
               Tab(child: Text("Categoría")),
-              Tab(child: Text("Novedad")),
               Tab(child: Text("Temática")),
               Tab(child: Text("Edad")),
-              Tab(child: Text("Número de jugadores")),
+              Tab(child: Text("Número de Jugadores")),
               Tab(child: Text("Precio")),
               Tab(child: Text("Mecánica")),
               Tab(child: Text("Editorial"))
@@ -57,14 +60,53 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
             child: TabBarView(
               controller: tabController,
               children: [
-                SiBuscasFilter(),
-                Text("Categoría contenido"),
-                Text("Novedad contenido"),
-                Text("Temática contenido"),
+                RadioButtonListFilter(
+                  filterName: "Si Buscas...",
+                  categories: ZacatrusSiBuscasFilter.categories.toList(),
+                  initialCategory: urlComposer.siBuscas?.value,
+                  onChange: (value) {
+                    urlComposer = urlComposer.copyWith(
+                        siBuscas: Optional.value(value == null
+                            ? null
+                            : ZacatrusSiBuscasFilter(value: value)));
+                  },
+                ),
+                RadioButtonListFilter(
+                  filterName: "Categoría",
+                  categories: ZacatrusCategoriaFilter.categories.toList(),
+                  initialCategory: urlComposer.categoria?.value,
+                  onChange: (value) {
+                    urlComposer = urlComposer.copyWith(
+                        categoria: Optional.value(value == null
+                            ? null
+                            : ZacatrusCategoriaFilter(value: value)));
+                  },
+                ),
+                RadioButtonListFilter(
+                  filterName: "Temática",
+                  categories: ZacatrusTematicaFilter.categories.toList(),
+                  initialCategory: urlComposer.tematica?.value,
+                  onChange: (value) {
+                    urlComposer = urlComposer.copyWith(
+                        tematica: Optional.value(value == null
+                            ? null
+                            : ZacatrusTematicaFilter(value: value)));
+                  },
+                ),
                 Text("Edad contenido"),
                 Text("Número de jugadores contenido"),
                 Text("Precio contenido"),
-                Text("Mecánica contenido"),
+                RadioButtonListFilter(
+                  filterName: "Mecánica",
+                  categories: ZacatrusMecanicaFilter.categories.toList(),
+                  initialCategory: urlComposer.mecanica?.value,
+                  onChange: (value) {
+                    urlComposer = urlComposer.copyWith(
+                        mecanica: Optional.value(value == null
+                            ? null
+                            : ZacatrusMecanicaFilter(value: value)));
+                  },
+                ),
                 Text("Editorial contenido"),
               ],
             ),
@@ -104,52 +146,61 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
   }
 }
 
-class SiBuscasFilter extends StatefulWidget {
-  const SiBuscasFilter({
+class RadioButtonListFilter extends StatefulWidget {
+  const RadioButtonListFilter({
+    required this.filterName,
+    required this.categories,
+    required this.initialCategory,
+    required this.onChange,
     Key? key,
   }) : super(key: key);
 
+  final List<String> categories;
+  final String? initialCategory;
+  final Function(String?) onChange;
+  final String filterName;
+
   @override
-  State<SiBuscasFilter> createState() => _SiBuscasFilterState();
+  State<RadioButtonListFilter> createState() => _RadioButtonListFilterState();
 }
 
-class _SiBuscasFilterState extends State<SiBuscasFilter> {
+class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
   String? selected;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.initialCategory;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              selected = null;
-            });
-          },
-          child: Text("Limpiar"),
-          style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColorDark,
-          ),
+        Text(
+          widget.filterName,
+          style: Theme.of(context).textTheme.headline4,
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Text("Si buscas..."),
-                ...ZacatrusSiBuscasFilter.categories.map(
-                  (category) => RadioListTile<String?>(
-                    toggleable: true,
-                    groupValue: selected,
-                    value: category,
-                    title: Text(category),
-                    onChanged: (String? value) {
-                      setState(() {
-                        selected = value;
-                      });
-                    },
-                  ),
-                )
-              ],
+          child: Scrollbar(
+            child: ListView.builder(
+              itemCount: widget.categories.length,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                final category = widget.categories[index];
+                return RadioListTile<String?>(
+                  toggleable: true,
+                  groupValue: selected,
+                  value: category,
+                  title: Text(category),
+                  onChanged: (String? value) {
+                    setState(() {
+                      selected = value;
+                    });
+                    widget.onChange(value);
+                  },
+                );
+              },
             ),
           ),
         ),
