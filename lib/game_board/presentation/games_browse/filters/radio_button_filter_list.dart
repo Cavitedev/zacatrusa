@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../constants/app_margins_and_sizes.dart';
+import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/filters/voice_to_speech_button.dart';
 
 class RadioButtonListFilter extends StatefulWidget {
   const RadioButtonListFilter({
@@ -26,6 +26,7 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
   String? selected;
   late List<String> filteredCategories;
   late ScrollController scrollController;
+  late TextEditingController textController;
 
   @override
   void initState() {
@@ -33,12 +34,14 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
     selected = widget.initialCategory;
     filteredCategories = widget.categories;
     scrollController = ScrollController();
+    textController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
     scrollController.dispose();
+    textController.dispose();
   }
 
   @override
@@ -55,6 +58,7 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
             padding: const EdgeInsets.symmetric(horizontal: generalPadding),
             child: TextField(
               autocorrect: false,
+              controller: textController,
               onChanged: (value) {
                 setState(() {
                   filteredCategories = widget.categories
@@ -65,6 +69,11 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
               },
             ),
           ),
+        VoiceToSpeechButton(
+          onWordHeard: (textHeard) {
+            textController.text = textHeard;
+          },
+        ),
         Expanded(
           child: Scrollbar(
             controller: scrollController,
