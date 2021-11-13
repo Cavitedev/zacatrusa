@@ -14,6 +14,10 @@ extension StringX on String {
     return num.parse(toNumericString());
   }
 
+  String toSpanishNumber() {
+    return replaceAll(".", ",");
+  }
+
   double fromCommaDecimalToNum() {
     String text = splitMapJoin(
       _commaNumRegex,
@@ -30,12 +34,10 @@ extension StringX on String {
   static const nonDiacritics =
       'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
 
-  String withoutDiacriticalMarks() =>
-      splitMapJoin('',
-          onNonMatch: (char) =>
-          char.isNotEmpty && diacritics.contains(char)
-              ? nonDiacritics[diacritics.indexOf(char)]
-              : char);
+  String withoutDiacriticalMarks() => splitMapJoin('',
+      onNonMatch: (char) => char.isNotEmpty && diacritics.contains(char)
+          ? nonDiacritics[diacritics.indexOf(char)]
+          : char);
 
   String removeDomain() {
     final Uri uri = Uri.parse(this);

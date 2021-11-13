@@ -42,6 +42,11 @@ class ZacatrusRangoPrecioFilter implements IFilter {
   }
 
   @override
+  String toString() {
+    return "${min.toString().toSpanishNumber()}€ - ${max.toString().toSpanishNumber()}€";
+  }
+
+  @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ZacatrusRangoPrecioFilter &&
