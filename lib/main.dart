@@ -51,7 +51,8 @@ class MyApp extends ConsumerWidget {
             ),
           )),
           textTheme: const TextTheme(
-            headline6: TextStyle(fontSize: 20),
+            headline6: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
             headline5: TextStyle(fontSize: 24),
             headline4: TextStyle(fontSize: 28, color: Colors.black),
             headline3: TextStyle(

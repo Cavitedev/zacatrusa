@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
 import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/filters/radio_button_filter_list.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/filters/slider_filter.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/filters/tab_widgets/radio_button_filter_list.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/filters/tab_widgets/slider_filter.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/filters/tab_widgets/summary_filters.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
@@ -15,7 +16,7 @@ import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_temati
 
 import '../../../application/browser/browser_notifier.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
-import 'checkbox_filter_list.dart';
+import 'tab_widgets/checkbox_filter_list.dart';
 
 class BrowsePageFilters extends ConsumerStatefulWidget {
   const BrowsePageFilters({
@@ -34,7 +35,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 8, vsync: this);
+    tabController = TabController(length: 9, vsync: this);
     urlComposer = ref.read(browserNotifierProvider).urlComposer;
   }
 
@@ -53,6 +54,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
           TabBar(
             isScrollable: true,
             tabs: const [
+              Tab(text: "Resumen"),
               Tab(text: "Si Buscas"),
               Tab(text: "Categoría"),
               Tab(text: "Temática"),
@@ -68,6 +70,14 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
             child: TabBarView(
               controller: tabController,
               children: [
+                SummaryFilters(
+                  urlComposer: urlComposer,
+                  onComposerUpdate: (composer) {
+                    setState(() {
+                      urlComposer = composer;
+                    });
+                  },
+                ),
                 RadioButtonListFilter(
                   filterName: "Si Buscas...",
                   categories: ZacatrusSiBuscasFilter.categories.toList(),
