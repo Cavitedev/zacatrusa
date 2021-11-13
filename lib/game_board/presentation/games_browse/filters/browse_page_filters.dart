@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
@@ -86,6 +87,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   filterName: "Temática",
                   categories: ZacatrusTematicaFilter.categories.toList(),
                   initialCategory: urlComposer.tematica?.value,
+                  searchEnabled: true,
                   onChange: (value) {
                     urlComposer = urlComposer.copyWith(
                         tematica: Optional.value(value == null
@@ -100,6 +102,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   filterName: "Mecánica",
                   categories: ZacatrusMecanicaFilter.categories.toList(),
                   initialCategory: urlComposer.mecanica?.value,
+                  searchEnabled: true,
                   onChange: (value) {
                     urlComposer = urlComposer.copyWith(
                         mecanica: Optional.value(value == null
@@ -107,7 +110,18 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                             : ZacatrusMecanicaFilter(value: value)));
                   },
                 ),
-                Text("Editorial contenido"),
+                RadioButtonListFilter(
+                  filterName: "Editorial",
+                  categories: ZacatrusEditorialFilter.categories.toList(),
+                  initialCategory: urlComposer.editorial?.value,
+                  searchEnabled: true,
+                  onChange: (value) {
+                    urlComposer = urlComposer.copyWith(
+                        editorial: Optional.value(value == null
+                            ? null
+                            : ZacatrusEditorialFilter(value: value)));
+                  },
+                ),
               ],
             ),
           ),
@@ -152,6 +166,7 @@ class RadioButtonListFilter extends StatefulWidget {
     required this.categories,
     required this.initialCategory,
     required this.onChange,
+    this.searchEnabled = false,
     Key? key,
   }) : super(key: key);
 
@@ -159,6 +174,7 @@ class RadioButtonListFilter extends StatefulWidget {
   final String? initialCategory;
   final Function(String?) onChange;
   final String filterName;
+  final bool searchEnabled;
 
   @override
   State<RadioButtonListFilter> createState() => _RadioButtonListFilterState();
@@ -183,15 +199,21 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
           widget.filterName,
           style: Theme.of(context).textTheme.headline4,
         ),
-        TextField(
-          onChanged: (value) {
-            setState(() {
-              filteredCategories = widget.categories
-                  .where((category) => category.contains(value))
-                  .toList();
-            });
-          },
-        ),
+        if (widget.searchEnabled)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: generalPadding),
+            child: TextField(
+              autocorrect: false,
+              onChanged: (value) {
+                setState(() {
+                  filteredCategories = widget.categories
+                      .where((category) =>
+                          category.toLowerCase().contains(value.toLowerCase()))
+                      .toList();
+                });
+              },
+            ),
+          ),
         Expanded(
           child: Scrollbar(
             child: ListView.builder(

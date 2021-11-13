@@ -40,6 +40,10 @@ class MyApp extends ConsumerWidget {
             labelColor: Colors.black,
             unselectedLabelColor: Colors.black38,
           ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            isDense: true,
+          ),
           textTheme: const TextTheme(
             headline6: TextStyle(fontSize: 20),
             headline5: TextStyle(fontSize: 24),
