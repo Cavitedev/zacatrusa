@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../constants/app_margins_and_sizes.dart';
@@ -70,15 +72,17 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
             child: OutlinedInputField(
               autocorrect: false,
               controller: textController,
-              suffixIconWhenNoText: VoiceToSpeechButton(
-                onWordHeard: (textHeard) {
-                  textController.value = TextEditingValue(
-                    text: textHeard,
-                    selection:
-                        TextSelection.collapsed(offset: textHeard.length),
-                  );
-                },
-              ),
+              suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
+                  ? VoiceToSpeechButton(
+                      onWordHeard: (textHeard) {
+                        textController.value = TextEditingValue(
+                          text: textHeard,
+                          selection:
+                              TextSelection.collapsed(offset: textHeard.length),
+                        );
+                      },
+                    )
+                  : null,
             ),
           ),
         Expanded(
