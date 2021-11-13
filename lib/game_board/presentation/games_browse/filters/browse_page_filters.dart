@@ -31,6 +31,11 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters> {
       actions: [
         ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Cancelar")),
+        ElevatedButton(
+            onPressed: () {
               ref
                   .read(browserNotifierProvider.notifier)
                   .changeFilters(urlComposer);
