@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
 import 'package:zacatrusa/core/optional.dart';
 import 'package:zacatrusa/game_board/presentation/games_browse/filters/radio_button_filter_list.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/filters/slider_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
@@ -121,7 +123,20 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                             : ZacatrusNumJugadoresFilter(values: values)));
                   },
                 ),
-                Text("Precio contenido"),
+                SliderFilter(
+                  filterName: "Precio",
+                  minValue: ZacatrusRangoPrecioFilter.minValue,
+                  maxValue: ZacatrusRangoPrecioFilter.maxValue,
+                  initialMinValue: urlComposer.precio?.min ??
+                      ZacatrusRangoPrecioFilter.minValue,
+                  initialMaxValue: urlComposer.precio?.max ??
+                      ZacatrusRangoPrecioFilter.maxValue,
+                  onChange: (newMinValue, newMaxValue) {
+                    urlComposer = urlComposer.copyWith(
+                        precio: Optional.value(ZacatrusRangoPrecioFilter(
+                            min: newMinValue, max: newMaxValue)));
+                  },
+                ),
                 RadioButtonListFilter(
                   filterName: "Mecánica",
                   categories: ZacatrusMecanicaFilter.categories.toList(),
