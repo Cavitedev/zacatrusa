@@ -47,6 +47,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       child: Column(
         children: [
           TabBar(

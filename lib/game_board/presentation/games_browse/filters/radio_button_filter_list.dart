@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/outlined_input_field.dart';
 import 'package:zacatrusa/game_board/presentation/games_browse/filters/voice_to_speech_button.dart';
 
 class RadioButtonListFilter extends StatefulWidget {
@@ -35,6 +36,15 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
     filteredCategories = widget.categories;
     scrollController = ScrollController();
     textController = TextEditingController();
+    textController.addListener(() {
+      setState(() {
+        filteredCategories = widget.categories
+            .where((category) => category
+                .toLowerCase()
+                .contains(textController.text.toLowerCase()))
+            .toList();
+      });
+    });
   }
 
   @override
@@ -54,26 +64,21 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
           textAlign: TextAlign.center,
         ),
         if (widget.searchEnabled)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: generalPadding),
-            child: TextField(
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: generalPadding),
+            child: OutlinedInputField(
               autocorrect: false,
               controller: textController,
-              onChanged: (value) {
-                setState(() {
-                  filteredCategories = widget.categories
-                      .where((category) =>
-                          category.toLowerCase().contains(value.toLowerCase()))
-                      .toList();
-                });
-              },
+              suffixIconWhenNoText: VoiceToSpeechButton(
+                onWordHeard: (textHeard) {
+                  textController.value = TextEditingValue(
+                    text: textHeard,
+                    selection:
+                        TextSelection.collapsed(offset: textHeard.length),
+                  );
+                },
+              ),
             ),
-          ),
-        if (widget.searchEnabled)
-          VoiceToSpeechButton(
-            onWordHeard: (textHeard) {
-              textController.text = textHeard;
-            },
           ),
         Expanded(
           child: Scrollbar(

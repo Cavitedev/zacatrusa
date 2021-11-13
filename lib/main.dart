@@ -44,6 +44,12 @@ class MyApp extends ConsumerWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             isDense: true,
           ),
+          dialogTheme: const DialogTheme(
+              shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+          )),
           textTheme: const TextTheme(
             headline6: TextStyle(fontSize: 20),
             headline5: TextStyle(fontSize: 24),

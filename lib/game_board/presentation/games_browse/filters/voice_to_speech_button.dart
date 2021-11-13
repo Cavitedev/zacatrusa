@@ -31,13 +31,13 @@ class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
   Widget build(BuildContext context) {
     return AvatarGlow(
       animate: speech.isListening,
-      endRadius: 50,
+      endRadius: 24,
       glowColor: Theme.of(context).primaryColor,
       duration: const Duration(milliseconds: 1000),
       repeatPauseDuration: const Duration(milliseconds: 100),
       repeat: true,
       curve: Curves.fastOutSlowIn,
-      child: FloatingActionButton(
+      child: IconButton(
           onPressed: () async {
             if (!speech.isAvailable) {
               await Permission.speech.request();
@@ -54,7 +54,7 @@ class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
                   localeId: "es_ES");
             }
           },
-          child: Icon(
+          icon: Icon(
             speech.isListening ? Icons.mic_rounded : Icons.mic_none_rounded,
           )),
     );
