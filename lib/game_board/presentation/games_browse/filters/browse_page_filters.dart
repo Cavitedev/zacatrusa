@@ -72,10 +72,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   categories: ZacatrusSiBuscasFilter.categories.toList(),
                   initialCategory: urlComposer.siBuscas?.value,
                   onChange: (value) {
-                    urlComposer = urlComposer.copyWith(
-                        siBuscas: Optional.value(value == null
-                            ? null
-                            : ZacatrusSiBuscasFilter(value: value)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          siBuscas: Optional.value(value == null
+                              ? null
+                              : ZacatrusSiBuscasFilter(value: value)));
+                    });
                   },
                 ),
                 RadioButtonListFilter(
@@ -83,10 +85,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   categories: ZacatrusCategoriaFilter.categories.toList(),
                   initialCategory: urlComposer.categoria?.value,
                   onChange: (value) {
-                    urlComposer = urlComposer.copyWith(
-                        categoria: Optional.value(value == null
-                            ? null
-                            : ZacatrusCategoriaFilter(value: value)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          categoria: Optional.value(value == null
+                              ? null
+                              : ZacatrusCategoriaFilter(value: value)));
+                    });
                   },
                 ),
                 RadioButtonListFilter(
@@ -95,10 +99,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   initialCategory: urlComposer.tematica?.value,
                   searchEnabled: true,
                   onChange: (value) {
-                    urlComposer = urlComposer.copyWith(
-                        tematica: Optional.value(value == null
-                            ? null
-                            : ZacatrusTematicaFilter(value: value)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          tematica: Optional.value(value == null
+                              ? null
+                              : ZacatrusTematicaFilter(value: value)));
+                    });
                   },
                 ),
                 CheckboxListFilter(
@@ -106,10 +112,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   categories: ZacatrusEdadesFilter.categories.toList(),
                   initialCategories: urlComposer.edades?.values ?? [],
                   onChange: (values) {
-                    urlComposer = urlComposer.copyWith(
-                        edades: Optional.value(values.isEmpty
-                            ? null
-                            : ZacatrusEdadesFilter(values: values)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          edades: Optional.value(values.isEmpty
+                              ? null
+                              : ZacatrusEdadesFilter(values: values)));
+                    });
                   },
                 ),
                 CheckboxListFilter(
@@ -117,10 +125,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   categories: ZacatrusNumJugadoresFilter.categories.toList(),
                   initialCategories: urlComposer.numJugadores?.values ?? [],
                   onChange: (values) {
-                    urlComposer = urlComposer.copyWith(
-                        numJugadores: Optional.value(values.isEmpty
-                            ? null
-                            : ZacatrusNumJugadoresFilter(values: values)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          numJugadores: Optional.value(values.isEmpty
+                              ? null
+                              : ZacatrusNumJugadoresFilter(values: values)));
+                    });
                   },
                 ),
                 SliderFilter(
@@ -132,9 +142,11 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   initialMaxValue: urlComposer.precio?.max ??
                       ZacatrusRangoPrecioFilter.maxValue,
                   onChange: (newMinValue, newMaxValue) {
-                    urlComposer = urlComposer.copyWith(
-                        precio: Optional.value(ZacatrusRangoPrecioFilter(
-                            min: newMinValue, max: newMaxValue)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          precio: Optional.value(ZacatrusRangoPrecioFilter(
+                              min: newMinValue, max: newMaxValue)));
+                    });
                   },
                 ),
                 RadioButtonListFilter(
@@ -143,10 +155,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   initialCategory: urlComposer.mecanica?.value,
                   searchEnabled: true,
                   onChange: (value) {
-                    urlComposer = urlComposer.copyWith(
-                        mecanica: Optional.value(value == null
-                            ? null
-                            : ZacatrusMecanicaFilter(value: value)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          mecanica: Optional.value(value == null
+                              ? null
+                              : ZacatrusMecanicaFilter(value: value)));
+                    });
                   },
                 ),
                 RadioButtonListFilter(
@@ -155,10 +169,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   initialCategory: urlComposer.editorial?.value,
                   searchEnabled: true,
                   onChange: (value) {
-                    urlComposer = urlComposer.copyWith(
-                        editorial: Optional.value(value == null
-                            ? null
-                            : ZacatrusEditorialFilter(value: value)));
+                    setState(() {
+                      urlComposer = urlComposer.copyWith(
+                          editorial: Optional.value(value == null
+                              ? null
+                              : ZacatrusEditorialFilter(value: value)));
+                    });
                   },
                 ),
               ],
