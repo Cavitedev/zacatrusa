@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
 import 'package:zacatrusa/core/optional.dart';
+import 'package:zacatrusa/game_board/presentation/games_browse/filters/radio_button_filter_list.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
 import '../../../application/browser/browser_notifier.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
+import 'checkbox_filter_list.dart';
 
 class BrowsePageFilters extends ConsumerStatefulWidget {
   const BrowsePageFilters({
@@ -95,8 +99,28 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                             : ZacatrusTematicaFilter(value: value)));
                   },
                 ),
-                Text("Edad contenido"),
-                Text("Número de jugadores contenido"),
+                CheckboxListFilter(
+                  filterName: "Edad",
+                  categories: ZacatrusEdadesFilter.categories.toList(),
+                  initialCategories: urlComposer.edades?.values ?? [],
+                  onChange: (values) {
+                    urlComposer = urlComposer.copyWith(
+                        edades: Optional.value(values.isEmpty
+                            ? null
+                            : ZacatrusEdadesFilter(values: values)));
+                  },
+                ),
+                CheckboxListFilter(
+                  filterName: "Número de Jugadores",
+                  categories: ZacatrusNumJugadoresFilter.categories.toList(),
+                  initialCategories: urlComposer.numJugadores?.values ?? [],
+                  onChange: (values) {
+                    urlComposer = urlComposer.copyWith(
+                        numJugadores: Optional.value(values.isEmpty
+                            ? null
+                            : ZacatrusNumJugadoresFilter(values: values)));
+                  },
+                ),
                 Text("Precio contenido"),
                 RadioButtonListFilter(
                   filterName: "Mecánica",
@@ -156,88 +180,6 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
           )
         ],
       ),
-    );
-  }
-}
-
-class RadioButtonListFilter extends StatefulWidget {
-  const RadioButtonListFilter({
-    required this.filterName,
-    required this.categories,
-    required this.initialCategory,
-    required this.onChange,
-    this.searchEnabled = false,
-    Key? key,
-  }) : super(key: key);
-
-  final List<String> categories;
-  final String? initialCategory;
-  final Function(String?) onChange;
-  final String filterName;
-  final bool searchEnabled;
-
-  @override
-  State<RadioButtonListFilter> createState() => _RadioButtonListFilterState();
-}
-
-class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
-  String? selected;
-  late List<String> filteredCategories;
-
-  @override
-  void initState() {
-    super.initState();
-    selected = widget.initialCategory;
-    filteredCategories = widget.categories;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          widget.filterName,
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        if (widget.searchEnabled)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: generalPadding),
-            child: TextField(
-              autocorrect: false,
-              onChanged: (value) {
-                setState(() {
-                  filteredCategories = widget.categories
-                      .where((category) =>
-                          category.toLowerCase().contains(value.toLowerCase()))
-                      .toList();
-                });
-              },
-            ),
-          ),
-        Expanded(
-          child: Scrollbar(
-            child: ListView.builder(
-              itemCount: filteredCategories.length,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                final category = filteredCategories[index];
-                return RadioListTile<String?>(
-                  toggleable: true,
-                  groupValue: selected,
-                  value: category,
-                  title: Text(category),
-                  onChanged: (String? value) {
-                    setState(() {
-                      selected = value;
-                    });
-                    widget.onChange(value);
-                  },
-                );
-              },
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
