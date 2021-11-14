@@ -90,8 +90,7 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
       notifyListeners();
       return true;
     } else if (_currentConf.isSearching) {
-      _currentConf.isSearching = false;
-      notifyListeners();
+      updateIsSearching(false);
       return true;
     }
     return false;
