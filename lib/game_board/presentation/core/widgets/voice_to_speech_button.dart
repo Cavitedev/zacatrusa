@@ -2,6 +2,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -55,9 +56,16 @@ class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
                     });
                 return;
               }
-              await speech.initialize();
+              bool success = await speech.initialize(
+                  onError: (error) => _onSpeechError(context, error));
+              if (success == false) {
+                _onInitializeError(context);
+                return;
+              }
             }
             speech.statusListener = _onStatus;
+            speech.errorListener = (error) => _onSpeechError(context, error);
+
             if (speech.isListening) {
               await speech.stop();
             } else {
@@ -78,5 +86,26 @@ class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
     setState(() {
       currentStatus = nextStatus;
     });
+  }
+
+  void _onSpeechError(BuildContext context, SpeechRecognitionError error) {
+    showFlash(
+        context: context,
+        builder: (context, controller) {
+          return SpeechErrorFlash(
+            controller: controller,
+            error: error,
+          );
+        });
+  }
+
+  void _onInitializeError(BuildContext context) {
+    showFlash(
+        context: context,
+        builder: (context, controller) {
+          return SpeechInitializeFlash(
+            controller: controller,
+          );
+        });
   }
 }
