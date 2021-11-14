@@ -7,6 +7,7 @@ import 'package:window_size/window_size.dart';
 import 'constants/app_constants.dart';
 import 'game_board/presentation/core/routing/game_route_information_parser.dart';
 import 'game_board/presentation/core/routing/games_router_delegate.dart';
+import 'settings/settings_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class MyApp extends ConsumerWidget {
     final routerDelegate = ref.watch(gamesRouterDelegateProvider);
     final routeInformationParser =
         ref.watch(gameRouteInformationParserProvider);
-
+    ref.read(settingsControllerProvider);
     return MaterialApp.router(
       title: appName,
       routerDelegate: routerDelegate,

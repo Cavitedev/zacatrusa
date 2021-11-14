@@ -43,6 +43,7 @@ dependencies:
   avatar_glow: ^2.0.2
   app_settings: ^4.1.1
   flash: ^2.0.3
+  shared_preferences: ^2.0.8
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git

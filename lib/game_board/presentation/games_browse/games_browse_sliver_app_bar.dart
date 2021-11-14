@@ -3,15 +3,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_constants.dart';
-import 'package:zacatrusa/core/optional.dart';
-import 'package:zacatrusa/game_board/application/browser/browser_notifier.dart';
-import 'package:zacatrusa/game_board/application/browser/browser_state.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/outlined_input_field.dart';
-import 'package:zacatrusa/game_board/presentation/core/widgets/voice_to_speech_button.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_query_filter.dart';
 
+import '../../../constants/app_constants.dart';
+import '../../../core/optional.dart';
+import '../../../settings/settings_controller.dart';
+import '../../application/browser/browser_notifier.dart';
+import '../../application/browser/browser_state.dart';
+import '../../zacatrus/domain/url/filters/zacatrus_query_filter.dart';
+import '../../zacatrus/domain/url/zacatrus_url_composer.dart';
+import '../core/widgets/outlined_input_field.dart';
+import '../core/widgets/voice_to_speech_button.dart';
 import 'filters/browse_page_filters.dart';
+import 'warning_query_search.dart';
 
 class GamesBrowseSliverAppBar extends ConsumerStatefulWidget {
   const GamesBrowseSliverAppBar({
@@ -133,10 +136,31 @@ class _GamesBrowseSliverAppBarState
   }
 
   void _onSubmit(String text) {
+    final BrowserState broswerState = ref.read(browserNotifierProvider);
+    final ZacatrusUrlBrowserComposer urlComposer = broswerState.urlComposer;
+
+    if (text.isNotEmpty) {
+      if (urlComposer.areThereFiltersConflictingWithQueries &&
+          !ref.read(settingsControllerProvider).notifyQueryDowngradeWarning) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return DowngradeQuerySearchWarningDialog(
+                onAccept: () => _updateQueryOnUrlComposer(urlComposer, text),
+              );
+            });
+        return;
+      }
+    }
+
+    _updateQueryOnUrlComposer(urlComposer, text);
+  }
+
+  void _updateQueryOnUrlComposer(
+      ZacatrusUrlBrowserComposer urlComposer, String text) {
     final BrowserNotifier broswerNotifier =
         ref.read(browserNotifierProvider.notifier);
-    final BrowserState broswerState = ref.read(browserNotifierProvider);
-    broswerNotifier.changeFilters(broswerState.urlComposer
-        .copyWith(query: Optional.value(ZacatrusQueryFilter(value: text))));
+    broswerNotifier.changeFilters(urlComposer.copyWith(
+        query: Optional.value(ZacatrusQueryFilter(value: text))));
   }
 }

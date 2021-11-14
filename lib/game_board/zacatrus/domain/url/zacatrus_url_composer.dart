@@ -302,6 +302,15 @@ class ZacatrusUrlBrowserComposer {
       mecanica != null ||
       editorial != null;
 
+  bool get canSearchBeComplete =>
+      query == null || !areThereFiltersConflictingWithQueries;
+
+  bool get areThereFiltersConflictingWithQueries =>
+      categoria != null ||
+      edades != null ||
+      precio != null ||
+      editorial != null;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
