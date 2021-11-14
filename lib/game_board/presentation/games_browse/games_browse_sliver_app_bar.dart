@@ -11,6 +11,8 @@ import 'package:zacatrusa/game_board/presentation/core/widgets/outlined_input_fi
 import 'package:zacatrusa/game_board/presentation/core/widgets/voice_to_speech_button.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_query_filter.dart';
 
+import 'filters/browse_page_filters.dart';
+
 class GamesBrowseSliverAppBar extends ConsumerStatefulWidget {
   const GamesBrowseSliverAppBar({
     Key? key,
@@ -22,156 +24,112 @@ class GamesBrowseSliverAppBar extends ConsumerStatefulWidget {
 }
 
 class _GamesBrowseSliverAppBarState
-    extends ConsumerState<GamesBrowseSliverAppBar>
-    with SingleTickerProviderStateMixin {
+    extends ConsumerState<GamesBrowseSliverAppBar> {
   late final TextEditingController textController;
   bool isSearching = false;
-  late AnimationController _animationController;
-  late Animation<double> _animation;
+  late FocusNode controllerFocus;
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController();
-
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 150));
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_animationController);
+    controllerFocus = FocusNode();
   }
 
   @override
   void dispose() {
-    super.dispose();
     textController.dispose();
+    controllerFocus.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return isSearching?  SliverAppBar(
-      backgroundColor: isSearching ? Colors.white : null,
-      title: isSearching
-          ? OutlinedInputField(
-              autocorrect: false,
-              textStyle: TextStyle(color: Colors.white),
-              textInputAction: TextInputAction.search,
-              controller: textController,
-              onSubmit: _onSubmit,
-              suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
-                  ? VoiceToSpeechButton(
-                      onWordHeard: (textHeard, isFinished) {
-                        if (isFinished) {
-                          _onSubmit(textHeard);
-                        }
-                        textController.value = TextEditingValue(
-                          text: textHeard,
-                          selection:
-                              TextSelection.collapsed(offset: textHeard.length),
-                        );
-                      },
-                    )
-                  : null,
-            )
-          : const Text(appName),
+    return isSearching ? _searchingAppBar() : _defaultSearchBar(context);
+  }
+
+  SliverAppBar _defaultSearchBar(BuildContext context) {
+    return SliverAppBar(
+      title: GestureDetector(
+        onTap: () {
+          _changeIsSearchingState(true);
+        },
+        child:
+            Text(textController.text.isEmpty ? appName : textController.text),
+      ),
       floating: true,
       actions: [
-        if (!isSearching)
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  isSearching = true;
-                });
-              },
-              icon: const Icon(Icons.search)),
         IconButton(
             onPressed: () {
-              setState(() {
-                isSearching = !isSearching;
-              });
-              // showDialog(
-              // context: context,
-              // builder: (context) {
-              //   return const BrowsePageFilters();
-              // });
+              _changeIsSearchingState(true);
             },
-            icon: const Icon(Icons.home)),
+            icon: const Icon(
+              Icons.search,
+              semanticLabel: "Buscar por nombre",
+            )),
         IconButton(
             onPressed: () {
-              if (_animationController.isCompleted) {
-                _animationController.reverse();
-              } else {
-                _animationController.forward();
-              }
-              // showDialog(
-              // context: context,
-              // builder: (context) {
-              //   return const BrowsePageFilters();
-              // });
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const BrowsePageFilters();
+                  });
             },
-            icon: const Icon(Icons.filter_list))
-      ],
-    ) : SliverAppBar(
-      backgroundColor: isSearching ? Colors.white : null,
-      title: isSearching
-          ? OutlinedInputField(
-              autocorrect: false,
-              textStyle: TextStyle(color: Colors.white),
-              textInputAction: TextInputAction.search,
-              controller: textController,
-              onSubmit: _onSubmit,
-              suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
-                  ? VoiceToSpeechButton(
-                      onWordHeard: (textHeard, isFinished) {
-                        if (isFinished) {
-                          _onSubmit(textHeard);
-                        }
-                        textController.value = TextEditingValue(
-                          text: textHeard,
-                          selection:
-                              TextSelection.collapsed(offset: textHeard.length),
-                        );
-                      },
-                    )
-                  : null,
-            )
-          : const Text(appName),
-      floating: true,
-      actions: [
-        if (!isSearching)
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  isSearching = true;
-                });
-              },
-              icon: const Icon(Icons.search)),
-        IconButton(
-            onPressed: () {
-              setState(() {
-                isSearching = !isSearching;
-              });
-              // showDialog(
-              // context: context,
-              // builder: (context) {
-              //   return const BrowsePageFilters();
-              // });
-            },
-            icon: const Icon(Icons.home)),
-        IconButton(
-            onPressed: () {
-              if (_animationController.isCompleted) {
-                _animationController.reverse();
-              } else {
-                _animationController.forward();
-              }
-              // showDialog(
-              // context: context,
-              // builder: (context) {
-              //   return const BrowsePageFilters();
-              // });
-            },
-            icon: const Icon(Icons.filter_list))
+            icon: const Icon(
+              Icons.filter_list,
+              semanticLabel: "Filtrar",
+            ))
       ],
     );
+  }
+
+  SliverAppBar _searchingAppBar() {
+    return SliverAppBar(
+      backgroundColor: Colors.white,
+      floating: true,
+      iconTheme: const IconThemeData(color: Colors.black),
+      leading: IconButton(
+        onPressed: () {
+          _changeIsSearchingState(false);
+        },
+        icon: const Icon(
+          Icons.arrow_back,
+          semanticLabel: "Volver a barra normal",
+        ),
+      ),
+      title: OutlinedInputField(
+        autocorrect: false,
+        textInputAction: TextInputAction.search,
+        controller: textController,
+        onSubmit: _onSubmit,
+        focusNode: controllerFocus,
+        suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
+            ? VoiceToSpeechButton(
+                onWordHeard: (textHeard, isFinished) {
+                  if (isFinished) {
+                    _onSubmit(textHeard);
+                  }
+                  textController.value = TextEditingValue(
+                    text: textHeard,
+                    selection:
+                        TextSelection.collapsed(offset: textHeard.length),
+                  );
+                },
+              )
+            : null,
+      ),
+    );
+  }
+
+  void _changeIsSearchingState(bool isSearching) {
+    setState(() {
+      this.isSearching = isSearching;
+      if (isSearching) {
+        controllerFocus.requestFocus();
+      } else {
+        controllerFocus.unfocus();
+      }
+    });
   }
 
   void _onSubmit(String text) {

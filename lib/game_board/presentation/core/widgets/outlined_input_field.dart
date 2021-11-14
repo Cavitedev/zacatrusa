@@ -70,11 +70,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
     } else {
       textEditingController = TextEditingController();
     }
-    textEditingController.addListener(() {
-      setState(() {
-        hasText = textEditingController.text.isNotEmpty;
-      });
-    });
+    textEditingController.addListener(_hasTextListener);
 
     super.initState();
   }
@@ -84,7 +80,15 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
     if (widget.controller == null) {
       textEditingController.dispose();
     }
+    textEditingController.removeListener(_hasTextListener);
+
     super.dispose();
+  }
+
+  void _hasTextListener() {
+    return setState(() {
+      hasText = textEditingController.text.isNotEmpty;
+    });
   }
 
   @override
@@ -150,9 +154,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
     if (widget.focusNode != null) {
       widget.focusNode!.unfocus();
     }
-    setState(() {
-      hasText = false;
-      widget.onChanged?.call("");
-    });
+    widget.onChanged?.call("");
+    widget.onSubmit?.call("");
   }
 }
