@@ -11,6 +11,7 @@ import '../../application/browser/browser_notifier.dart';
 import '../../application/browser/browser_state.dart';
 import '../../zacatrus/domain/url/filters/zacatrus_query_filter.dart';
 import '../../zacatrus/domain/url/zacatrus_url_composer.dart';
+import '../core/routing/games_router_delegate.dart';
 import '../core/widgets/outlined_input_field.dart';
 import '../core/widgets/voice_to_speech_button.dart';
 import 'filters/browse_page_filters.dart';
@@ -29,7 +30,6 @@ class GamesBrowseSliverAppBar extends ConsumerStatefulWidget {
 class _GamesBrowseSliverAppBarState
     extends ConsumerState<GamesBrowseSliverAppBar> {
   late final TextEditingController textController;
-  bool isSearching = false;
   late FocusNode controllerFocus;
 
   @override
@@ -48,6 +48,8 @@ class _GamesBrowseSliverAppBarState
 
   @override
   Widget build(BuildContext context) {
+    final bool isSearching =
+        ref.watch(gamesRouterDelegateProvider).currentConf.isSearching;
     return isSearching ? _searchingAppBar() : _defaultSearchBar(context);
   }
 
@@ -125,14 +127,13 @@ class _GamesBrowseSliverAppBarState
   }
 
   void _changeIsSearchingState(bool isSearching) {
-    setState(() {
-      this.isSearching = isSearching;
-      if (isSearching) {
-        controllerFocus.requestFocus();
-      } else {
-        controllerFocus.unfocus();
-      }
-    });
+    final router = ref.read(gamesRouterDelegateProvider);
+    router.currentConf = router.currentConf.copyWith(isSearching: isSearching);
+    if (isSearching) {
+      controllerFocus.requestFocus();
+    } else {
+      controllerFocus.unfocus();
+    }
   }
 
   void _onSubmit(String text) {
