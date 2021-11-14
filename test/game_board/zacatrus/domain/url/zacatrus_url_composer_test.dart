@@ -225,6 +225,18 @@ void main() {
         expect(output,
             "https://zacatrus.es/catalogsearch/result/?ocasiones=1623&q=cartas");
       });
+
+      test("Searching with tematica returns right url", () {
+        final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+            query: const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+            tematica:
+                const Optional.value(ZacatrusTematicaFilter(value: "Música")));
+
+        final output = urlComposer.buildUrl();
+
+        expect(output,
+            "https://zacatrus.es/catalogsearch/result/?q=cartas&tema_sel=1376");
+      });
     });
   });
 
@@ -400,6 +412,20 @@ void main() {
                     const Optional.value(ZacatrusQueryFilter(value: "cartas")),
                 siBuscas: const Optional.value(
                     ZacatrusSiBuscasFilter(value: "Familiares"))));
+      });
+
+      test("Home query page with temática returns right composer", () {
+        const String url =
+            "https://zacatrus.es/catalogsearch/result/?q=cartas&tema_sel=1376";
+
+        final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+        expect(
+            result,
+            ZacatrusUrlBrowserComposer.init().copyWith(
+                query:
+                    const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+                tematica: const Optional.value(
+                    ZacatrusTematicaFilter(value: "Música"))));
       });
     });
   });

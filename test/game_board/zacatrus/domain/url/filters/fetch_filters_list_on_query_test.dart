@@ -6,27 +6,28 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
 //This test that the amount of filters haven't changed
 void main() {
   const rawUrl = "https://zacatrus.es/catalogsearch/result/index/?q=cartas";
-  late List<dom.Element> collapsibleFilters;
+  late List<dom.Element> collapsibleFilters1;
+  late List<dom.Element> collapsibleFilters2;
 
   setUpAll(() async {
-    http.Response response = await http.get(Uri.parse(rawUrl));
-    final String body = utf8.decode(response.bodyBytes);
-    final dom.Document document = parser.parse(body);
-    collapsibleFilters = document.getElementById("narrow-by-list")!.children;
+    collapsibleFilters1 = await _parseWebsiteAndGetFilters(rawUrl);
+    collapsibleFilters2 = await _parseWebsiteAndGetFilters(
+        "https://zacatrus.es/catalogsearch/result/index/?q=musica");
   });
 
   test("Filters were fetched", () {
-    expect(collapsibleFilters.length, 8);
+    expect(collapsibleFilters1.length, 8);
   });
 
   test("Fetch Si buscas", () async {
-    dom.Element tematicaDiv = collapsibleFilters[0];
+    dom.Element siBUscasDiv = collapsibleFilters1[0];
 
-    final dom.Element ol = tematicaDiv.getElementsByTagName("ol")[0];
+    final dom.Element ol = siBUscasDiv.getElementsByTagName("ol")[0];
     final Map<String, String> siBuscas =
         _getParameterLinkCategories(ol, ZacatrusSiBuscasFilter.keyValue);
 
@@ -34,28 +35,27 @@ void main() {
     expect(siBuscas.length, 12);
   });
 
-  // test("Fetch categorias", () async {
-  //   dom.Element categoriaDiv = collapsibleFilters[1];
-  //
-  //   final dom.Element ul = categoriaDiv.getElementsByTagName("ul")[0];
-  //   final Map<String, String> categorias = _getParameterLinkCategories(ul);
-  //
-  //   print(categorias);
-  //   expect(categorias.length, 5);
-  // });
-  //
-  // test("Fetch temáticas", () async {
-  //   dom.Element tematicaDiv = collapsibleFilters[4];
-  //
-  //   final dom.Element ol = tematicaDiv.getElementsByTagName("ol")[0];
-  //   final Map<String, String> tematicas = _getParameterLinkCategories(ol);
-  //
-  //   print(tematicas);
-  //   expect(tematicas.length, 43);
-  // });
+  test("Fetch temáticas", () async {
+    dom.Element tematicaDiv = collapsibleFilters1[3];
+
+    final dom.Element ol = tematicaDiv.getElementsByTagName("ol")[0];
+    final Map<String, String> tematicas =
+        _getParameterLinkCategories(ol, ZacatrusTematicaFilter.keyValue);
+
+    dom.Element tematicaDiv2 = collapsibleFilters2[2];
+
+    final dom.Element ol2 = tematicaDiv2.getElementsByTagName("ol")[0];
+    final Map<String, String> tematicas2 =
+        _getParameterLinkCategories(ol2, ZacatrusTematicaFilter.keyValue);
+
+    tematicas.addAll(tematicas2);
+
+    print(tematicas);
+    expect(tematicas.length, 43);
+  });
   //
   // test("Fetch edades", () async {
-  //   dom.Element edadDiv = collapsibleFilters[6];
+  //   dom.Element edadDiv = collapsibleFilters1[6];
   //
   //   final dom.Element ol = edadDiv.getElementsByTagName("ol")[0];
   //
@@ -67,7 +67,7 @@ void main() {
   // });
   //
   // test("Fetch Num jugadores", () async {
-  //   dom.Element numJugadoresDiv = collapsibleFilters[7];
+  //   dom.Element numJugadoresDiv = collapsibleFilters1[7];
   //
   //   final dom.Element ol = numJugadoresDiv.getElementsByTagName("ol")[0];
   //
@@ -78,7 +78,7 @@ void main() {
   // });
   //
   // test("Fetch Mecánica", () async {
-  //   dom.Element mecanicaDiv = collapsibleFilters[9];
+  //   dom.Element mecanicaDiv = collapsibleFilters1[9];
   //
   //   final dom.Element ol = mecanicaDiv.getElementsByTagName("ol")[0];
   //   final Map<String, String> mecanicas = _getParameterLinkCategories(ol);
@@ -88,7 +88,7 @@ void main() {
   // });
   //
   // test("Fetch Editorial", () async {
-  //   dom.Element editorialDiv = collapsibleFilters[10];
+  //   dom.Element editorialDiv = collapsibleFilters1[10];
   //
   //   final dom.Element ol = editorialDiv.getElementsByTagName("ol")[0];
   //   final Map<String, String> editoriales = _getParameterLinkCategories(ol);
@@ -96,6 +96,13 @@ void main() {
   //   print(editoriales);
   //   expect(editoriales.length, 192);
   // });
+}
+
+Future<List<dom.Element>> _parseWebsiteAndGetFilters(String rawUrl) async {
+  http.Response response = await http.get(Uri.parse(rawUrl));
+  final String body = utf8.decode(response.bodyBytes);
+  final dom.Document document = parser.parse(body);
+  return document.getElementById("narrow-by-list")!.children;
 }
 
 Map<String, String> _getParameterLinkCategories(
@@ -110,7 +117,7 @@ Map<String, String> _getParameterLinkCategories(
       if (link == null) {
         return null;
       }
-      late String urlModifier = Uri.parse(link).queryParameters[parameter]!;
+      String urlModifier = Uri.parse(link).queryParameters[parameter]!;
       return MapEntry('"$label"', '"$urlModifier"');
     }).whereType<MapEntry<String, String>>(),
   );

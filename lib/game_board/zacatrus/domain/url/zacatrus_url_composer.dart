@@ -89,6 +89,12 @@ class ZacatrusUrlBrowserComposer {
       if (siBuscasParam != null) {
         siBuscas = ZacatrusSiBuscasFilter.queryUrl(value: siBuscasParam);
       }
+
+      final String? tematicaParam =
+          uri.queryParameters[ZacatrusTematicaFilter.keyValue];
+      if (tematicaParam != null) {
+        tematica = ZacatrusTematicaFilter.queryUrl(value: tematicaParam);
+      }
     }
 
     return ZacatrusUrlBrowserComposer(
@@ -213,7 +219,7 @@ class ZacatrusUrlBrowserComposer {
     }
 
     String url =
-        "$rawUrlWithQuery${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}";
+        "$rawUrlWithQuery${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}${tematica?.toQueryParam() ?? ""}";
     return _urlWithUnnecesaryCharacters(url);
   }
 
