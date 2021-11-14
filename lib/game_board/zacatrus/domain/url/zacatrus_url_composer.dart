@@ -47,6 +47,50 @@ class ZacatrusUrlBrowserComposer {
   }
 
   factory ZacatrusUrlBrowserComposer.fromUrl(String url) {
+    url = url.replaceAll(".html", "");
+    final Uri uri = Uri.parse(url);
+
+    if (uri.pathSegments[0] == "juegos-de-mesa") {
+      return ZacatrusUrlBrowserComposer._fromUriWithoutQuery(uri);
+    } else {
+      return ZacatrusUrlBrowserComposer._fromUriWithQuery(uri);
+    }
+  }
+
+  factory ZacatrusUrlBrowserComposer._fromUriWithQuery(Uri uri) {
+    ZacatrusProductsPerPage productsPerPage = const ZacatrusProductsPerPage(24);
+    ZacatrusPageIndex pageNum = const ZacatrusPageIndex(1);
+    ZacatrusSiBuscasFilter? siBuscas;
+    ZacatrusCategoriaFilter? categoria;
+    ZacatrusTematicaFilter? tematica;
+    ZacatrusEdadesFilter? edades;
+    ZacatrusRangoPrecioFilter? precio;
+    ZacatrusMecanicaFilter? mecanica;
+    ZacatrusOrder? order;
+
+    ZacatrusQueryFilter? query;
+
+    if (uri.queryParameters.isNotEmpty) {
+      final String? queryParam = uri.queryParameters["q"];
+      if (queryParam != null) {
+        query = ZacatrusQueryFilter(value: queryParam);
+      }
+    }
+
+    return ZacatrusUrlBrowserComposer(
+        pageNum: pageNum,
+        productsPerPage: productsPerPage,
+        siBuscas: siBuscas,
+        categoria: categoria,
+        edades: edades,
+        mecanica: mecanica,
+        precio: precio,
+        tematica: tematica,
+        order: order,
+        query: query);
+  }
+
+  factory ZacatrusUrlBrowserComposer._fromUriWithoutQuery(Uri uri) {
     ZacatrusProductsPerPage productsPerPage = const ZacatrusProductsPerPage(24);
     ZacatrusPageIndex pageNum = const ZacatrusPageIndex(1);
 
@@ -59,9 +103,6 @@ class ZacatrusUrlBrowserComposer {
     ZacatrusMecanicaFilter? mecanica;
     ZacatrusEditorialFilter? editorial;
     ZacatrusOrder? order;
-
-    url = url.replaceAll(".html", "");
-    final Uri uri = Uri.parse(url);
 
     if (uri.pathSegments.length == 1 && uri.queryParameters.isEmpty) {
       return ZacatrusUrlBrowserComposer.init();
