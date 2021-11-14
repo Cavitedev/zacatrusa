@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
@@ -53,29 +54,18 @@ void main() {
     print(tematicas);
     expect(tematicas.length, 43);
   });
-  //
-  // test("Fetch edades", () async {
-  //   dom.Element edadDiv = collapsibleFilters1[6];
-  //
-  //   final dom.Element ol = edadDiv.getElementsByTagName("ol")[0];
-  //
-  //   final Map<String, String> edades =
-  //       _getParameterLinkCategories(ol, isParameter: true);
-  //
-  //   print(edades);
-  //   expect(edades.length, 7);
-  // });
-  //
-  // test("Fetch Num jugadores", () async {
-  //   dom.Element numJugadoresDiv = collapsibleFilters1[7];
-  //
-  //   final dom.Element ol = numJugadoresDiv.getElementsByTagName("ol")[0];
-  //
-  //   final Map<String, String> numJugadores = _getParameterLinkCategories(ol);
-  //
-  //   print(numJugadores);
-  //   expect(numJugadores.length, 9);
-  // });
+
+  test("Fetch Num jugadores", () async {
+    dom.Element numJugadoresDiv = collapsibleFilters1[6];
+
+    final dom.Element ol = numJugadoresDiv.getElementsByTagName("ol")[0];
+
+    final Map<String, String> numJugadores =
+        _getParameterLinkCategories(ol, ZacatrusNumJugadoresFilter.keyValue);
+
+    print(numJugadores);
+    expect(numJugadores.length, 9);
+  });
   //
   // test("Fetch Mecánica", () async {
   //   dom.Element mecanicaDiv = collapsibleFilters1[9];

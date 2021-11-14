@@ -53,6 +53,37 @@ class ZacatrusNumJugadoresFilter implements IMultipleFilter {
 
   bool _notRepeated() => values.toSet().toList().length == values.length;
 
+  static String keyValue = "njugadores";
+
+  ZacatrusNumJugadoresFilter.queryUrl({
+    required String concatenatedValue,
+  }) : values = concatenatedValue
+            .split(",")
+            .map((valueUrl) => categoriesQueryUrl.keys
+                .firstWhere((key) => categoriesQueryUrl[key] == valueUrl))
+            .toList(growable: false);
+
+  static Map<String, String> categoriesQueryUrl = {
+    "1": "280",
+    "2": "281",
+    "3": "282",
+    "4": "283",
+    "5": "284",
+    "6": "285",
+    "7": "286",
+    "8": "287",
+    "+8": "308"
+  };
+
+  String toQueryParam() {
+    String valueParam = values
+        .map((value) => categoriesQueryUrl[value]!)
+        .fold<String>(
+            "", (previousValue, element) => previousValue + element + ",");
+    valueParam = valueParam.substring(0, valueParam.length - 1);
+    return "$keyValue=$valueParam&";
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -62,5 +93,4 @@ class ZacatrusNumJugadoresFilter implements IMultipleFilter {
 
   @override
   int get hashCode => values.hashCode;
-
 }

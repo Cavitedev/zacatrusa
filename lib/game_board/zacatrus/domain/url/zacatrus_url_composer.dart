@@ -71,7 +71,7 @@ class ZacatrusUrlBrowserComposer {
     ZacatrusSiBuscasFilter? siBuscas;
     ZacatrusCategoriaFilter? categoria;
     ZacatrusTematicaFilter? tematica;
-    ZacatrusEdadesFilter? edades;
+    ZacatrusNumJugadoresFilter? numJugadores;
     ZacatrusRangoPrecioFilter? precio;
     ZacatrusMecanicaFilter? mecanica;
     ZacatrusOrder? order;
@@ -95,6 +95,13 @@ class ZacatrusUrlBrowserComposer {
       if (tematicaParam != null) {
         tematica = ZacatrusTematicaFilter.queryUrl(value: tematicaParam);
       }
+
+      final String? numJugadoresParam =
+          uri.queryParameters[ZacatrusNumJugadoresFilter.keyValue];
+      if (numJugadoresParam != null) {
+        numJugadores = ZacatrusNumJugadoresFilter.queryUrl(
+            concatenatedValue: numJugadoresParam);
+      }
     }
 
     return ZacatrusUrlBrowserComposer(
@@ -102,7 +109,7 @@ class ZacatrusUrlBrowserComposer {
         productsPerPage: productsPerPage,
         siBuscas: siBuscas,
         categoria: categoria,
-        edades: edades,
+        numJugadores: numJugadores,
         mecanica: mecanica,
         precio: precio,
         tematica: tematica,
@@ -219,7 +226,7 @@ class ZacatrusUrlBrowserComposer {
     }
 
     String url =
-        "$rawUrlWithQuery${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}${tematica?.toQueryParam() ?? ""}";
+        "$rawUrlWithQuery${numJugadores?.toQueryParam() ?? ""}${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}${tematica?.toQueryParam() ?? ""}";
     return _urlWithUnnecesaryCharacters(url);
   }
 

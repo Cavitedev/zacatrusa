@@ -237,6 +237,18 @@ void main() {
         expect(output,
             "https://zacatrus.es/catalogsearch/result/?q=cartas&tema_sel=1376");
       });
+
+      test("Searching with número de jugadores returns right url", () {
+        final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+            query: const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+            numJugadores: const Optional.value(
+                ZacatrusNumJugadoresFilter(values: ["2", "3", "4"])));
+
+        final output = urlComposer.buildUrl();
+
+        expect(output,
+            "https://zacatrus.es/catalogsearch/result/?njugadores=281,282,283&q=cartas");
+      });
     });
   });
 
@@ -426,6 +438,20 @@ void main() {
                     const Optional.value(ZacatrusQueryFilter(value: "cartas")),
                 tematica: const Optional.value(
                     ZacatrusTematicaFilter(value: "Música"))));
+      });
+
+      test("Home query page with num jugadores returns right composer", () {
+        const String url =
+            "https://zacatrus.es/catalogsearch/result/index/?njugadores=281,282,283&q=cartas";
+
+        final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+        expect(
+            result,
+            ZacatrusUrlBrowserComposer.init().copyWith(
+                query:
+                    const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+                numJugadores: const Optional.value(
+                    ZacatrusNumJugadoresFilter(values: ["2", "3", "4"]))));
       });
     });
   });
