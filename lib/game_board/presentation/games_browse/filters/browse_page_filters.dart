@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/settings/settings_controller.dart';
 
 import '../../../../constants/app_margins_and_sizes.dart';
 import '../../../../core/optional.dart';
@@ -13,6 +14,7 @@ import '../../../zacatrus/domain/url/filters/zacatrus_rango_precio_filter.dart';
 import '../../../zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import '../../../zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
+import '../warning_query_search.dart';
 import 'tab_widgets/checkbox_filter_list.dart';
 import 'tab_widgets/radio_button_filter_list.dart';
 import 'tab_widgets/slider_filter.dart';
@@ -30,6 +32,7 @@ class BrowsePageFilters extends ConsumerStatefulWidget {
 class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
     with SingleTickerProviderStateMixin {
   late ZacatrusUrlBrowserComposer urlComposer;
+  bool _forBuilding = false;
   late final TabController tabController;
 
   @override
@@ -96,15 +99,24 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   },
                 ),
                 RadioButtonListFilter(
+                  key: ValueKey("Categoría $_forBuilding"),
                   filterName: "Categoría",
                   categories: ZacatrusCategoriaFilter.categories.toList(),
                   initialCategory: urlComposer.categoria?.value,
                   onChange: (value) {
                     setState(() {
-                      urlComposer = urlComposer.copyWith(
+                      final newComposer = urlComposer.copyWith(
                           categoria: Optional.value(value == null
                               ? null
                               : ZacatrusCategoriaFilter(value: value)));
+
+                      if (_shouldShowDowngradeQuertDialog(newComposer)) {
+                        _showDrowngradeQuerySearchWarningDialog(
+                            newComposer, context);
+                        return;
+                      }
+
+                      urlComposer = newComposer;
                     });
                   },
                 ),
@@ -123,15 +135,23 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   },
                 ),
                 CheckboxListFilter(
+                  key: ValueKey("Edad $_forBuilding"),
                   filterName: "Edad",
                   categories: ZacatrusEdadesFilter.categories.toList(),
-                  initialCategories: urlComposer.edades?.values ?? [],
+                  initialCategories: [...urlComposer.edades?.values ?? []],
                   onChange: (values) {
                     setState(() {
-                      urlComposer = urlComposer.copyWith(
+                      final newComposer = urlComposer.copyWith(
                           edades: Optional.value(values.isEmpty
                               ? null
                               : ZacatrusEdadesFilter(values: values)));
+                      if (_shouldShowDowngradeQuertDialog(newComposer)) {
+                        _showDrowngradeQuerySearchWarningDialog(
+                            newComposer, context);
+                        return;
+                      }
+
+                      urlComposer = newComposer;
                     });
                   },
                 ),
@@ -149,6 +169,7 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   },
                 ),
                 SliderFilter(
+                  key: ValueKey("Filter Precio $_forBuilding"),
                   filterName: "Precio",
                   minValue: ZacatrusRangoPrecioFilter.minValue,
                   maxValue: ZacatrusRangoPrecioFilter.maxValue,
@@ -158,14 +179,20 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                       ZacatrusRangoPrecioFilter.maxValue,
                   onChange: (newMinValue, newMaxValue) {
                     setState(() {
-                      urlComposer = urlComposer.copyWith(
+                      final newComposer = urlComposer.copyWith(
                           precio: Optional.value(ZacatrusRangoPrecioFilter(
                               min: newMinValue, max: newMaxValue)));
+
+                      if (_shouldShowDowngradeQuertDialog(newComposer)) {
+                        _showDrowngradeQuerySearchWarningDialog(
+                            newComposer, context);
+                        return;
+                      }
+                      urlComposer = newComposer;
                     });
                   },
                 ),
                 RadioButtonListFilter(
-                  key: ValueKey("Mecánica"),
                   filterName: "Mecánica",
                   categories: ZacatrusMecanicaFilter.categories.toList(),
                   initialCategory: urlComposer.mecanica?.value,
@@ -180,17 +207,25 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
                   },
                 ),
                 RadioButtonListFilter(
-                  key: ValueKey("Editorial"),
+                  key: ValueKey("Filter Editorial $_forBuilding"),
                   filterName: "Editorial",
                   categories: ZacatrusEditorialFilter.categories.toList(),
                   initialCategory: urlComposer.editorial?.value,
                   searchEnabled: true,
                   onChange: (value) {
                     setState(() {
-                      urlComposer = urlComposer.copyWith(
+                      final newComposer = urlComposer.copyWith(
                           editorial: Optional.value(value == null
                               ? null
                               : ZacatrusEditorialFilter(value: value)));
+
+                      if (_shouldShowDowngradeQuertDialog(newComposer)) {
+                        _showDrowngradeQuerySearchWarningDialog(
+                            newComposer, context);
+                        return;
+                      }
+
+                      urlComposer = newComposer;
                     });
                   },
                 ),
@@ -229,5 +264,31 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
         ],
       ),
     );
+  }
+
+  /// True if this method handles changing the url notifier
+  void _showDrowngradeQuerySearchWarningDialog(
+      ZacatrusUrlBrowserComposer newComposer, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return DowngradeQuerySearchWarningDialog(
+            onAccept: () {
+              setState(() {
+                urlComposer = newComposer;
+              });
+            },
+            onDismiss: () {
+              setState(() {
+                _forBuilding = !_forBuilding;
+              });
+            },
+          );
+        });
+  }
+
+  bool _shouldShowDowngradeQuertDialog(ZacatrusUrlBrowserComposer newComposer) {
+    return !newComposer.canSearchBeComplete &&
+        !ref.read(settingsControllerProvider).notifyQueryDowngradeWarning;
   }
 }

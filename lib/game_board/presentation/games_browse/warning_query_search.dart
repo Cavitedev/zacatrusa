@@ -6,10 +6,12 @@ import 'package:zacatrusa/settings/settings_controller.dart';
 class DowngradeQuerySearchWarningDialog extends ConsumerWidget {
   const DowngradeQuerySearchWarningDialog({
     required this.onAccept,
+    this.onDismiss,
     Key? key,
   }) : super(key: key);
 
   final Function onAccept;
+  final Function? onDismiss;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,6 +49,7 @@ Tenga en cuenta que dichos filtros solo se aplicarán cuando no se busque por no
         ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
+              onDismiss?.call();
             },
             child: const Text("Cancelar")),
         ElevatedButton(

@@ -30,6 +30,16 @@ class SummaryFilters extends StatelessWidget {
             "Filtros Seleccionados:",
             style: Theme.of(context).textTheme.headline6,
           ),
+          if (urlComposer.query != null)
+            SummaryFilterElement(
+              labelName: "Búsqueda: ",
+              valueName: urlComposer.query!.value,
+              onClear: () {
+                onComposerUpdate(urlComposer.copyWith(
+                  query: const Optional.value(null),
+                ));
+              },
+            ),
           if (urlComposer.siBuscas != null)
             SummaryFilterElement(
               labelName: "Si Buscas: ",
