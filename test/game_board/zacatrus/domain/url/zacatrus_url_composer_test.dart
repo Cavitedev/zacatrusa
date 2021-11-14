@@ -249,6 +249,18 @@ void main() {
         expect(output,
             "https://zacatrus.es/catalogsearch/result/?njugadores=281,282,283&q=cartas");
       });
+
+      test("Searching with mecanica returns right url", () {
+        final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+            query: const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+            mecanica:
+                const Optional.value(ZacatrusMecanicaFilter(value: "Arena")));
+
+        final output = urlComposer.buildUrl();
+
+        expect(output,
+            "https://zacatrus.es/catalogsearch/result/?estilo=1152&q=cartas");
+      });
     });
   });
 
@@ -452,6 +464,20 @@ void main() {
                     const Optional.value(ZacatrusQueryFilter(value: "cartas")),
                 numJugadores: const Optional.value(
                     ZacatrusNumJugadoresFilter(values: ["2", "3", "4"]))));
+      });
+
+      test("Home query page with mecanica returns right composer", () {
+        const String url =
+            "https://zacatrus.es/catalogsearch/result/index/?estilo=1152&q=cartas";
+
+        final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+        expect(
+            result,
+            ZacatrusUrlBrowserComposer.init().copyWith(
+                query:
+                    const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+                mecanica: const Optional.value(
+                    ZacatrusMecanicaFilter(value: "Arena"))));
       });
     });
   });

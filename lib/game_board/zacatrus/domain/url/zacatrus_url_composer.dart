@@ -102,6 +102,12 @@ class ZacatrusUrlBrowserComposer {
         numJugadores = ZacatrusNumJugadoresFilter.queryUrl(
             concatenatedValue: numJugadoresParam);
       }
+
+      final String? mecanicaParam =
+          uri.queryParameters[ZacatrusMecanicaFilter.keyValue];
+      if (mecanicaParam != null) {
+        mecanica = ZacatrusMecanicaFilter.queryUrl(value: mecanicaParam);
+      }
     }
 
     return ZacatrusUrlBrowserComposer(
@@ -226,7 +232,7 @@ class ZacatrusUrlBrowserComposer {
     }
 
     String url =
-        "$rawUrlWithQuery${numJugadores?.toQueryParam() ?? ""}${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}${tematica?.toQueryParam() ?? ""}";
+        "$rawUrlWithQuery${mecanica?.toQueryParam() ?? ""}${numJugadores?.toQueryParam() ?? ""}${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}${tematica?.toQueryParam() ?? ""}";
     return _urlWithUnnecesaryCharacters(url);
   }
 

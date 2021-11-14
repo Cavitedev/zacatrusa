@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
@@ -66,26 +67,17 @@ void main() {
     print(numJugadores);
     expect(numJugadores.length, 9);
   });
-  //
-  // test("Fetch Mecánica", () async {
-  //   dom.Element mecanicaDiv = collapsibleFilters1[9];
-  //
-  //   final dom.Element ol = mecanicaDiv.getElementsByTagName("ol")[0];
-  //   final Map<String, String> mecanicas = _getParameterLinkCategories(ol);
-  //
-  //   print(mecanicas);
-  //   expect(mecanicas.length, 35);
-  // });
-  //
-  // test("Fetch Editorial", () async {
-  //   dom.Element editorialDiv = collapsibleFilters1[10];
-  //
-  //   final dom.Element ol = editorialDiv.getElementsByTagName("ol")[0];
-  //   final Map<String, String> editoriales = _getParameterLinkCategories(ol);
-  //
-  //   print(editoriales);
-  //   expect(editoriales.length, 192);
-  // });
+
+  test("Fetch Mecánica", () async {
+    dom.Element mecanicaDiv = collapsibleFilters1[7];
+
+    final dom.Element ol = mecanicaDiv.getElementsByTagName("ol")[0];
+    final Map<String, String> mecanicas =
+        _getParameterLinkCategories(ol, ZacatrusMecanicaFilter.keyValue);
+
+    print(mecanicas);
+    expect(mecanicas.length, 35);
+  });
 }
 
 Future<List<dom.Element>> _parseWebsiteAndGetFilters(String rawUrl) async {
