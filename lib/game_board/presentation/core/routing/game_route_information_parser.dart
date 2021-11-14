@@ -27,7 +27,8 @@ class GameRouteInformationParser
 
     if (location.endsWith("settings")) {
       return GamesRoutingConfiguration.settings();
-    } else if (location.contains("juegos-de-mesa")) {
+    } else if (location.contains("juegos-de-mesa") ||
+        location.contains("catalogsearch")) {
       final ZacatrusUrlBrowserComposer composer =
           ZacatrusUrlBrowserComposer.fromUrl(location);
       final result = GamesRoutingConfiguration.home(filterComposer: composer);

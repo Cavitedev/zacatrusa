@@ -494,7 +494,7 @@ void main() {
       expect(builtUrl, expectedUrl);
     });
 
-    test("Full query case 1", () {
+    test("Full query case not index", () {
       const givenUrl =
           "https://zacatrus.es/catalogsearch/result/?estilo=7283&njugadores=280,281,282,283,284,285,286,287,308&ocasiones=1623&q=cartas&tema_sel=935";
 
@@ -502,6 +502,19 @@ void main() {
       final builtUrl = composer.buildUrl();
 
       final expectedUrl = Uri.decodeFull(givenUrl);
+      expect(builtUrl, expectedUrl);
+    });
+
+    test("Full query case index", () {
+      const givenUrl =
+          "https://zacatrus.es/catalogsearch/result/index/?estilo=7283&njugadores=280,281,282,283,284,285,286,287,308&ocasiones=1623&q=cartas&tema_sel=935";
+
+      const expectedUrl =
+          "https://zacatrus.es/catalogsearch/result/?estilo=7283&njugadores=280,281,282,283,284,285,286,287,308&ocasiones=1623&q=cartas&tema_sel=935";
+
+      final composer = ZacatrusUrlBrowserComposer.fromUrl(givenUrl);
+      final builtUrl = composer.buildUrl();
+
       expect(builtUrl, expectedUrl);
     });
   });
