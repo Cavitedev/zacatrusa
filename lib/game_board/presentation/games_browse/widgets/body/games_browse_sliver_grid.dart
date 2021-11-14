@@ -6,9 +6,9 @@ import '../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../../core/optional.dart';
 import '../../../../zacatrus/domain/browse_page/game_overview.dart';
 import '../../../core/routing/games_router_delegate.dart';
-import '../../../core/widgets/price.dart';
-import '../../../core/widgets/reviews_number.dart';
-import '../../../core/widgets/star_bars_indicator.dart';
+import '../../../core/widgets/game_overview/price.dart';
+import '../../../core/widgets/game_overview/reviews_number.dart';
+import '../../../core/widgets/game_overview/star_bars_indicator.dart';
 
 class GamesBrowseSliverGrid extends StatelessWidget {
   const GamesBrowseSliverGrid({
@@ -85,7 +85,8 @@ class ListGameItem extends ConsumerWidget {
                           child: StarsBarIndicator(stars: game.stars!)),
                     if (game.price != null)
                       Padding(
-                        padding: const EdgeInsets.only(top: innerElementsPadding),
+                        padding:
+                            const EdgeInsets.only(top: innerElementsPadding),
                         child: PriceText(price: game.price!),
                       ),
                   ],
