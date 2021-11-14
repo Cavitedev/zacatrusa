@@ -74,7 +74,7 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
               controller: textController,
               suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
                   ? VoiceToSpeechButton(
-                      onWordHeard: (textHeard) {
+                      onWordHeard: (textHeard, _) {
                         textController.value = TextEditingValue(
                           text: textHeard,
                           selection:

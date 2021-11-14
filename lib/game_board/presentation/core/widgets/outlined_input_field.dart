@@ -16,16 +16,19 @@ class OutlinedInputField extends StatefulWidget {
   /// override outline when it is set
   final OutlineInputBorder? outlineInputBorder;
 
+  final TextStyle? textStyle;
   final TextInputType keyboardType;
   final TextCapitalization textCapitalization;
   final Icon? prefixIcon;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
   final String helperText;
+  final TextInputAction? textInputAction;
 
   final TextEditingController? controller;
 
   final Function(String)? onChanged;
+  final Function(String)? onSubmit;
   final Widget? suffixIconWhenNoText;
 
   const OutlinedInputField({
@@ -46,6 +49,9 @@ class OutlinedInputField extends StatefulWidget {
     this.maxLines = 1,
     this.onChanged,
     this.suffixIconWhenNoText,
+    this.textStyle,
+    this.textInputAction,
+    this.onSubmit,
   }) : super(key: key);
 
   @override
@@ -93,6 +99,7 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
           });
           widget.onChanged?.call(str);
         },
+        style: widget.textStyle,
         maxLines: widget.maxLines,
         focusNode: widget.focusNode,
         autocorrect: widget.autocorrect,
@@ -103,6 +110,10 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
         textCapitalization: widget.textCapitalization,
         showCursor: true,
         scrollPhysics: const BouncingScrollPhysics(),
+        onSubmitted: (text) {
+          widget.onSubmit?.call(text);
+        },
+        textInputAction: widget.textInputAction,
         decoration: InputDecoration(
             labelText: widget.hintText,
             filled: true,

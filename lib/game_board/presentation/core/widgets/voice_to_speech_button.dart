@@ -15,7 +15,7 @@ class VoiceToSpeechButton extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final Function(String) onWordHeard;
+  final Function(String, bool) onWordHeard;
 
   @override
   State<StatefulWidget> createState() => _VoiceToSpeechButtonState();
@@ -71,7 +71,7 @@ class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
             } else {
               await speech.listen(
                   onResult: (SpeechRecognitionResult str) {
-                    widget.onWordHeard(str.recognizedWords);
+                    widget.onWordHeard(str.recognizedWords, str.finalResult);
                   },
                   localeId: "es_ES");
             }
