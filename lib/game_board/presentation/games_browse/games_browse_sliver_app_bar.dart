@@ -12,7 +12,7 @@ import '../../application/browser/browser_state.dart';
 import '../../zacatrus/domain/url/filters/zacatrus_query_filter.dart';
 import '../../zacatrus/domain/url/zacatrus_url_composer.dart';
 import '../core/routing/games_router_delegate.dart';
-import '../core/widgets/outlined_input_field.dart';
+import '../core/widgets/outlined_text_field.dart';
 import '../core/widgets/voice_to_speech_button.dart';
 import 'filters/browse_page_filters.dart';
 import 'warning_query_search.dart';
@@ -48,8 +48,7 @@ class _GamesBrowseSliverAppBarState
 
   @override
   Widget build(BuildContext context) {
-    final bool isSearching =
-        ref.watch(gamesRouterDelegateProvider).currentConf.isSearching;
+    final bool isSearching = ref.watch(isSearchingProvider);
     return isSearching ? _searchingAppBar() : _defaultSearchBar(context);
   }
 
@@ -102,7 +101,7 @@ class _GamesBrowseSliverAppBarState
           semanticLabel: "Volver a barra normal",
         ),
       ),
-      title: OutlinedInputField(
+      title: OutlinedTextField(
         autocorrect: false,
         textInputAction: TextInputAction.search,
         controller: textController,
@@ -128,7 +127,7 @@ class _GamesBrowseSliverAppBarState
 
   void _changeIsSearchingState(bool isSearching) {
     final router = ref.read(gamesRouterDelegateProvider);
-    router.currentConf = router.currentConf.copyWith(isSearching: isSearching);
+    router.updateIsSearching(isSearching);
     if (isSearching) {
       controllerFocus.requestFocus();
     } else {

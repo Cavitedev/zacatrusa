@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zacatrusa/constants/app_error_constants.dart';
 
 import '../../../../constants/app_margins_and_sizes.dart';
 
@@ -15,10 +16,7 @@ class ErrorWidgetWithImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle errorStyle = Theme.of(context)
-        .textTheme
-        .headline6!
-        .copyWith(color: Theme.of(context).errorColor);
+    final TextStyle errorStyle = AppErrorConstants.errorTextStyle(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: listPadding),

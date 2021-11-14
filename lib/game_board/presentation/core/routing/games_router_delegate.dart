@@ -10,6 +10,7 @@ import '../widgets/slide_page.dart';
 import 'games_routing_configuration.dart';
 
 final gamesRouterDelegateProvider = Provider((ref) => GamesRouterDelegate(ref));
+final isSearchingProvider = StateProvider<bool>((ref) => false);
 
 class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
     with
@@ -38,6 +39,11 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
     }
     _currentConf = conf;
     notifyListeners();
+  }
+
+  void updateIsSearching(bool newIsSearching) {
+    _currentConf = currentConf.copyWith(isSearching: newIsSearching);
+    ref.read(isSearchingProvider.notifier).state = newIsSearching;
   }
 
   @override

@@ -33,7 +33,6 @@ class GamesRoutingConfiguration {
       identical(this, other) ||
       other is GamesRoutingConfiguration &&
           runtimeType == other.runtimeType &&
-          isSearching == other.isSearching &&
           filterComposer == other.filterComposer &&
           settings == other.settings &&
           detailsGameUrl == other.detailsGameUrl &&
@@ -41,7 +40,6 @@ class GamesRoutingConfiguration {
 
   @override
   int get hashCode =>
-      isSearching.hashCode ^
       filterComposer.hashCode ^
       settings.hashCode ^
       detailsGameUrl.hashCode ^

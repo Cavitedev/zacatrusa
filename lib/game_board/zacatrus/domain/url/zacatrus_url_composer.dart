@@ -311,6 +311,13 @@ class ZacatrusUrlBrowserComposer {
       precio != null ||
       editorial != null;
 
+  bool get isQueryLongEnough {
+    if (query == null) {
+      return true;
+    }
+    return query!.value.length >= 3;
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

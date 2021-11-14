@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../constants/app_margins_and_sizes.dart';
 
-class OutlinedInputField extends StatefulWidget {
+class OutlinedTextField extends StatefulWidget {
   final String hintText;
   final bool autoFocus;
   final bool autocorrect;
@@ -31,7 +31,7 @@ class OutlinedInputField extends StatefulWidget {
   final Function(String)? onSubmit;
   final Widget? suffixIconWhenNoText;
 
-  const OutlinedInputField({
+  const OutlinedTextField({
     Key? key,
     this.hintText = "",
     this.autocorrect = false,
@@ -55,10 +55,10 @@ class OutlinedInputField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _OutlinedInputFieldState createState() => _OutlinedInputFieldState();
+  _OutlinedTextFieldState createState() => _OutlinedTextFieldState();
 }
 
-class _OutlinedInputFieldState extends State<OutlinedInputField> {
+class _OutlinedTextFieldState extends State<OutlinedTextField> {
   bool hasText = false;
   late TextEditingController textEditingController;
   String? helpText;
@@ -118,35 +118,39 @@ class _OutlinedInputFieldState extends State<OutlinedInputField> {
           widget.onSubmit?.call(text);
         },
         textInputAction: widget.textInputAction,
-        decoration: InputDecoration(
-            labelText: widget.hintText,
-            filled: true,
-            helperText: (widget.helperText.isNotEmpty)
-                ? widget.helperText
-                : (helpText != null && helpText!.isNotEmpty)
-                    ? helpText
-                    : null,
-            prefixIcon: widget.prefixIcon,
-            suffixIcon: hasText
-                ? IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _clearText();
-                    },
-                  )
-                : widget.suffixIconWhenNoText,
-            contentPadding: const EdgeInsets.only(top: 8, bottom: 8, left: 9),
-            focusedBorder: widget.outlineInputBorder ??
-                OutlineInputBorder(
-                    borderRadius: widget.borderRadius,
-                    borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor, width: 2)),
-            border: OutlineInputBorder(
-              borderRadius: widget.borderRadius,
-              borderSide: BorderSide.none,
-            )),
+        decoration: _buildInputDecoration(context),
       ),
     );
+  }
+
+  InputDecoration _buildInputDecoration(BuildContext context) {
+    return InputDecoration(
+        labelText: widget.hintText,
+        filled: true,
+        helperText: (widget.helperText.isNotEmpty)
+            ? widget.helperText
+            : (helpText != null && helpText!.isNotEmpty)
+                ? helpText
+                : null,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon: hasText
+            ? IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  _clearText();
+                },
+              )
+            : widget.suffixIconWhenNoText,
+        contentPadding: const EdgeInsets.only(top: 8, bottom: 8, left: 9),
+        focusedBorder: widget.outlineInputBorder ??
+            OutlineInputBorder(
+                borderRadius: widget.borderRadius,
+                borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 2)),
+        border: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: BorderSide.none,
+        ));
   }
 
   void _clearText() {

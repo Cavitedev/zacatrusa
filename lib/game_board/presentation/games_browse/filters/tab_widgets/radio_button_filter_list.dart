@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../../constants/app_margins_and_sizes.dart';
-import '../../../core/widgets/outlined_input_field.dart';
+import '../../../core/widgets/outlined_text_field.dart';
 import '../../../core/widgets/voice_to_speech_button.dart';
 
 class RadioButtonListFilter extends StatefulWidget {
@@ -69,7 +69,7 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
         if (widget.searchEnabled)
           Container(
             margin: const EdgeInsets.symmetric(horizontal: generalPadding),
-            child: OutlinedInputField(
+            child: OutlinedTextField(
               autocorrect: false,
               controller: textController,
               suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)

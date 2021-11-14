@@ -33,7 +33,9 @@ class GamesBrowse extends ConsumerWidget {
           },
           child: CustomScrollView(
             slivers: [
-              const GamesBrowseSliverAppBar(),
+              const GamesBrowseSliverAppBar(
+                key: ValueKey("Appbar browse"),
+              ),
               SortListGridSwitcherRow(
                 onViewChange: (listOrGrid) {
                   ref.read(listGridViewProvider.notifier).state = listOrGrid;
