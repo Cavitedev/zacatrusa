@@ -35,8 +35,12 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 9, vsync: this, initialIndex: 8);
     urlComposer = ref.read(browserNotifierProvider).urlComposer;
+
+    tabController = TabController(
+        length: 9,
+        vsync: this,
+        initialIndex: urlComposer.areThereFilters ? 0 : 1);
   }
 
   @override

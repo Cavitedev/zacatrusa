@@ -205,6 +205,16 @@ class ZacatrusUrlBrowserComposer {
     return "/" + nonEmptyElements.join("-");
   }
 
+  bool get areThereFilters =>
+      siBuscas != null ||
+      categoria != null ||
+      tematica != null ||
+      edades != null ||
+      numJugadores != null ||
+      precio != null ||
+      mecanica != null ||
+      editorial != null;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
