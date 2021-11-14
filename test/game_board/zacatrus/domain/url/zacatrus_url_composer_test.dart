@@ -483,9 +483,20 @@ void main() {
   });
 
   group("From url to composer and from composer to url", () {
-    test("Full case 1", () {
+    test("Full not query case 1", () {
       const givenUrl =
           "https://zacatrus.es/juegos-de-mesa/dados/fiesta-abstracto-habilidad-asmodee.html?edad=73%2C72%2C71%2C70%2C1614&price=8.00-25.00&product_list_dir=desc&product_list_order=price";
+
+      final composer = ZacatrusUrlBrowserComposer.fromUrl(givenUrl);
+      final builtUrl = composer.buildUrl();
+
+      final expectedUrl = Uri.decodeFull(givenUrl);
+      expect(builtUrl, expectedUrl);
+    });
+
+    test("Full query case 1", () {
+      const givenUrl =
+          "https://zacatrus.es/catalogsearch/result/?estilo=7283&njugadores=280,281,282,283,284,285,286,287,308&ocasiones=1623&q=cartas&tema_sel=935";
 
       final composer = ZacatrusUrlBrowserComposer.fromUrl(givenUrl);
       final builtUrl = composer.buildUrl();
