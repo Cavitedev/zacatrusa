@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_query_filter.dart';
 
 import '../../../../core/optional.dart';
 import 'filters/zacatrus_categoria_filter.dart';
@@ -9,12 +8,16 @@ import 'filters/zacatrus_mecanica_filter.dart';
 import 'filters/zacatrus_num_jugadores_filter.dart';
 import 'filters/zacatrus_order.dart';
 import 'filters/zacatrus_page_query_parameter.dart';
+import 'filters/zacatrus_query_filter.dart';
 import 'filters/zacatrus_rango_precio_filter.dart';
 import 'filters/zacatrus_si_buscas_filter.dart';
 import 'filters/zacatrus_tematica_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
+  final ZacatrusProductsPerPage productsPerPage;
+  final ZacatrusPageIndex pageNum;
+
   final ZacatrusSiBuscasFilter? siBuscas;
   final ZacatrusCategoriaFilter? categoria;
   final ZacatrusTematicaFilter? tematica;
@@ -46,6 +49,11 @@ class ZacatrusUrlBrowserComposer {
         pageNum: ZacatrusPageIndex(1));
   }
 
+  static const String rawUrlNoQuery = "https://zacatrus.es/juegos-de-mesa";
+
+  static const String rawUrlWithQuery =
+      "https://zacatrus.es/catalogsearch/result/?";
+
   factory ZacatrusUrlBrowserComposer.fromUrl(String url) {
     url = url.replaceAll(".html", "");
     final Uri uri = Uri.parse(url);
@@ -74,6 +82,12 @@ class ZacatrusUrlBrowserComposer {
       final String? queryParam = uri.queryParameters["q"];
       if (queryParam != null) {
         query = ZacatrusQueryFilter(value: queryParam);
+      }
+
+      final String? siBuscasParam =
+          uri.queryParameters[ZacatrusSiBuscasFilter.keyValue];
+      if (siBuscasParam != null) {
+        siBuscas = ZacatrusSiBuscasFilter.queryUrl(value: siBuscasParam);
       }
     }
 
@@ -193,19 +207,13 @@ class ZacatrusUrlBrowserComposer {
         order: order);
   }
 
-  static const String rawUrlNoQuery = "https://zacatrus.es/juegos-de-mesa";
-  static const String rawUrlWithQuery =
-      "https://zacatrus.es/catalogsearch/result/?";
-
-  final ZacatrusProductsPerPage productsPerPage;
-  final ZacatrusPageIndex pageNum;
-
   String buildUrl() {
     if (query == null) {
       return _buildUrlWithNoQuery();
     }
 
-    String url = "$rawUrlWithQuery${query?.toParam() ?? ""}";
+    String url =
+        "$rawUrlWithQuery${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}";
     return _urlWithUnnecesaryCharacters(url);
   }
 

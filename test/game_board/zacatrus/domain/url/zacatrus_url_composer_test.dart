@@ -213,6 +213,18 @@ void main() {
 
         expect(output, "https://zacatrus.es/catalogsearch/result/?q=cartas");
       });
+
+      test("Searching with si buscas returns right url", () {
+        final urlComposer = ZacatrusUrlBrowserComposer.init().copyWith(
+            query: const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+            siBuscas: const Optional.value(
+                ZacatrusSiBuscasFilter(value: "Familiares")));
+
+        final output = urlComposer.buildUrl();
+
+        expect(output,
+            "https://zacatrus.es/catalogsearch/result/?ocasiones=1623&q=cartas");
+      });
     });
   });
 
@@ -374,6 +386,20 @@ void main() {
             ZacatrusUrlBrowserComposer.init().copyWith(
                 query: const Optional.value(
                     ZacatrusQueryFilter(value: "cartas"))));
+      });
+
+      test("Home query page with Si Buscas returns right composer", () {
+        const String url =
+            "https://zacatrus.es/catalogsearch/result/index/?ocasiones=1623&q=cartas";
+
+        final result = ZacatrusUrlBrowserComposer.fromUrl(url);
+        expect(
+            result,
+            ZacatrusUrlBrowserComposer.init().copyWith(
+                query:
+                    const Optional.value(ZacatrusQueryFilter(value: "cartas")),
+                siBuscas: const Optional.value(
+                    ZacatrusSiBuscasFilter(value: "Familiares"))));
       });
     });
   });

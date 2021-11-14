@@ -42,6 +42,30 @@ class ZacatrusSiBuscasFilter implements ISingleFilter {
   @override
   isValid() => isValidCategory(value);
 
+  static String keyValue = "ocasiones";
+
+  ZacatrusSiBuscasFilter.queryUrl({
+    required String value,
+  }) : value = categoriesQueryUrl.keys
+            .firstWhere((key) => categoriesQueryUrl[key] == value);
+
+  static Map<String, String> categoriesQueryUrl = {
+    "Familiares": "1623",
+    "Cooperativo": "1616",
+    "Solitario": "499",
+    "Para 2": "277",
+    "Experiencia": "1618",
+    "Fiesta": "1622",
+    "Narrativo": "1619",
+    "Rápido": "1617",
+    "Infantil": "276",
+    "Viaje": "1615",
+    "Eurogame": "1633",
+    "Ameritrash": "1632"
+  };
+
+  String toQueryParam() => "$keyValue=${categoriesQueryUrl[value]}&";
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
