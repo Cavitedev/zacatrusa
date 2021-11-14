@@ -41,6 +41,7 @@ dependencies:
   speech_to_text: ^5.2.0
   permission_handler: ^8.2.6
   avatar_glow: ^2.0.2
+  app_settings: ^4.1.1
   flash: ^2.0.3
   window_size:
     git:

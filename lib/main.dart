@@ -31,7 +31,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: appName,
       routerDelegate: routerDelegate,
-      // backButtonDispatcher: RootBackButtonDispatcher(),
+      backButtonDispatcher: RootBackButtonDispatcher(),
       routeInformationParser: routeInformationParser,
       theme: ThemeData(
           primarySwatch: Colors.green,

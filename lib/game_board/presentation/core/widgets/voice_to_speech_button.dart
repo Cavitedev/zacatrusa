@@ -1,4 +1,6 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -18,7 +20,6 @@ class VoiceToSpeechButton extends StatefulWidget {
 
 class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
   String? currentStatus;
-
   late stt.SpeechToText speech;
 
   @override
@@ -41,6 +42,47 @@ class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
           onPressed: () async {
             if (!speech.isAvailable) {
               await Permission.speech.request();
+              final pemissionStatus = await Permission.speech.status;
+              if (pemissionStatus.isDenied) {
+                showFlash(
+                    context: context,
+                    builder: (context, controller) {
+                      return Flash(
+                          controller: controller,
+                          behavior: FlashBehavior.floating,
+                          position: FlashPosition.bottom,
+                          barrierBlur: 2,
+                          boxShadows: const [
+                            BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 1),
+                                blurRadius: 10,
+                                spreadRadius: 5)
+                          ],
+                          child: FlashBar(
+                            title: Text(
+                              "No hay permisos suficientes",
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            content: const Text(
+                                "Se necesita permisos de microfono para poder utilizar el reconocimiento por voz. Pulse el icono del engranaje para ir a los ajustes de la aplicación y cambie los permisos"),
+                            primaryAction: IconButton(
+                              onPressed: () async {
+                                await AppSettings.openAppSettings();
+                              },
+                              icon: const Icon(Icons.settings_applications),
+                              iconSize: 36,
+                              color: Colors.black,
+                            ),
+                            icon: Icon(
+                              Icons.warning,
+                              color: Colors.amberAccent.shade700,
+                            ),
+                          ));
+                    });
+                // _showB;
+                return;
+              }
               await speech.initialize();
             }
             speech.statusListener = _onStatus;
