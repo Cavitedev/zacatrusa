@@ -7,6 +7,9 @@ import 'settings_service.dart';
 final settingsControllerProvider = ChangeNotifierProvider(
     (_) => SettingsController(SettingsService())..loadSettings());
 
+final settingsFontFamilyControllerProvider = Provider((ref) =>
+    ref.watch(settingsControllerProvider.select((set) => set._fontFaimily)));
+
 class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
 
@@ -20,6 +23,7 @@ class SettingsController with ChangeNotifier {
     await _settingsService.init();
     _notifyQueryDowngradeWarning =
         _settingsService.notifyQueryDowngradeWarning();
+    _fontFaimily = _settingsService.fontFamily();
 
     notifyListeners();
   }
@@ -38,5 +42,20 @@ class SettingsController with ChangeNotifier {
 
     await _settingsService
         .updateNotifyQueryDowngradeWarning(_notifyQueryDowngradeWarning);
+  }
+
+  late String _fontFaimily;
+
+  String get fontFaimily => _fontFaimily;
+
+  Future<void> updateFontfamily(String? newFontFamily) async {
+    if (newFontFamily == null) return;
+    if (newFontFamily == fontFaimily) return;
+
+    _fontFaimily = newFontFamily;
+
+    notifyListeners();
+
+    await _settingsService.updateFontFamily(_fontFaimily);
   }
 }

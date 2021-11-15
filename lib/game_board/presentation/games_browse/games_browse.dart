@@ -20,6 +20,7 @@ class GamesBrowse extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       key: _scaffoldKey,
+      drawerEdgeDragWidth: 100,
       drawer: const AppDrawer(),
       body: RefreshIndicator(
         semanticsLabel: "Recargar juegos de mesa",
