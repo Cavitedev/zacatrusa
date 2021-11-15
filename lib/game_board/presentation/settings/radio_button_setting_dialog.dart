@@ -156,6 +156,7 @@ class _DialogRadioColumnState<T> extends ConsumerState<DialogRadioColumn<T>> {
                 controller: _scrollController,
                 itemCount: _msgValuesList.length,
                 physics: const BouncingScrollPhysics(),
+                itemExtent: elementSize,
                 itemBuilder: (context, index) {
                   MapEntry msgVal = _msgValuesList[index];
                   return _buildRadioListTile(
