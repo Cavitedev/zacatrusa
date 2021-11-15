@@ -43,9 +43,10 @@ class SettingsService {
   }
 
   static String primaryColorIndexKey = "primary_color";
+  static const int greenColorIndex = 9;
 
   int primaryColorIndex() {
-    return preferences.getInt(primaryColorIndexKey) ?? 1;
+    return preferences.getInt(primaryColorIndexKey) ?? greenColorIndex;
   }
 
   Future<void> updatePrimaryColorIndex(int newPrimaryColorIndex) async {
