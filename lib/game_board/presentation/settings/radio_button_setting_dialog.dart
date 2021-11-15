@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MessageValue<T> {
-  final String message;
-  final T value;
-
-  const MessageValue({
-    required this.message,
-    required this.value,
-  });
-}
-
 class RadioButtonSettingDialog<T> extends ConsumerWidget {
   const RadioButtonSettingDialog({
     required this.name,
@@ -22,7 +12,7 @@ class RadioButtonSettingDialog<T> extends ConsumerWidget {
   }) : super(key: key);
 
   final String name;
-  final List<MessageValue<T>> messageValues;
+  final Map<T, String> messageValues;
   final Provider<T> provider;
   final String dialogTitle;
   final Function(T) onChanged;
@@ -33,7 +23,7 @@ class RadioButtonSettingDialog<T> extends ConsumerWidget {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 48),
       title: Text(name),
-      subtitle: Text(value.toString()),
+      subtitle: Text(messageValues[value] ?? "no se ha encontrado"),
       onTap: () {
         showDialog(
           context: context,
@@ -52,7 +42,7 @@ class RadioButtonSettingDialog<T> extends ConsumerWidget {
 }
 
 class ChangeValueDialog<T> extends StatelessWidget {
-  final List<MessageValue<T>> messageValues;
+  final Map<T, String> messageValues;
   final Provider<T> provider;
   final String title;
   final Function(T) onChanged;
@@ -113,7 +103,7 @@ class RadioDialog extends StatelessWidget {
 }
 
 class DialogRadioColumn<T> extends ConsumerWidget {
-  final List<MessageValue<T>> messageValues;
+  final Map<T, String> messageValues;
   final Provider<T> provider;
   final Function(T) onChanged;
 
@@ -130,11 +120,11 @@ class DialogRadioColumn<T> extends ConsumerWidget {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: messageValues
+      children: messageValues.entries
           .map((msgVal) => _buildRadioListTile(
               context: context,
-              value: msgVal.value,
-              msg: msgVal.message,
+              value: msgVal.key,
+              msg: msgVal.value,
               groupValue: groupValue,
               ref: ref))
           .toList(),
@@ -151,7 +141,9 @@ class DialogRadioColumn<T> extends ConsumerWidget {
     return RadioListTile<T>(
       groupValue: groupValue,
       value: value,
-      title: Text(msg),
+      title: Text(
+        msg,
+      ),
       onChanged: (newValue) {
         onChanged(newValue!);
         Navigator.pop(context);

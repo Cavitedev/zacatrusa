@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:window_size/window_size.dart';
 
 import 'constants/app_constants.dart';
@@ -9,13 +10,15 @@ import 'game_board/presentation/core/routing/game_route_information_parser.dart'
 import 'game_board/presentation/core/routing/games_router_delegate.dart';
 import 'settings/settings_controller.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!Platform.environment.containsKey('FLUTTER_TEST') &&
       (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     setWindowMinSize(const Size(350, 350));
     setWindowMaxSize(Size.infinite);
   }
+
+  await SettingsController.singleton().loadSettings();
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -52,16 +55,20 @@ class MyApp extends ConsumerWidget {
               Radius.circular(12),
             ),
           )),
-          textTheme: const TextTheme(
-            headline6: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.w400, color: Colors.black),
-            headline5: TextStyle(fontSize: 24),
-            headline4: TextStyle(fontSize: 28, color: Colors.black),
-            headline3: TextStyle(
-                fontSize: 36, color: Colors.black, letterSpacing: 0.5),
-            headline2:
-                TextStyle(fontSize: 44, color: Colors.black, letterSpacing: 1),
-          )),
+          textTheme: GoogleFonts.getTextTheme(
+              ref.watch(settingsFontFamilyControllerProvider),
+              const TextTheme(
+                headline6: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black),
+                headline5: TextStyle(fontSize: 24),
+                headline4: TextStyle(fontSize: 28, color: Colors.black),
+                headline3: TextStyle(
+                    fontSize: 36, color: Colors.black, letterSpacing: 0.5),
+                headline2: TextStyle(
+                    fontSize: 44, color: Colors.black, letterSpacing: 1),
+              ))),
     );
   }
 }

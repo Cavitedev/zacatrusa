@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'settings_service.dart';
 
-final settingsControllerProvider = ChangeNotifierProvider(
-    (_) => SettingsController(SettingsService())..loadSettings());
+final settingsControllerProvider =
+    ChangeNotifierProvider((_) => SettingsController._singleton);
 
 final settingsFontFamilyControllerProvider = Provider((ref) =>
     ref.watch(settingsControllerProvider.select((set) => set._fontFaimily)));
@@ -14,6 +14,11 @@ class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
 
   final SettingsService _settingsService;
+
+  static final SettingsController _singleton =
+      SettingsController(SettingsService());
+
+  factory SettingsController.singleton() => _singleton;
 
   bool isLoaded = false;
 

@@ -18,10 +18,11 @@ class SettingsPage extends ConsumerWidget {
               name: "Tipo de letra",
               dialogTitle: "Elija tipo de letra",
               provider: settingsFontFamilyControllerProvider,
-              messageValues: [
-                MessageValue(message: "Roboto", value: "roboto"),
-                MessageValue(message: "OpenSans", value: "open_sans")
-              ],
+              messageValues: const {
+                "Roboto": "Roboto",
+                "Open Sans": "Open Sans",
+                "Oswald": "Oswald",
+              },
               onChanged: (value) {
                 ref
                     .read(settingsControllerProvider)

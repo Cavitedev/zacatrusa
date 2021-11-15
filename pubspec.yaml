@@ -44,6 +44,7 @@ dependencies:
   app_settings: ^4.1.1
   flash: ^2.0.3
   shared_preferences: ^2.0.8
+  google_fonts: ^2.1.0
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
