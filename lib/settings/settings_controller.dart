@@ -8,10 +8,16 @@ final settingsControllerProvider =
     ChangeNotifierProvider((_) => SettingsController._singleton);
 
 final settingsFontFamilyControllerProvider = Provider((ref) =>
-    ref.watch(settingsControllerProvider.select((set) => set._fontFamily)));
+    ref.watch(settingsControllerProvider.select((set) => set.fontFamily)));
 
 final settingsFontSizeControllerProvider = Provider((ref) =>
-    ref.watch(settingsControllerProvider.select((set) => set._fontSize)));
+    ref.watch(settingsControllerProvider.select((set) => set.fontSize)));
+
+final settingsPrimaryColorIndexControllerProvider = Provider((ref) => ref
+    .watch(settingsControllerProvider.select((set) => set.primaryColorIndex)));
+
+final settingsPrimaryColorControllerProvider = Provider((ref) =>
+    ref.watch(settingsControllerProvider.select((set) => set.primaryColor)));
 
 class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
@@ -33,6 +39,7 @@ class SettingsController with ChangeNotifier {
         _settingsService.notifyQueryDowngradeWarning();
     _fontFamily = _settingsService.fontFamily();
     _fontSize = _settingsService.fontSize();
+    _primaryColorIndex = _settingsService.primaryColorIndex();
 
     notifyListeners();
   }
@@ -80,5 +87,22 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     await _settingsService.updateFontSize(_fontSize);
+  }
+
+  late int _primaryColorIndex;
+
+  int get primaryColorIndex => _primaryColorIndex;
+
+  MaterialColor get primaryColor => Colors.primaries[primaryColorIndex];
+
+  Future<void> updatePrimaryColorIndex(int? newPrimaryColorIndex) async {
+    if (newPrimaryColorIndex == null) return;
+    if (newPrimaryColorIndex == primaryColorIndex) return;
+
+    _primaryColorIndex = newPrimaryColorIndex;
+
+    notifyListeners();
+
+    await _settingsService.updatePrimaryColorIndex(newPrimaryColorIndex);
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
+import 'package:zacatrusa/settings/material_color_data.dart';
 
 import 'radio_dialog.dart';
 
-class RadioButtonSettingDialog<T> extends ConsumerWidget {
-  const RadioButtonSettingDialog({
+class ColorRadioButtonSettingDialog<T> extends ConsumerWidget {
+  const ColorRadioButtonSettingDialog({
     required this.name,
     required this.dialogTitle,
     required this.provider,
@@ -15,7 +16,7 @@ class RadioButtonSettingDialog<T> extends ConsumerWidget {
   }) : super(key: key);
 
   final String name;
-  final Map<T, String> messageValues;
+  final Map<T, MaterialColorData> messageValues;
   final Provider<T> provider;
   final String dialogTitle;
   final Function(T?) onChanged;
@@ -25,13 +26,16 @@ class RadioButtonSettingDialog<T> extends ConsumerWidget {
     final T value = ref.watch(provider);
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 48, right: generalPadding),
+      trailing: CircleColorContianer(
+        color: messageValues[value]?.color,
+      ),
       title: Text(name),
-      subtitle: Text(messageValues[value] ?? "no se ha encontrado"),
+      subtitle: Text(messageValues[value]?.msg ?? "no se ha encontrado"),
       onTap: () {
         showDialog(
           context: context,
           builder: (_) {
-            return ChangeValueDialog<T>(
+            return ChangeColorValueDialog<T>(
               messageValues: messageValues,
               title: dialogTitle,
               provider: provider,
@@ -44,13 +48,13 @@ class RadioButtonSettingDialog<T> extends ConsumerWidget {
   }
 }
 
-class ChangeValueDialog<T> extends StatelessWidget {
-  final Map<T, String> messageValues;
+class ChangeColorValueDialog<T> extends StatelessWidget {
+  final Map<T, MaterialColorData> messageValues;
   final Provider<T> provider;
   final String title;
   final Function(T?) onChanged;
 
-  const ChangeValueDialog({
+  const ChangeColorValueDialog({
     required this.messageValues,
     required this.provider,
     required this.title,
@@ -62,7 +66,7 @@ class ChangeValueDialog<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return RadioDialog(
       title: title,
-      content: DialogRadioColumn(
+      content: ColorDialogRadioColumn(
         messageValues: messageValues,
         provider: provider,
         onChanged: onChanged,
@@ -71,12 +75,12 @@ class ChangeValueDialog<T> extends StatelessWidget {
   }
 }
 
-class DialogRadioColumn<T> extends ConsumerWidget {
-  final Map<T, String> messageValues;
+class ColorDialogRadioColumn<T> extends ConsumerWidget {
+  final Map<T, MaterialColorData> messageValues;
   final Provider<T> provider;
   final Function(T?) onChanged;
 
-  const DialogRadioColumn({
+  const ColorDialogRadioColumn({
     required this.messageValues,
     required this.provider,
     required this.onChanged,
@@ -94,7 +98,8 @@ class DialogRadioColumn<T> extends ConsumerWidget {
             .map((msgVal) => _buildRadioListTile(
                 context: context,
                 value: msgVal.key,
-                msg: msgVal.value,
+                msg: msgVal.value.msg,
+                color: msgVal.value.color,
                 groupValue: groupValue,
                 ref: ref))
             .toList(),
@@ -107,16 +112,49 @@ class DialogRadioColumn<T> extends ConsumerWidget {
     required T value,
     required T groupValue,
     required String msg,
+    required Color color,
     required WidgetRef ref,
   }) {
     return RadioListTile<T>(
       groupValue: groupValue,
       value: value,
-      title: Text(msg),
+      title: Row(
+        children: [
+          CircleColorContianer(
+            color: color,
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Text(msg),
+        ],
+      ),
       onChanged: (newValue) {
         onChanged(newValue);
         Navigator.pop(context);
       },
+    );
+  }
+}
+
+class CircleColorContianer extends StatelessWidget {
+  const CircleColorContianer({
+    this.color,
+    Key? key,
+  }) : super(key: key);
+
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        shape: BoxShape.circle,
+        color: color,
+      ),
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/settings/material_color_data.dart';
 
 import '../../../settings/settings_controller.dart';
+import 'color_radio_button_setting_dialog.dart';
 import 'radio_button_setting_dialog.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -44,8 +46,27 @@ class SettingsPage extends ConsumerWidget {
               onChanged: (value) {
                 ref.read(settingsControllerProvider).updateFontSize(value);
               }),
+          const Divider(),
+          ColorRadioButtonSettingDialog<int>(
+              name: "Color primario",
+              dialogTitle: "Elija un color primario",
+              provider: settingsPrimaryColorIndexControllerProvider,
+              messageValues: colorsValues(),
+              onChanged: (value) {
+                ref
+                    .read(settingsControllerProvider)
+                    .updatePrimaryColorIndex(value);
+              }),
         ],
       ),
     );
+  }
+
+  Map<int, MaterialColorData> colorsValues() {
+    return Map.fromEntries(
+        Iterable<int>.generate(Colors.primaries.length).map((index) {
+      MaterialColorData colorData = MaterialColorData.fromIndex(index);
+      return MapEntry(index, colorData);
+    }));
   }
 }

@@ -37,7 +37,7 @@ class MyApp extends ConsumerWidget {
       backButtonDispatcher: RootBackButtonDispatcher(),
       routeInformationParser: routeInformationParser,
       theme: ThemeData(
-          primarySwatch: Colors.green,
+          primarySwatch: ref.watch(settingsPrimaryColorControllerProvider),
           errorColor: Colors.redAccent.shade400,
           tabBarTheme: const TabBarTheme(
             labelColor: Colors.black,

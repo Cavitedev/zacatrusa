@@ -41,4 +41,14 @@ class SettingsService {
       await preferences.setDouble(fontSizeKey, newFontSize);
     }
   }
+
+  static String primaryColorIndexKey = "primary_color";
+
+  int primaryColorIndex() {
+    return preferences.getInt(primaryColorIndexKey) ?? 1;
+  }
+
+  Future<void> updatePrimaryColorIndex(int newPrimaryColorIndex) async {
+    await preferences.setInt(primaryColorIndexKey, newPrimaryColorIndex);
+  }
 }
