@@ -12,7 +12,8 @@ class ZacatrusEdadesFilter implements IMultipleFilter {
 
   ZacatrusEdadesFilter.url({
     required String concatenatedValue,
-  }) : values = concatenatedValue.split(",")
+  }) : values = concatenatedValue
+            .split(",")
             .map((valueUrl) => categoriesUrl.keys
                 .firstWhere((key) => categoriesUrl[key] == valueUrl))
             .toList(growable: false);

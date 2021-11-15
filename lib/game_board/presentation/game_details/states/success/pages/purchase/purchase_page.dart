@@ -4,8 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../../../zacatrus/domain/details_page/game_overview_details.dart';
 import '../../../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
-import '../../../../../core/widgets/price.dart';
-import '../../../../../core/widgets/star_bars_indicator.dart';
+import '../../../../../core/widgets/game_overview/price.dart';
+import '../../../../../core/widgets/game_overview/star_bars_indicator.dart';
 
 class PurchasePage extends StatelessWidget {
   const PurchasePage({required this.data, Key? key}) : super(key: key);

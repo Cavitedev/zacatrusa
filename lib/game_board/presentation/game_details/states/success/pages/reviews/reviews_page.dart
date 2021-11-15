@@ -7,7 +7,7 @@ import '../../../../../../application/details/reviews/reviews_state.dart';
 import '../../../../../../zacatrus/domain/details_page/reviews/game_review.dart';
 import '../../../../../../zacatrus/domain/details_page/reviews/reviews_url.dart';
 import '../../../../../core/feedback_errors_loading/internet_feedback_widgets.dart';
-import '../../../../../core/widgets/star_bars_indicator.dart';
+import '../../../../../core/widgets/game_overview/star_bars_indicator.dart';
 
 class ReviewsPage extends ConsumerWidget {
   const ReviewsPage({this.reviewsUrl, Key? key}) : super(key: key);

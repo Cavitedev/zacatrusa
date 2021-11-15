@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/game_details/states/success/image_carousel_display.dart';
 
 import '../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../zacatrus/domain/details_page/zacatrus_details_page_data.dart';
 import 'game_details_bottom_navigation_bar.dart';
+import 'image_carousel_display.dart';
 import 'pages/characterictics/characterictics_page.dart';
 import 'pages/game_details_null_data.dart';
 import 'pages/purchase/purchase_page.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/games_browse/app_drawer.dart';
 
 import '../../application/browser/browser_notifier.dart';
+import 'app_drawer.dart';
 import 'games_browse_sliver_app_bar.dart';
 import 'widgets/body/games_browser_loaded_games.dart';
 import 'widgets/body/games_browser_loads.dart';
@@ -20,6 +20,7 @@ class GamesBrowse extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       key: _scaffoldKey,
+      drawerEdgeDragWidth: 100,
       drawer: const AppDrawer(),
       body: RefreshIndicator(
         semanticsLabel: "Recargar juegos de mesa",
@@ -33,7 +34,9 @@ class GamesBrowse extends ConsumerWidget {
           },
           child: CustomScrollView(
             slivers: [
-              const GamesBrowseSliverAppBar(),
+              const GamesBrowseSliverAppBar(
+                key: ValueKey("Appbar browse"),
+              ),
               SortListGridSwitcherRow(
                 onViewChange: (listOrGrid) {
                   ref.read(listGridViewProvider.notifier).state = listOrGrid;

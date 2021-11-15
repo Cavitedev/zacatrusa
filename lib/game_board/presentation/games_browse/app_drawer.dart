@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/app_constants.dart';
-import 'package:zacatrusa/game_board/presentation/core/routing/games_router_delegate.dart';
+import 'package:zacatrusa/constants/color_x.dart';
+
+import '../../../constants/app_constants.dart';
+import '../core/routing/games_router_delegate.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -22,10 +24,10 @@ class AppDrawer extends ConsumerWidget {
               ),
               child: Text(
                 appName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline2!
-                    .copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.headline2!.copyWith(
+                    color: Theme.of(context)
+                        .primaryColor
+                        .textColorForThisBackground()),
               )),
           ListTile(
             title: Text(

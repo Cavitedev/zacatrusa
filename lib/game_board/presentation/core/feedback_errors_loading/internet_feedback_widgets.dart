@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zacatrusa/constants/app_error_constants.dart';
 
 import '../../../infrastructure/core/internet_feedback.dart';
 import '../../../infrastructure/core/scrapping_failures.dart';
@@ -32,9 +33,6 @@ class InternetFeedbackWidget extends StatelessWidget {
         );
       } else if (feedback is StatusCodeInternetFailure) {
         final statusfeedback = feedback as StatusCodeInternetFailure;
-        txt = """
-Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}""";
-
         return ErrorWidgetWithImage(
           msg:
               "Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}",
@@ -66,8 +64,21 @@ Error código ${statusfeedback.statusCode} en la página ${statusfeedback.url}""
     } else if (feedback is InternetReloading) {
       txt = "Reintentando cargar $url";
       return Loading(msg: txt);
+    } else if (feedback is QueryLengthNotEnough) {
+      return Text(
+        "Longitud mínima de consulta de búsqueda es 3",
+        softWrap: true,
+        style: AppErrorConstants.errorTextStyle(context),
+      );
     }
 
     return const Text("No debe aparacer, reportálo en github zacatrusa");
+  }
+
+  static TextStyle errorTextStyle(BuildContext context) {
+    return Theme.of(context)
+        .textTheme
+        .headline6!
+        .copyWith(color: Theme.of(context).errorColor);
   }
 }

@@ -63,6 +63,53 @@ class ZacatrusMecanicaFilter implements ISingleFilter {
   @override
   isValid() => isValidCategory(value);
 
+  static String keyValue = "estilo";
+
+  ZacatrusMecanicaFilter.queryUrl({
+    required String value,
+  }) : value = categoriesQueryUrl.keys
+            .firstWhere((key) => categoriesQueryUrl[key] == value);
+
+  static Map<String, String> categoriesQueryUrl = {
+    "4X": "891",
+    "Arena": "1152",
+    "Bazas": "1629",
+    "Colección de sets": "1016",
+    "Colocación de losetas": "7280",
+    "Colocación de trabajadores": "1827",
+    "Conquista de territorio": "1385",
+    "Crawler": "887",
+    "Creación de mazo": "932",
+    "Deducción e Investigación": "896",
+    "Defensa de la Torre": "1172",
+    "Draft": "1274",
+    "Escape room": "889",
+    "Evolución de Civilización": "919",
+    "Exploración y Aventura": "897",
+    "Gestión de cartas": "7283",
+    "Gestión de recursos": "223",
+    "Juegos de palabras": "7303",
+    "Habilidad": "933",
+    "LCG": "886",
+    "Legacy": "894",
+    "Matemáticas": "7528",
+    "Mayorías": "1204",
+    "Memoria": "969",
+    "Negociación": "892",
+    "Pick & Deliver": "1775",
+    "Preguntas y respuestas": "219",
+    "Programación acciones": "1219",
+    "Puzzle": "950",
+    "Roles ocultos": "1311",
+    "Roll&Write": "1819",
+    "Sandbox": "1699",
+    "Subastas": "7413",
+    "Tienta la suerte": "973",
+    "Wargame": "936"
+  };
+
+  String toQueryParam() => "$keyValue=${categoriesQueryUrl[value]}&";
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

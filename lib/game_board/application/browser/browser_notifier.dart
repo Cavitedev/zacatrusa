@@ -23,6 +23,13 @@ class BrowserNotifier extends StateNotifier<BrowserState> {
   StreamSubscription? subscription;
 
   void loadGames() {
+    if (!state.urlComposer.isQueryLongEnough) {
+      state = state.copyWith(
+          loadingFeedback:
+              QueryLengthNotEnough(url: state.urlComposer.buildUrl()));
+      return;
+    }
+
     if (state.allGamesFetched) {
       state = state.copyWith(
           loadingFeedback:

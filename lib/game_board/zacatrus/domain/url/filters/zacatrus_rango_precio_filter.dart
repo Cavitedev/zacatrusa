@@ -1,5 +1,4 @@
 import '../../../../../core/string_helper.dart';
-
 import 'i_filter.dart';
 
 class ZacatrusRangoPrecioFilter implements IFilter {
@@ -9,7 +8,10 @@ class ZacatrusRangoPrecioFilter implements IFilter {
   const ZacatrusRangoPrecioFilter({
     required this.min,
     required this.max,
-  }) : assert(min <= max && min >= 0 && max <= 270);
+  }) : assert(min <= max && min >= minValue && max <= maxValue);
+
+  static const double minValue = 0;
+  static const double maxValue = 270;
 
   factory ZacatrusRangoPrecioFilter.url({required String precioParameter}) {
     final List<String> splittedPrecio = precioParameter.split("-");
@@ -22,13 +24,26 @@ class ZacatrusRangoPrecioFilter implements IFilter {
 
   @override
   String? toUrl() {
-    return "price=" + min.toStringAsFixed(2) + "-" + max.toStringAsFixed(2) + "&";
+    if (min == minValue && max == maxValue) {
+      return "";
+    }
+
+    return "price=" +
+        min.toStringAsFixed(2) +
+        "-" +
+        max.toStringAsFixed(2) +
+        "&";
   }
 
   @override
   bool isValid() {
     // Managed on assert
     throw UnimplementedError();
+  }
+
+  @override
+  String toString() {
+    return "${min.toString().toSpanishNumber()}€ - ${max.toString().toSpanishNumber()}€";
   }
 
   @override

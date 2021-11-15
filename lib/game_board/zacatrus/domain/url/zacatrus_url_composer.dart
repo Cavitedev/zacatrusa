@@ -8,12 +8,27 @@ import 'filters/zacatrus_mecanica_filter.dart';
 import 'filters/zacatrus_num_jugadores_filter.dart';
 import 'filters/zacatrus_order.dart';
 import 'filters/zacatrus_page_query_parameter.dart';
+import 'filters/zacatrus_query_filter.dart';
 import 'filters/zacatrus_rango_precio_filter.dart';
 import 'filters/zacatrus_si_buscas_filter.dart';
 import 'filters/zacatrus_tematica_filter.dart';
 
 @immutable
 class ZacatrusUrlBrowserComposer {
+  final ZacatrusProductsPerPage productsPerPage;
+  final ZacatrusPageIndex pageNum;
+
+  final ZacatrusSiBuscasFilter? siBuscas;
+  final ZacatrusCategoriaFilter? categoria;
+  final ZacatrusTematicaFilter? tematica;
+  final ZacatrusEdadesFilter? edades;
+  final ZacatrusNumJugadoresFilter? numJugadores;
+  final ZacatrusRangoPrecioFilter? precio;
+  final ZacatrusMecanicaFilter? mecanica;
+  final ZacatrusEditorialFilter? editorial;
+  final ZacatrusOrder? order;
+  final ZacatrusQueryFilter? query;
+
   const ZacatrusUrlBrowserComposer(
       {required this.productsPerPage,
       required this.pageNum,
@@ -25,7 +40,8 @@ class ZacatrusUrlBrowserComposer {
       this.precio,
       this.mecanica,
       this.editorial,
-      this.order});
+      this.order,
+      this.query});
 
   factory ZacatrusUrlBrowserComposer.init() {
     return const ZacatrusUrlBrowserComposer(
@@ -33,7 +49,81 @@ class ZacatrusUrlBrowserComposer {
         pageNum: ZacatrusPageIndex(1));
   }
 
+  static const String rawUrlNoQuery = "https://zacatrus.es/juegos-de-mesa";
+
+  static const String rawUrlWithQuery =
+      "https://zacatrus.es/catalogsearch/result/?";
+
   factory ZacatrusUrlBrowserComposer.fromUrl(String url) {
+    url = url.replaceAll(".html", "");
+    final Uri uri = Uri.parse(url);
+
+    if (uri.pathSegments[0] == "juegos-de-mesa") {
+      return ZacatrusUrlBrowserComposer._fromUriWithoutQuery(uri);
+    } else {
+      return ZacatrusUrlBrowserComposer._fromUriWithQuery(uri);
+    }
+  }
+
+  factory ZacatrusUrlBrowserComposer._fromUriWithQuery(Uri uri) {
+    ZacatrusProductsPerPage productsPerPage = const ZacatrusProductsPerPage(24);
+    ZacatrusPageIndex pageNum = const ZacatrusPageIndex(1);
+    ZacatrusSiBuscasFilter? siBuscas;
+    ZacatrusCategoriaFilter? categoria;
+    ZacatrusTematicaFilter? tematica;
+    ZacatrusNumJugadoresFilter? numJugadores;
+    ZacatrusRangoPrecioFilter? precio;
+    ZacatrusMecanicaFilter? mecanica;
+    ZacatrusOrder? order;
+
+    ZacatrusQueryFilter? query;
+
+    if (uri.queryParameters.isNotEmpty) {
+      final String? queryParam = uri.queryParameters["q"];
+      if (queryParam != null) {
+        query = ZacatrusQueryFilter(value: queryParam);
+      }
+
+      final String? siBuscasParam =
+          uri.queryParameters[ZacatrusSiBuscasFilter.keyValue];
+      if (siBuscasParam != null) {
+        siBuscas = ZacatrusSiBuscasFilter.queryUrl(value: siBuscasParam);
+      }
+
+      final String? tematicaParam =
+          uri.queryParameters[ZacatrusTematicaFilter.keyValue];
+      if (tematicaParam != null) {
+        tematica = ZacatrusTematicaFilter.queryUrl(value: tematicaParam);
+      }
+
+      final String? numJugadoresParam =
+          uri.queryParameters[ZacatrusNumJugadoresFilter.keyValue];
+      if (numJugadoresParam != null) {
+        numJugadores = ZacatrusNumJugadoresFilter.queryUrl(
+            concatenatedValue: numJugadoresParam);
+      }
+
+      final String? mecanicaParam =
+          uri.queryParameters[ZacatrusMecanicaFilter.keyValue];
+      if (mecanicaParam != null) {
+        mecanica = ZacatrusMecanicaFilter.queryUrl(value: mecanicaParam);
+      }
+    }
+
+    return ZacatrusUrlBrowserComposer(
+        pageNum: pageNum,
+        productsPerPage: productsPerPage,
+        siBuscas: siBuscas,
+        categoria: categoria,
+        numJugadores: numJugadores,
+        mecanica: mecanica,
+        precio: precio,
+        tematica: tematica,
+        order: order,
+        query: query);
+  }
+
+  factory ZacatrusUrlBrowserComposer._fromUriWithoutQuery(Uri uri) {
     ZacatrusProductsPerPage productsPerPage = const ZacatrusProductsPerPage(24);
     ZacatrusPageIndex pageNum = const ZacatrusPageIndex(1);
 
@@ -46,9 +136,6 @@ class ZacatrusUrlBrowserComposer {
     ZacatrusMecanicaFilter? mecanica;
     ZacatrusEditorialFilter? editorial;
     ZacatrusOrder? order;
-
-    url = url.replaceAll(".html", "");
-    final Uri uri = Uri.parse(url);
 
     if (uri.pathSegments.length == 1 && uri.queryParameters.isEmpty) {
       return ZacatrusUrlBrowserComposer.init();
@@ -139,22 +226,17 @@ class ZacatrusUrlBrowserComposer {
         order: order);
   }
 
-  static const String rawUrl = "https://zacatrus.es/juegos-de-mesa";
-
-  final ZacatrusProductsPerPage productsPerPage;
-  final ZacatrusPageIndex pageNum;
-
-  final ZacatrusSiBuscasFilter? siBuscas;
-  final ZacatrusCategoriaFilter? categoria;
-  final ZacatrusTematicaFilter? tematica;
-  final ZacatrusEdadesFilter? edades;
-  final ZacatrusNumJugadoresFilter? numJugadores;
-  final ZacatrusRangoPrecioFilter? precio;
-  final ZacatrusMecanicaFilter? mecanica;
-  final ZacatrusEditorialFilter? editorial;
-  final ZacatrusOrder? order;
-
   String buildUrl() {
+    if (query == null) {
+      return _buildUrlWithNoQuery();
+    }
+
+    String url =
+        "$rawUrlWithQuery${mecanica?.toQueryParam() ?? ""}${numJugadores?.toQueryParam() ?? ""}${siBuscas?.toQueryParam() ?? ""}${query?.toParam() ?? ""}${tematica?.toQueryParam() ?? ""}";
+    return _urlWithUnnecesaryCharacters(url);
+  }
+
+  String _buildUrlWithNoQuery() {
     String categoriaAddition =
         categoria == null ? "" : "/${categoria!.toUrl()}";
 
@@ -176,17 +258,22 @@ class ZacatrusUrlBrowserComposer {
       editorialAddition
     ]);
 
-    final String pathUrl = '$rawUrl$categoriaAddition$pathJoin2.html';
+    final String pathUrl = '$rawUrlNoQuery$categoriaAddition$pathJoin2.html';
 
     final String params =
         "${pageNum.toParam()}${edades?.toUrl() ?? ""}${precio?.toUrl() ?? ""}${productsPerPage.toParam()}${order?.toUrl() ?? ""}";
 
     String url = "$pathUrl?$params";
 
-    if (url[url.length - 1] == "&" || url[url.length - 1] == "?") {
-      return url.substring(0, url.length - 1);
-    }
+    url = _urlWithUnnecesaryCharacters(url);
 
+    return url;
+  }
+
+  String _urlWithUnnecesaryCharacters(String url) {
+    if (url[url.length - 1] == "&" || url[url.length - 1] == "?") {
+      url = url.substring(0, url.length - 1);
+    }
     return url;
   }
 
@@ -205,13 +292,37 @@ class ZacatrusUrlBrowserComposer {
     return "/" + nonEmptyElements.join("-");
   }
 
+  bool get areThereFilters =>
+      siBuscas != null ||
+      categoria != null ||
+      tematica != null ||
+      edades != null ||
+      numJugadores != null ||
+      precio != null ||
+      mecanica != null ||
+      editorial != null;
+
+  bool get canSearchBeComplete =>
+      query == null || !areThereFiltersConflictingWithQueries;
+
+  bool get areThereFiltersConflictingWithQueries =>
+      categoria != null ||
+      edades != null ||
+      precio != null ||
+      editorial != null;
+
+  bool get isQueryLongEnough {
+    if (query == null) {
+      return true;
+    }
+    return query!.value.length >= 3;
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ZacatrusUrlBrowserComposer &&
           runtimeType == other.runtimeType &&
-          productsPerPage == other.productsPerPage &&
-          pageNum == other.pageNum &&
           siBuscas == other.siBuscas &&
           categoria == other.categoria &&
           tematica == other.tematica &&
@@ -220,12 +331,13 @@ class ZacatrusUrlBrowserComposer {
           precio == other.precio &&
           mecanica == other.mecanica &&
           editorial == other.editorial &&
-          order == other.order;
+          order == other.order &&
+          query == other.query &&
+          productsPerPage == other.productsPerPage &&
+          pageNum == other.pageNum;
 
   @override
   int get hashCode =>
-      productsPerPage.hashCode ^
-      pageNum.hashCode ^
       siBuscas.hashCode ^
       categoria.hashCode ^
       tematica.hashCode ^
@@ -234,11 +346,14 @@ class ZacatrusUrlBrowserComposer {
       precio.hashCode ^
       mecanica.hashCode ^
       editorial.hashCode ^
-      order.hashCode;
+      order.hashCode ^
+      query.hashCode ^
+      productsPerPage.hashCode ^
+      pageNum.hashCode;
 
   @override
   String toString() {
-    return 'ZacatrusUrlBrowserComposer{productsPerPage: $productsPerPage, pageNum: $pageNum, siBuscas: $siBuscas, categoria: $categoria, tematica: $tematica, edades: $edades, numJugadores: $numJugadores, precio: $precio, mecanica: $mecanica, editorial: $editorial}';
+    return 'ZacatrusUrlBrowserComposer{siBuscas: $siBuscas, categoria: $categoria, tematica: $tematica, edades: $edades, numJugadores: $numJugadores, precio: $precio, mecanica: $mecanica, editorial: $editorial, order: $order, query: $query, productsPerPage: $productsPerPage, pageNum: $pageNum}';
   }
 
   ZacatrusUrlBrowserComposer copyWith({
@@ -253,6 +368,7 @@ class ZacatrusUrlBrowserComposer {
     Optional<ZacatrusMecanicaFilter?>? mecanica,
     Optional<ZacatrusEditorialFilter?>? editorial,
     Optional<ZacatrusOrder?>? order,
+    Optional<ZacatrusQueryFilter?>? query,
   }) {
     return ZacatrusUrlBrowserComposer(
       productsPerPage: productsPerPage ?? this.productsPerPage,
@@ -270,6 +386,7 @@ class ZacatrusUrlBrowserComposer {
       editorial:
           editorial?.isValid ?? false ? editorial!.value : this.editorial,
       order: order?.isValid ?? false ? order!.value : this.order,
+      query: query?.isValid ?? false ? query!.value : this.query,
     );
   }
 }
