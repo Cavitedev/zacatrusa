@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/voice_to_speech_dialog_field.dart';
 
 import 'settings_dialog.dart';
 
@@ -89,9 +90,13 @@ class DialogRadioColumn<T> extends ConsumerStatefulWidget {
 }
 
 class _DialogRadioColumnState<T> extends ConsumerState<DialogRadioColumn<T>> {
-  late final List<MapEntry> _msgValuesList;
-  late final ScrollController _scrollController;
+  late List<MapEntry> _msgValuesList;
   late int _indexSelectedElement;
+  late final int _msgValuesInitialLength;
+
+  ScrollController? _scrollController;
+  TextEditingController? _textController;
+
   static const double elementSize = 56;
   static const int thresholdToScrollAutomatically = 10;
 
@@ -99,46 +104,60 @@ class _DialogRadioColumnState<T> extends ConsumerState<DialogRadioColumn<T>> {
   void initState() {
     super.initState();
     _msgValuesList = widget.messageValues.entries.toList();
-    _scrollController = ScrollController();
-    if (_msgValuesList.length > thresholdToScrollAutomatically) {
+    _msgValuesInitialLength = _msgValuesList.length;
+    if (_msgValuesInitialLength > thresholdToScrollAutomatically) {
+      _textController = TextEditingController();
+
+      _textController!.addListener(() {
+        setState(() {
+          _msgValuesList = widget.messageValues.entries
+              .where((entry) => entry.value
+                  .toLowerCase()
+                  .contains(_textController!.text.toLowerCase()))
+              .toList();
+        });
+      });
+
+      _scrollController = ScrollController();
+
       final selectedValue = ref.read(widget.provider);
       _indexSelectedElement =
           _msgValuesList.indexWhere((entry) => entry.key == selectedValue);
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-        _scrollController.jumpTo(_indexSelectedElement * elementSize);
+        _scrollController!.jumpTo(_indexSelectedElement * elementSize);
       });
     }
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController?.dispose();
+    _textController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final T groupValue = ref.watch(widget.provider);
-    final List<MapEntry> msgValuesList = widget.messageValues.entries.toList();
 
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ElevatedButton(
-              onPressed: () {
-                _scrollController.jumpTo(100);
-              },
-              child: Text("butón")),
+          if (_msgValuesInitialLength > thresholdToScrollAutomatically)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: VoiceToSpeechDialogField(textController: _textController!),
+            ),
           Expanded(
             child: Scrollbar(
               controller: _scrollController,
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: msgValuesList.length,
+                itemCount: _msgValuesList.length,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  MapEntry msgVal = msgValuesList[index];
+                  MapEntry msgVal = _msgValuesList[index];
                   return _buildRadioListTile(
                       context: context,
                       index: index,

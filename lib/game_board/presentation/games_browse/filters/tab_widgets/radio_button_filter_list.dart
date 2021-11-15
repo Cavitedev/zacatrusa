@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-
-import '../../../../../constants/app_margins_and_sizes.dart';
-import '../../../core/widgets/outlined_text_field.dart';
-import '../../../core/widgets/voice_to_speech_button.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/voice_to_speech_dialog_field.dart';
 
 class RadioButtonListFilter extends StatefulWidget {
   const RadioButtonListFilter({
@@ -67,24 +62,7 @@ class _RadioButtonListFilterState extends State<RadioButtonListFilter> {
           textAlign: TextAlign.center,
         ),
         if (widget.searchEnabled)
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: generalPadding),
-            child: OutlinedTextField(
-              autocorrect: false,
-              controller: textController,
-              suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
-                  ? VoiceToSpeechButton(
-                      onWordHeard: (textHeard, _) {
-                        textController.value = TextEditingValue(
-                          text: textHeard,
-                          selection:
-                              TextSelection.collapsed(offset: textHeard.length),
-                        );
-                      },
-                    )
-                  : null,
-            ),
-          ),
+          VoiceToSpeechDialogField(textController: textController),
         Expanded(
           child: Scrollbar(
             controller: scrollController,
