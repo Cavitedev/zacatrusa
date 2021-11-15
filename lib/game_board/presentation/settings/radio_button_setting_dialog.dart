@@ -15,7 +15,7 @@ class RadioButtonSettingDialog<T> extends ConsumerWidget {
   final Map<T, String> messageValues;
   final Provider<T> provider;
   final String dialogTitle;
-  final Function(T) onChanged;
+  final Function(T?) onChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,7 +45,7 @@ class ChangeValueDialog<T> extends StatelessWidget {
   final Map<T, String> messageValues;
   final Provider<T> provider;
   final String title;
-  final Function(T) onChanged;
+  final Function(T?) onChanged;
 
   const ChangeValueDialog({
     required this.messageValues,
@@ -105,7 +105,7 @@ class RadioDialog extends StatelessWidget {
 class DialogRadioColumn<T> extends ConsumerWidget {
   final Map<T, String> messageValues;
   final Provider<T> provider;
-  final Function(T) onChanged;
+  final Function(T?) onChanged;
 
   const DialogRadioColumn({
     required this.messageValues,
@@ -145,7 +145,7 @@ class DialogRadioColumn<T> extends ConsumerWidget {
         msg,
       ),
       onChanged: (newValue) {
-        onChanged(newValue!);
+        onChanged(newValue);
         Navigator.pop(context);
       },
     );

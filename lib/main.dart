@@ -28,10 +28,9 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final routerDelegate = ref.watch(gamesRouterDelegateProvider);
-    final routeInformationParser =
-        ref.watch(gameRouteInformationParserProvider);
-    ref.read(settingsControllerProvider);
+    final routerDelegate = ref.read(gamesRouterDelegateProvider);
+    final routeInformationParser = ref.read(gameRouteInformationParserProvider);
+
     return MaterialApp.router(
       title: appName,
       routerDelegate: routerDelegate,

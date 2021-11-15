@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/game_board/presentation/settings/radio_button_setting_dialog.dart';
-import 'package:zacatrusa/settings/settings_controller.dart';
+
+import '../../../settings/settings_controller.dart';
+import 'radio_button_setting_dialog.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -14,8 +15,8 @@ class SettingsPage extends ConsumerWidget {
       ),
       body: ListView(
         children: [
-          RadioButtonSettingDialog(
-              name: "Tipo de letra",
+          RadioButtonSettingDialog<String>(
+              name: "Familia de Letra",
               dialogTitle: "Elija tipo de letra",
               provider: settingsFontFamilyControllerProvider,
               messageValues: const {
@@ -24,9 +25,24 @@ class SettingsPage extends ConsumerWidget {
                 "Oswald": "Oswald",
               },
               onChanged: (value) {
-                ref
-                    .read(settingsControllerProvider)
-                    .updateFontfamily(value.toString());
+                ref.read(settingsControllerProvider).updateFontfamily(value);
+              }),
+          const Divider(),
+          RadioButtonSettingDialog<double?>(
+              name: "Tamaño de Letra",
+              dialogTitle: "Elija el tamaño de letra",
+              provider: settingsFontSizeControllerProvider,
+              messageValues: {
+                null: "Por Defecto",
+                0.8: "XXS",
+                0.9: "XS",
+                1: "S",
+                1.1: "M",
+                1.2: "L",
+                1.4: "XL",
+              },
+              onChanged: (value) {
+                ref.read(settingsControllerProvider).updateFontSize(value);
               }),
         ],
       ),

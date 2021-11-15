@@ -8,7 +8,10 @@ final settingsControllerProvider =
     ChangeNotifierProvider((_) => SettingsController._singleton);
 
 final settingsFontFamilyControllerProvider = Provider((ref) =>
-    ref.watch(settingsControllerProvider.select((set) => set._fontFaimily)));
+    ref.watch(settingsControllerProvider.select((set) => set._fontFamily)));
+
+final settingsFontSizeControllerProvider = Provider((ref) =>
+    ref.watch(settingsControllerProvider.select((set) => set._fontSize)));
 
 class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
@@ -28,7 +31,8 @@ class SettingsController with ChangeNotifier {
     await _settingsService.init();
     _notifyQueryDowngradeWarning =
         _settingsService.notifyQueryDowngradeWarning();
-    _fontFaimily = _settingsService.fontFamily();
+    _fontFamily = _settingsService.fontFamily();
+    _fontSize = _settingsService.fontSize();
 
     notifyListeners();
   }
@@ -49,18 +53,32 @@ class SettingsController with ChangeNotifier {
         .updateNotifyQueryDowngradeWarning(_notifyQueryDowngradeWarning);
   }
 
-  late String _fontFaimily;
+  late String _fontFamily;
 
-  String get fontFaimily => _fontFaimily;
+  String get fontFamily => _fontFamily;
 
   Future<void> updateFontfamily(String? newFontFamily) async {
     if (newFontFamily == null) return;
-    if (newFontFamily == fontFaimily) return;
+    if (newFontFamily == fontFamily) return;
 
-    _fontFaimily = newFontFamily;
+    _fontFamily = newFontFamily;
 
     notifyListeners();
 
-    await _settingsService.updateFontFamily(_fontFaimily);
+    await _settingsService.updateFontFamily(_fontFamily);
+  }
+
+  double? _fontSize;
+
+  double? get fontSize => _fontSize;
+
+  Future<void> updateFontSize(double? newFontSize) async {
+    if (newFontSize == fontSize) return;
+
+    _fontSize = newFontSize;
+
+    notifyListeners();
+
+    await _settingsService.updateFontSize(_fontSize);
   }
 }

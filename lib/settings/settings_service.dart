@@ -27,4 +27,18 @@ class SettingsService {
   Future<void> updateFontFamily(String newFontFamily) async {
     await preferences.setString(fontFamilyKey, newFontFamily);
   }
+
+  static String fontSizeKey = "font_size";
+
+  double? fontSize() {
+    return preferences.getDouble(fontSizeKey);
+  }
+
+  Future<void> updateFontSize(double? newFontSize) async {
+    if (newFontSize == null) {
+      await preferences.remove(fontSizeKey);
+    } else {
+      await preferences.setDouble(fontSizeKey, newFontSize);
+    }
+  }
 }

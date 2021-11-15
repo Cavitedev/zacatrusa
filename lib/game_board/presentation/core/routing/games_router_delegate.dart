@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/settings/media_query.dart';
 
 import '../../../application/browser/browser_notifier.dart';
 import '../../game_details/game_details.dart';
@@ -48,31 +49,35 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      pages: [
-        MaterialPage(key: const ValueKey("Games Browse"), child: GamesBrowse()),
-        if (_currentConf.detailsGameUrl != null)
+    return UpdatedMediaQuery(
+      child: Navigator(
+        pages: [
           MaterialPage(
-              key: ValueKey(_currentConf.detailsGameUrl),
-              child: GameDetails(
-                url: _currentConf.detailsGameUrl!,
-              )),
-        if (_currentConf.settings)
-          const MaterialPage(key: ValueKey("Settings"), child: SettingsPage()),
-        if (_currentConf.imageLoaded != null)
-          MaterialPage(
-              key: ValueKey("Image ${_currentConf.imageLoaded}"),
-              child: SlidePage(
-                url: _currentConf.imageLoaded,
-              ))
-      ],
-      onPopPage: (route, result) {
-        if (!route.didPop(result)) {
-          return false;
-        }
+              key: const ValueKey("Games Browse"), child: GamesBrowse()),
+          if (_currentConf.detailsGameUrl != null)
+            MaterialPage(
+                key: ValueKey(_currentConf.detailsGameUrl),
+                child: GameDetails(
+                  url: _currentConf.detailsGameUrl!,
+                )),
+          if (_currentConf.settings)
+            const MaterialPage(
+                key: ValueKey("Settings"), child: SettingsPage()),
+          if (_currentConf.imageLoaded != null)
+            MaterialPage(
+                key: ValueKey("Image ${_currentConf.imageLoaded}"),
+                child: SlidePage(
+                  url: _currentConf.imageLoaded,
+                ))
+        ],
+        onPopPage: (route, result) {
+          if (!route.didPop(result)) {
+            return false;
+          }
 
-        return onPopRoute();
-      },
+          return onPopRoute();
+        },
+      ),
     );
   }
 
