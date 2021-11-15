@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zacatrusa/settings/material_color_data.dart';
 
 import '../../../settings/settings_controller.dart';
@@ -21,11 +22,7 @@ class SettingsPage extends ConsumerWidget {
               name: "Familia de Letra",
               dialogTitle: "Elija tipo de letra",
               provider: settingsFontFamilyControllerProvider,
-              messageValues: const {
-                "Roboto": "Roboto",
-                "Open Sans": "Open Sans",
-                "Oswald": "Oswald",
-              },
+              messageValues: _fontsValues(),
               onChanged: (value) {
                 ref.read(settingsControllerProvider).updateFontfamily(value);
               }),
@@ -60,6 +57,11 @@ class SettingsPage extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Map<String, String> _fontsValues() {
+    return Map.fromEntries(
+        GoogleFonts.asMap().keys.map((font) => MapEntry(font, font)));
   }
 
   Map<int, MaterialColorData> colorsValues() {

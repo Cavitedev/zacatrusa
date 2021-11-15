@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/app_margins_and_sizes.dart';
 
-import 'radio_dialog.dart';
+import 'settings_dialog.dart';
 
 class RadioButtonSettingDialog<T> extends ConsumerWidget {
   const RadioButtonSettingDialog({
@@ -60,7 +60,7 @@ class ChangeValueDialog<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RadioDialog(
+    return SettingsDialog(
       title: title,
       content: DialogRadioColumn(
         messageValues: messageValues,
@@ -86,18 +86,21 @@ class DialogRadioColumn<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final T groupValue = ref.watch(provider);
+    final List<MapEntry> msgValuesList = messageValues.entries.toList();
 
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: messageValues.entries
-            .map((msgVal) => _buildRadioListTile(
-                context: context,
-                value: msgVal.key,
-                msg: msgVal.value,
-                groupValue: groupValue,
-                ref: ref))
-            .toList(),
+    return Expanded(
+      child: ListView.builder(
+        itemCount: msgValuesList.length,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          MapEntry msgVal = msgValuesList[index];
+          return _buildRadioListTile(
+              context: context,
+              value: msgVal.key,
+              msg: msgVal.value,
+              groupValue: groupValue,
+              ref: ref);
+        },
       ),
     );
   }
