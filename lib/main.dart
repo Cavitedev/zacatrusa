@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,16 +58,11 @@ class MyApp extends ConsumerWidget {
           textTheme: GoogleFonts.getTextTheme(
               ref.watch(settingsFontFamilyControllerProvider),
               const TextTheme(
-                headline6: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black),
+                headline6: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 headline5: TextStyle(fontSize: 24),
-                headline4: TextStyle(fontSize: 28, color: Colors.black),
-                headline3: TextStyle(
-                    fontSize: 36, color: Colors.black, letterSpacing: 0.5),
-                headline2: TextStyle(
-                    fontSize: 44, color: Colors.black, letterSpacing: 1),
+                headline4: TextStyle(fontSize: 28),
+                headline3: TextStyle(fontSize: 36, letterSpacing: 0.5),
+                headline2: TextStyle(fontSize: 44, letterSpacing: 1),
               ))),
     );
   }
