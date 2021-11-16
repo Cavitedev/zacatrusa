@@ -14,7 +14,7 @@ class AppDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
-      semanticLabel: "Drawer de la aplicación",
+      semanticLabel: "Navegación de la aplicación",
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

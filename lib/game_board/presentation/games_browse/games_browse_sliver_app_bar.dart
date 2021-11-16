@@ -54,6 +54,16 @@ class _GamesBrowseSliverAppBarState
 
   SliverAppBar _defaultSearchBar(BuildContext context) {
     return SliverAppBar(
+      leading: IconButton(
+        icon: const Icon(
+          Icons.menu,
+          semanticLabel: "Abrir navegación",
+        ),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+        tooltip: 'Abrir navegación',
+      ),
       title: GestureDetector(
         onTap: () {
           _changeIsSearchingState(true);
@@ -64,25 +74,29 @@ class _GamesBrowseSliverAppBarState
       floating: true,
       actions: [
         IconButton(
-            onPressed: () {
-              _changeIsSearchingState(true);
-            },
-            icon: const Icon(
-              Icons.search,
-              semanticLabel: "Buscar por nombre",
-            )),
+          onPressed: () {
+            _changeIsSearchingState(true);
+          },
+          icon: const Icon(
+            Icons.search,
+            semanticLabel: "Buscar por nombre",
+          ),
+          tooltip: "Buscar por nombre",
+        ),
         IconButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return const BrowsePageFilters();
-                  });
-            },
-            icon: const Icon(
-              Icons.filter_list,
-              semanticLabel: "Filtrar",
-            ))
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return const BrowsePageFilters();
+                });
+          },
+          icon: const Icon(
+            Icons.filter_list,
+            semanticLabel: "Filtrar",
+          ),
+          tooltip: "Filtrar",
+        )
       ],
     );
   }
