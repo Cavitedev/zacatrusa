@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zacatrusa/constants/app_error_constants.dart';
 
 import '../../../infrastructure/core/internet_feedback.dart';
 import '../../../infrastructure/core/scrapping_failures.dart';
+import 'error_widget.dart';
 import 'error_widget_with_image.dart';
 import 'loading.dart';
 
@@ -65,10 +65,8 @@ class InternetFeedbackWidget extends StatelessWidget {
       txt = "Reintentando cargar $url";
       return Loading(msg: txt);
     } else if (feedback is QueryLengthNotEnough) {
-      return Text(
-        "Longitud mínima de consulta de búsqueda es 3",
-        softWrap: true,
-        style: AppErrorConstants.errorTextStyle(context),
+      return const ErrorTextWidget(
+        errorMsg: "Longitud mínima de consulta de búsqueda es 3",
       );
     }
 

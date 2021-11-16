@@ -40,7 +40,7 @@ class OutlinedTextField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.sentences,
     this.prefixIcon,
     this.focusNode,
-    this.borderRadius = textFieldBorderRadious,
+    this.borderRadius = generalBorderRadius,
     this.inputFormatters,
     this.padding = EdgeInsets.zero,
     this.helperText = "",
