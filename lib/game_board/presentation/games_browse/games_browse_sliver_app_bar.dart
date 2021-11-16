@@ -152,15 +152,20 @@ class _GamesBrowseSliverAppBarState
         return;
       }
     }
+    if (text.isEmpty) {
+      _updateQueryOnUrlComposer(urlComposer, null);
+      return;
+    }
 
     _updateQueryOnUrlComposer(urlComposer, text);
   }
 
   void _updateQueryOnUrlComposer(
-      ZacatrusUrlBrowserComposer urlComposer, String text) {
+      ZacatrusUrlBrowserComposer urlComposer, String? text) {
     final BrowserNotifier broswerNotifier =
         ref.read(browserNotifierProvider.notifier);
     broswerNotifier.changeFilters(urlComposer.copyWith(
-        query: Optional.value(ZacatrusQueryFilter(value: text))));
+        query: Optional.value(
+            text == null ? null : ZacatrusQueryFilter(value: text))));
   }
 }
