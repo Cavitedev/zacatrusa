@@ -46,7 +46,7 @@ class MyApp extends ConsumerWidget {
           ),
           inputDecorationTheme: InputDecorationTheme(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            // fillColor: Colors.green.shade800,
+            fillColor: Colors.black12,
             isDense: true,
           ),
           dialogTheme: const DialogTheme(
