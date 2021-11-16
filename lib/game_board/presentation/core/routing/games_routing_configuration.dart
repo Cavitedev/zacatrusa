@@ -21,7 +21,8 @@ class GamesRoutingConfiguration {
 
   // ZacatrusUrlBrowserComposer? get filterComposer => _filterComposer;
 
-  bool isHome() => settings == false && detailsGameUrl == null;
+  bool isHome() =>
+      settings == false && detailsGameUrl == null && imageLoaded == null;
 
   @override
   String toString() {

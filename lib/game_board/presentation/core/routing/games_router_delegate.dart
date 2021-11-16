@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'package:zacatrusa/settings/media_query.dart';
 
 import '../../../application/browser/browser_notifier.dart';
@@ -33,10 +34,8 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   final HeroController heroC = HeroController();
 
   set currentConf(GamesRoutingConfiguration conf) {
-    if (conf.filterComposer != null) {
-      ref
-          .read(browserNotifierProvider.notifier)
-          .changeFilters(conf.filterComposer!);
+    if (conf.filterComposer != null && conf.isHome()) {
+      _reloadInitPage(conf);
     }
     _currentConf = conf;
     notifyListeners();
@@ -45,6 +44,12 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   void updateIsSearching(bool newIsSearching) {
     _currentConf = currentConf.copyWith(isSearching: newIsSearching);
     ref.read(isSearchingProvider.notifier).state = newIsSearching;
+  }
+
+  void _reloadInitPage(GamesRoutingConfiguration conf) {
+    ref
+        .read(browserNotifierProvider.notifier)
+        .changeFilters(conf.filterComposer!);
   }
 
   @override
@@ -84,17 +89,22 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   bool onPopRoute() {
     if (_currentConf.imageLoaded != null) {
       _currentConf.imageLoaded = null;
+      _loadInitHomeIfNeeded();
+
       notifyListeners();
       return true;
     } else if (_currentConf.settings == true) {
       _currentConf.settings = false;
+      _loadInitHomeIfNeeded();
       notifyListeners();
       return true;
     } else if (_currentConf.detailsGameUrl != null) {
       _currentConf.detailsGameUrl = null;
+      _loadInitHomeIfNeeded();
       notifyListeners();
       return true;
     } else if (_currentConf.isSearching) {
+      _loadInitHomeIfNeeded();
       updateIsSearching(false);
       return true;
     }
@@ -113,5 +123,12 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
     currentConf = configuration;
     notifyListeners();
     return Future.value(null);
+  }
+
+  void _loadInitHomeIfNeeded() {
+    if (_currentConf.isHome() && _currentConf.filterComposer == null) {
+      _currentConf.filterComposer = ZacatrusUrlBrowserComposer.init();
+      ref.read(browserNotifierProvider.notifier).loadGames();
+    }
   }
 }
