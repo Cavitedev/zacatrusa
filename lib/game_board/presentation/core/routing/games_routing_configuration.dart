@@ -1,3 +1,5 @@
+import 'package:zacatrusa/game_board/domain/image_data.dart';
+
 import '../../../../core/optional.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 
@@ -6,7 +8,7 @@ class GamesRoutingConfiguration {
   ZacatrusUrlBrowserComposer? filterComposer;
   bool settings;
   String? detailsGameUrl;
-  String? imageLoaded;
+  ImageData? imageLoaded;
 
   GamesRoutingConfiguration.home({
     this.filterComposer,
@@ -50,7 +52,7 @@ class GamesRoutingConfiguration {
       {Optional<ZacatrusUrlBrowserComposer?>? filterComposer,
       bool? settings,
       Optional<String?>? detailsGameUrl,
-      Optional<String?>? imageLoaded,
+      Optional<ImageData?>? imageLoaded,
       bool? isSearching}) {
     return GamesRoutingConfiguration._(
       filterComposer:

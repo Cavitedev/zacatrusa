@@ -72,7 +72,8 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
             MaterialPage(
                 key: ValueKey("Image ${_currentConf.imageLoaded}"),
                 child: SlidePage(
-                  url: _currentConf.imageLoaded,
+                  url: _currentConf.imageLoaded?.imageLink,
+                  semantics: _currentConf.imageLoaded?.imageAlt,
                 ))
         ],
         onPopPage: (route, result) {

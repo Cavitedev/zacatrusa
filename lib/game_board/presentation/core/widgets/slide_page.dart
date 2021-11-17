@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'hero_widget.dart';
 
 class SlidePage extends StatefulWidget {
-  const SlidePage({this.url, Key? key}) : super(key: key);
+  const SlidePage({this.url, this.semantics, Key? key}) : super(key: key);
   final String? url;
+  final String? semantics;
 
   @override
   _SlidePageState createState() => _SlidePageState();
@@ -53,9 +54,17 @@ class _SlidePageState extends State<SlidePage> {
                   },
                 )
               : HeroWidget(
-                  child: ExtendedImage.network(
-                    widget.url!,
-                    enableSlideOutPage: true,
+                  child: Semantics(
+                    value: "Imagen ampliada ${widget.semantics}",
+                    onTapHint: "Volver a la vista normal",
+                    onTap: () {
+                      slidePagekey.currentState!.popPage();
+                      Navigator.pop(context);
+                    },
+                    child: ExtendedImage.network(
+                      widget.url!,
+                      enableSlideOutPage: true,
+                    ),
                   ),
                   tag: widget.url!,
                   slideType: SlideType.onlyImage,
