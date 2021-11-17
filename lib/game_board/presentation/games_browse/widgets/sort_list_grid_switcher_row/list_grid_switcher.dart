@@ -30,6 +30,7 @@ class _ListGridSwitcherState extends State<ListGridSwitcher> {
             });
           },
           selected: selected == ListGrid.list,
+          tooltip: "Vista en lista",
         ),
         ViewSelectionButton(
           icon: Icons.grid_view_sharp,
@@ -40,6 +41,7 @@ class _ListGridSwitcherState extends State<ListGridSwitcher> {
             });
           },
           selected: selected == ListGrid.grid,
+          tooltip: "Vista en grid",
         ),
       ],
     );
@@ -47,21 +49,25 @@ class _ListGridSwitcherState extends State<ListGridSwitcher> {
 }
 
 class ViewSelectionButton extends StatelessWidget {
-  const ViewSelectionButton(
-      {Key? key,
-      required this.onPressed,
-      required this.icon,
-      required this.selected})
-      : super(key: key);
+  const ViewSelectionButton({
+    Key? key,
+    required this.onPressed,
+    required this.icon,
+    required this.selected,
+    required this.tooltip,
+  }) : super(key: key);
 
   final Function onPressed;
   final IconData icon;
   final bool selected;
+  final String tooltip;
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
       splashRadius: 24,
       padding: EdgeInsets.zero,
+      tooltip: tooltip,
       icon: Container(
         padding: const EdgeInsets.all(4),
         child: Icon(icon),
