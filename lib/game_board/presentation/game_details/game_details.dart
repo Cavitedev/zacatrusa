@@ -22,13 +22,19 @@ class GameDetails extends ConsumerWidget {
 
     if (eitherData == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text("Game Details")),
+        appBar: AppBar(title: const Text("Detalles del Juego")),
       );
     }
 
     if (eitherData.isLeft()) {
       return Scaffold(
-          appBar: AppBar(title: const Text("Game Details")),
+          appBar: AppBar(
+            title: const Text("Detalles del Juego"),
+            leading: Semantics(
+              value: "Volver atrás",
+              child: BackButton(),
+            ),
+          ),
           body: Padding(
             padding: const EdgeInsets.all(generalPadding),
             child: InternetFeedbackWidget(feedback: eitherData.getLeft()!),

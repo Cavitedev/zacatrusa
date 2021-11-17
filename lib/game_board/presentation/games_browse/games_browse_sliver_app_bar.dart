@@ -54,15 +54,6 @@ class _GamesBrowseSliverAppBarState
 
   SliverAppBar _defaultSearchBar(BuildContext context) {
     return SliverAppBar(
-      leading: IconButton(
-        icon: const Icon(
-          Icons.menu,
-        ),
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
-        tooltip: 'Abrir navegación',
-      ),
       title: GestureDetector(
         onTap: () {
           _changeIsSearchingState(true);

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:window_size/window_size.dart';
@@ -37,6 +38,12 @@ class MyApp extends ConsumerWidget {
       routerDelegate: routerDelegate,
       backButtonDispatcher: RootBackButtonDispatcher(),
       routeInformationParser: routeInformationParser,
+      locale: const Locale('es', ''),
+      supportedLocales: const [Locale('es', '')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       theme: ThemeData(
           primarySwatch: ref.watch(settingsPrimaryColorControllerProvider),
           errorColor: Colors.redAccent.shade400,
