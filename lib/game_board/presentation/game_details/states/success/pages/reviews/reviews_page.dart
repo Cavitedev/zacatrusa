@@ -88,46 +88,54 @@ class Review extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(listSpacing),
         width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.spaceAround,
-              runSpacing: 4,
-              spacing: 16,
+        child: MergeSemantics(
+          child: Semantics(
+            value: "Comentario $index",
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (GameReview.isElementValid(review.author))
-                  Text(
-                    review.author!,
-                    style: Theme.of(context).textTheme.subtitle2,
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  alignment: WrapAlignment.spaceAround,
+                  runSpacing: 4,
+                  spacing: 16,
+                  children: [
+                    if (GameReview.isElementValid(review.author))
+                      Text(
+                        review.author!,
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    if (review.stars != null)
+                      StarsBarIndicator(stars: review.stars!),
+                    if (review.date != null)
+                      Text(
+                        review.date!,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                  ],
+                ),
+                if (GameReview.isElementValid(review.title))
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: innerElementsPadding),
+                    child: Text(
+                      review.title!,
+                      style: Theme.of(context).textTheme.headline4,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                if (review.stars != null)
-                  StarsBarIndicator(stars: review.stars!),
-                if (review.date != null)
-                  Text(
-                    review.date!,
-                    style: Theme.of(context).textTheme.caption,
+                if (review.description != null)
+                  Semantics(
+                    label: review.description!,
+                    child: SelectableText(
+                      review.description!,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                   ),
               ],
             ),
-            if (GameReview.isElementValid(review.title))
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: innerElementsPadding),
-                child: Text(
-                  review.title!,
-                  style: Theme.of(context).textTheme.headline4,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            if (review.description != null)
-              SelectableText(
-                review.description!,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-          ],
+          ),
         ),
       ),
     );
