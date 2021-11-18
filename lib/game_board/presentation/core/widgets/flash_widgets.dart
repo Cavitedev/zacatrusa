@@ -93,18 +93,21 @@ class SpeechErrorFlash extends StatelessWidget {
   String _convertErrorMsg() {
     if (_isTimeOut()) {
       return "No se ha escuchado ninguna palabra durante el tiempo de activación, compruebe que funciona su microfono";
+    } else if (_isNoMatch()) {
+      "No hemos encontrado ninguna palabra en lo que has dicho. Inténtalo de nuevo hablando claro y comprobando que el micro funciona";
     }
     return "Ha habido un error con este mensaje: \"${error.errorMsg}\" informe de ello al equipo de desarrollo";
   }
 
   bool _isErrorImportant() {
-    if (_isTimeOut()) {
+    if (_isTimeOut() || _isNoMatch()) {
       return false;
     }
     return true;
   }
 
   bool _isTimeOut() => error.errorMsg == "error_speech_timeout";
+  bool _isNoMatch() => error.errorMsg == "error_no_natch";
 }
 
 class SpeechInitializeFlash extends StatelessWidget {
@@ -134,7 +137,7 @@ class SpeechInitializeFlash extends StatelessWidget {
             "Error al inicializar el reconocimiento de voz",
             style: Theme.of(context).textTheme.headline6,
           ),
-          content: Text(
+          content: const Text(
               "Hubo un problema al iniciar el reconocimiento de voz, notifíqueselo al equipo de desarrollo por favor"),
           shouldIconPulse: false,
           icon: Icon(
