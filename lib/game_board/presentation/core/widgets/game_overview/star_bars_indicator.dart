@@ -15,13 +15,15 @@ class StarsBarIndicator extends StatelessWidget {
     return Semantics.fromProperties(
       properties: SemanticsProperties(
           label: "$stars ${stars == 1 ? "estrella" : "estrellas"}"),
-      child: RatingBarIndicator(
-        itemBuilder: (context, index) => const Icon(
-          Icons.star,
-          color: Colors.amber,
+      child: ExcludeSemantics(
+        child: RatingBarIndicator(
+          itemBuilder: (context, index) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          rating: stars,
+          itemSize: 25.0,
         ),
-        rating: stars,
-        itemSize: 25.0,
       ),
     );
   }
