@@ -1,7 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -34,10 +33,9 @@ class _VoiceToSpeechButtonState extends State<VoiceToSpeechButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics.fromProperties(
-      properties: const SemanticsProperties(
-        label: "Reconocimiento por voz",
-      ),
+    return Semantics(
+      label: "Reconocimiento por voz",
+      onTapHint: "Escribir por voz",
       child: AvatarGlow(
         animate: speech.isListening,
         endRadius: 24,

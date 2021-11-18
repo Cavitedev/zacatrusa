@@ -49,14 +49,15 @@ class PurchasePage extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline5,
                         ),
                       ElevatedButton(
-                          onPressed: () {
-                            launch(
-                              overview.link,
-                            );
-                          },
-                          child: const Text(
-                            "Página del producto",
-                          ))
+                        onPressed: () {
+                          launch(
+                            overview.link,
+                          );
+                        },
+                        child: const Text(
+                          "Página del producto",
+                        ),
+                      )
                     ],
                   )
                 ],

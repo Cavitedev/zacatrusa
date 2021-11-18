@@ -135,7 +135,7 @@ class _OutlinedTextFieldState extends State<OutlinedTextField> {
         prefixIcon: widget.prefixIcon,
         suffixIcon: hasText
             ? IconButton(
-                tooltip: "Limpiar texto ${textEditingController.text}",
+                tooltip: "Limpiar el texto: ${textEditingController.text}",
                 icon: const Icon(Icons.clear),
                 onPressed: () {
                   _clearText();

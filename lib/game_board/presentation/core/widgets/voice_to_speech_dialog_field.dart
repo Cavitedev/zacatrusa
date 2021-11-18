@@ -16,22 +16,25 @@ class VoiceToSpeechDialogField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: generalPadding),
-      child: OutlinedTextField(
-        autocorrect: false,
-        controller: textController,
-        suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
-            ? VoiceToSpeechButton(
-                onWordHeard: (textHeard, _) {
-                  textController.value = TextEditingValue(
-                    text: textHeard,
-                    selection:
-                        TextSelection.collapsed(offset: textHeard.length),
-                  );
-                },
-              )
-            : null,
+    return Semantics(
+      label: "Campo de búsqueda",
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: generalPadding),
+        child: OutlinedTextField(
+          autocorrect: false,
+          controller: textController,
+          suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
+              ? VoiceToSpeechButton(
+                  onWordHeard: (textHeard, _) {
+                    textController.value = TextEditingValue(
+                      text: textHeard,
+                      selection:
+                          TextSelection.collapsed(offset: textHeard.length),
+                    );
+                  },
+                )
+              : null,
+        ),
       ),
     );
   }

@@ -23,14 +23,12 @@ class AppDrawer extends ConsumerWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
-            child: Semantics.fromProperties(
-              properties: SemanticsProperties(
-                label: "Título de la navegación",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                hint: "Salir de la navegación",
-              ),
+            child: Semantics(
+              label: "Título de la navegación",
+              onTap: () {
+                Navigator.pop(context);
+              },
+              onTapHint: "Salir de la navegación",
               child: ExcludeSemantics(
                 child: Text(
                   appName,

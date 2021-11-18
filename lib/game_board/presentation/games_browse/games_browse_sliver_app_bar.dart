@@ -103,26 +103,31 @@ class _GamesBrowseSliverAppBarState
           semanticLabel: "Volver a barra normal",
         ),
       ),
-      title: OutlinedTextField(
-        autocorrect: false,
-        textInputAction: TextInputAction.search,
-        controller: textController,
-        onSubmit: _onSubmit,
-        focusNode: controllerFocus,
-        suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
-            ? VoiceToSpeechButton(
-                onWordHeard: (textHeard, isFinished) {
-                  if (isFinished) {
-                    _onSubmit(textHeard);
-                  }
-                  textController.value = TextEditingValue(
-                    text: textHeard,
-                    selection:
-                        TextSelection.collapsed(offset: textHeard.length),
-                  );
-                },
-              )
-            : null,
+      title: Semantics(
+        label: textController.text.isEmpty
+            ? "Campo de texto de búsqueda vacío"
+            : "Campo de texto de búsqueda por el nombre ${textController.text}",
+        child: OutlinedTextField(
+          autocorrect: false,
+          textInputAction: TextInputAction.search,
+          controller: textController,
+          onSubmit: _onSubmit,
+          focusNode: controllerFocus,
+          suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
+              ? VoiceToSpeechButton(
+                  onWordHeard: (textHeard, isFinished) {
+                    if (isFinished) {
+                      _onSubmit(textHeard);
+                    }
+                    textController.value = TextEditingValue(
+                      text: textHeard,
+                      selection:
+                          TextSelection.collapsed(offset: textHeard.length),
+                    );
+                  },
+                )
+              : null,
+        ),
       ),
     );
   }
