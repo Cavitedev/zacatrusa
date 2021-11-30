@@ -13,14 +13,15 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
         
-      - name: Get Version of app
-        uses: NiklasLehnfeld/flutter-version-number-action@main
-        with:
-          file-path: ./pubspec.yaml
+      - id: read-version
+        run: |
+          VERSION=`cat ./pubspec.yaml | grep -o 'version:[^:]*' | cut -f2 -d":" | xargs`
+          echo "::set-output name=version::$(echo $VERSION)"
+        shell: bash
       - uses: nick-invision/assert-action@v1
         with:
           expected: 0.1.0
-          actual: ${{VERSION}}
+          actual: ${{ steps.read-version.outputs.version}}
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v1.5.3
         with:
