@@ -3,8 +3,6 @@ name: Flutter_Tests
 on:
   schedule:
     - cron: '8 15 * * *'
-  push:
-    branches: [master, Automatization_Feature] #Testing in this branch
   pull_request:
     branches: [master]
   
