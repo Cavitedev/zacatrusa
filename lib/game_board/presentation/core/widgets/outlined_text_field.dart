@@ -40,7 +40,7 @@ class OutlinedTextField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.sentences,
     this.prefixIcon,
     this.focusNode,
-    this.borderRadius = textFieldBorderRadious,
+    this.borderRadius = generalBorderRadius,
     this.inputFormatters,
     this.padding = EdgeInsets.zero,
     this.helperText = "",
@@ -135,6 +135,7 @@ class _OutlinedTextFieldState extends State<OutlinedTextField> {
         prefixIcon: widget.prefixIcon,
         suffixIcon: hasText
             ? IconButton(
+                tooltip: "Limpiar el texto: ${textEditingController.text}",
                 icon: const Icon(Icons.clear),
                 onPressed: () {
                   _clearText();

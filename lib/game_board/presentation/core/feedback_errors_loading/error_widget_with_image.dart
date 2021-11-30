@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:zacatrusa/constants/app_error_constants.dart';
 
 import '../../../../constants/app_margins_and_sizes.dart';
+import 'error_widget.dart';
 
 class ErrorWidgetWithImage extends StatelessWidget {
   const ErrorWidgetWithImage({
@@ -16,8 +16,6 @@ class ErrorWidgetWithImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle errorStyle = AppErrorConstants.errorTextStyle(context);
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: listPadding),
       child: Column(
@@ -27,10 +25,8 @@ class ErrorWidgetWithImage extends StatelessWidget {
           const SizedBox(
             height: listSpacing,
           ),
-          Text(
-            msg,
-            softWrap: true,
-            style: errorStyle,
+          ErrorTextWidget(
+            errorMsg: msg,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: listSpacing),

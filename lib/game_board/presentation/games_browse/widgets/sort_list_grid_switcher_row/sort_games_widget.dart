@@ -31,6 +31,17 @@ class _SortGamesWidget extends ConsumerState<SortGamesWidget> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    final ZacatrusOrder? order =
+        ref.read(browserNotifierProvider).urlComposer.order;
+    if (order != null) {
+      initOrder =
+          categoriesUrl.keys.firstWhere((key) => categoriesUrl[key] == order);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

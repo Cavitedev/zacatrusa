@@ -64,25 +64,27 @@ class _GamesBrowseSliverAppBarState
       floating: true,
       actions: [
         IconButton(
-            onPressed: () {
-              _changeIsSearchingState(true);
-            },
-            icon: const Icon(
-              Icons.search,
-              semanticLabel: "Buscar por nombre",
-            )),
+          onPressed: () {
+            _changeIsSearchingState(true);
+          },
+          icon: const Icon(
+            Icons.search,
+          ),
+          tooltip: "Buscar por nombre",
+        ),
         IconButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return const BrowsePageFilters();
-                  });
-            },
-            icon: const Icon(
-              Icons.filter_list,
-              semanticLabel: "Filtrar",
-            ))
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return const BrowsePageFilters();
+                });
+          },
+          icon: const Icon(
+            Icons.filter_list,
+          ),
+          tooltip: "Filtrar",
+        )
       ],
     );
   }
@@ -101,26 +103,31 @@ class _GamesBrowseSliverAppBarState
           semanticLabel: "Volver a barra normal",
         ),
       ),
-      title: OutlinedTextField(
-        autocorrect: false,
-        textInputAction: TextInputAction.search,
-        controller: textController,
-        onSubmit: _onSubmit,
-        focusNode: controllerFocus,
-        suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
-            ? VoiceToSpeechButton(
-                onWordHeard: (textHeard, isFinished) {
-                  if (isFinished) {
-                    _onSubmit(textHeard);
-                  }
-                  textController.value = TextEditingValue(
-                    text: textHeard,
-                    selection:
-                        TextSelection.collapsed(offset: textHeard.length),
-                  );
-                },
-              )
-            : null,
+      title: Semantics(
+        label: textController.text.isEmpty
+            ? "Campo de texto de búsqueda vacío"
+            : "Campo de texto de búsqueda por el nombre ${textController.text}",
+        child: OutlinedTextField(
+          autocorrect: false,
+          textInputAction: TextInputAction.search,
+          controller: textController,
+          onSubmit: _onSubmit,
+          focusNode: controllerFocus,
+          suffixIconWhenNoText: (Platform.isAndroid || Platform.isIOS)
+              ? VoiceToSpeechButton(
+                  onWordHeard: (textHeard, isFinished) {
+                    if (isFinished) {
+                      _onSubmit(textHeard);
+                    }
+                    textController.value = TextEditingValue(
+                      text: textHeard,
+                      selection:
+                          TextSelection.collapsed(offset: textHeard.length),
+                    );
+                  },
+                )
+              : null,
+        ),
       ),
     );
   }
@@ -152,15 +159,20 @@ class _GamesBrowseSliverAppBarState
         return;
       }
     }
+    if (text.isEmpty) {
+      _updateQueryOnUrlComposer(urlComposer, null);
+      return;
+    }
 
     _updateQueryOnUrlComposer(urlComposer, text);
   }
 
   void _updateQueryOnUrlComposer(
-      ZacatrusUrlBrowserComposer urlComposer, String text) {
+      ZacatrusUrlBrowserComposer urlComposer, String? text) {
     final BrowserNotifier broswerNotifier =
         ref.read(browserNotifierProvider.notifier);
     broswerNotifier.changeFilters(urlComposer.copyWith(
-        query: Optional.value(ZacatrusQueryFilter(value: text))));
+        query: Optional.value(
+            text == null ? null : ZacatrusQueryFilter(value: text))));
   }
 }

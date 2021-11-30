@@ -56,42 +56,49 @@ class ListGameItem extends ConsumerWidget {
         Card(
           child: SizedBox(
             width: double.infinity,
-            child: Column(
-              children: [
-                if (game.image != null)
-                  ExtendedImage.network(
-                    game.image!.imageLink!,
-                    height: 150,
-                    width: 150,
-                    semanticLabel: game.image?.imageAlt,
-                  ),
-                Flexible(
+            child: Semantics(
+              onTapHint: "Ir a pantalla de detalles",
+              onTap: () {
+                _detailsPage(ref);
+              },
+              button: true,
+              child: Column(
+                children: [
+                  if (game.image != null)
+                    ExtendedImage.network(
+                      game.image!.imageLink!,
+                      height: 150,
+                      width: 150,
+                    ),
+                  Flexible(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GameName(game: game),
-                    if (game.numberOfReviews != null)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                            5, innerElementsPadding, 0, 0),
-                        child: ReviewsNumber(
-                          numberReviews: game.numberOfReviews!,
-                        ),
-                      ),
-                    if (game.stars != null)
-                      Padding(
-                          padding:
-                              const EdgeInsets.only(top: innerElementsPadding),
-                          child: StarsBarIndicator(stars: game.stars!)),
-                    if (game.price != null)
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: innerElementsPadding),
-                        child: PriceText(price: game.price!),
-                      ),
-                  ],
-                ))
-              ],
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GameName(game: game),
+                        if (game.numberOfReviews != null)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                5, innerElementsPadding, 0, 0),
+                            child: ReviewsNumber(
+                              numberReviews: game.numberOfReviews!,
+                            ),
+                          ),
+                        if (game.stars != null)
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  top: innerElementsPadding),
+                              child: StarsBarIndicator(stars: game.stars!)),
+                        if (game.price != null)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: innerElementsPadding),
+                            child: PriceText(price: game.price!),
+                          ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -100,15 +107,18 @@ class ListGameItem extends ConsumerWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    final routerDelegate =
-                        ref.read(gamesRouterDelegateProvider);
-
-                    routerDelegate.currentConf = routerDelegate.currentConf
-                        .copyWith(detailsGameUrl: Optional.value(game.link));
+                    _detailsPage(ref);
                   },
                 ))),
       ],
     );
+  }
+
+  void _detailsPage(WidgetRef ref) {
+    final routerDelegate = ref.read(gamesRouterDelegateProvider);
+
+    routerDelegate.currentConf = routerDelegate.currentConf
+        .copyWith(detailsGameUrl: Optional.value(game.link));
   }
 }
 

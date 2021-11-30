@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class StarsBarIndicator extends StatelessWidget {
@@ -11,15 +12,18 @@ class StarsBarIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      value: "$stars ${stars == 1 ? "estrella" : "estrellas"}",
-      child: RatingBarIndicator(
-        itemBuilder: (context, index) => const Icon(
-          Icons.star,
-          color: Colors.amber,
+    return Semantics.fromProperties(
+      properties: SemanticsProperties(
+          label: "$stars ${stars == 1 ? "estrella" : "estrellas"}"),
+      child: ExcludeSemantics(
+        child: RatingBarIndicator(
+          itemBuilder: (context, index) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          rating: stars,
+          itemSize: 25.0,
         ),
-        rating: stars,
-        itemSize: 25.0,
       ),
     );
   }

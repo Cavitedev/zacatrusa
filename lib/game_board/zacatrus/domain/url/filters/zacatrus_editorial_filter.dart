@@ -181,6 +181,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "Salt & Pepper Games": "salt_pepper_games",
     "Scale Games": "scale_games",
     "Schmidt": "schmidt",
+    "Scorpion Masqué": "scorpion_masque",
     "SD Games": "sd_games",
     "Shining Creations": "shining_creations",
     "Smart Troll Games": "smart_troll_games",
@@ -207,7 +208,8 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "Wizkids": "wizkids",
     "Ystari Games": "ystari_games",
     "Z-Man Games": "z_man_games",
-    "Zombi Paella": "zombi_paella"
+    "Zombi Paella": "zombi_paella",
+    "Zygomatic": "zygomatic"
   };
 
   @override

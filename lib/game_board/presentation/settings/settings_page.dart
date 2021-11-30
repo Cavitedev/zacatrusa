@@ -20,7 +20,7 @@ class SettingsPage extends ConsumerWidget {
         children: [
           RadioButtonSettingDialog<String>(
               name: "Familia de Letra",
-              dialogTitle: "Elija tipo de letra",
+              dialogTitle: "Elija familia de letra",
               provider: settingsFontFamilyControllerProvider,
               messageValues: _fontsValues(),
               onChanged: (value) {

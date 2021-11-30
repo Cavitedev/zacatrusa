@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/constants/color_x.dart';
@@ -14,21 +15,31 @@ class AppDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
-      semanticLabel: "Drawer de la aplicación",
+      semanticLabel: "Navegación de $appName",
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Semantics(
+              label: "Título de la navegación",
+              onTap: () {
+                Navigator.pop(context);
+              },
+              onTapHint: "Salir de la navegación",
+              child: ExcludeSemantics(
+                child: Text(
+                  appName,
+                  style: Theme.of(context).textTheme.headline2!.copyWith(
+                      color: Theme.of(context)
+                          .primaryColor
+                          .textColorForThisBackground()),
+                ),
               ),
-              child: Text(
-                appName,
-                style: Theme.of(context).textTheme.headline2!.copyWith(
-                    color: Theme.of(context)
-                        .primaryColor
-                        .textColorForThisBackground()),
-              )),
+            ),
+          ),
           ListTile(
             title: Text(
               "Ajustes",

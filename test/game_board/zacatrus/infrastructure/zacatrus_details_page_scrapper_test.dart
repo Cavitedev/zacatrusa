@@ -40,7 +40,7 @@ void main() {
       expect(validAvailable, isTrue);
       expect(gameOverview.stars, 4.75);
       expect(gameOverview.price, 9.95);
-      expect(gameOverview.numberOfReviews, 16);
+      expect(gameOverview.numberOfReviews, greaterThanOrEqualTo(17));
 
       expect(data.gameDescription, isNotNull);
 

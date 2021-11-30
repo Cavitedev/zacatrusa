@@ -6,10 +6,7 @@ import 'app_drawer.dart';
 import 'games_browse_sliver_app_bar.dart';
 import 'widgets/body/games_browser_loaded_games.dart';
 import 'widgets/body/games_browser_loads.dart';
-import 'widgets/sort_list_grid_switcher_row/list_grid_switcher.dart';
 import 'widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
-
-final listGridViewProvider = StateProvider((_) => ListGrid.list);
 
 class GamesBrowse extends ConsumerWidget {
   GamesBrowse({Key? key}) : super(key: key);
@@ -20,7 +17,7 @@ class GamesBrowse extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       key: _scaffoldKey,
-      drawerEdgeDragWidth: 100,
+      drawerEdgeDragWidth: 35,
       drawer: const AppDrawer(),
       body: RefreshIndicator(
         semanticsLabel: "Recargar juegos de mesa",
@@ -37,11 +34,7 @@ class GamesBrowse extends ConsumerWidget {
               const GamesBrowseSliverAppBar(
                 key: ValueKey("Appbar browse"),
               ),
-              SortListGridSwitcherRow(
-                onViewChange: (listOrGrid) {
-                  ref.read(listGridViewProvider.notifier).state = listOrGrid;
-                },
-              ),
+              const SortListGridSwitcherRow(),
               const GamesBrowserLoadedGames(),
               const GamesBrowserLoads(),
               //Fills the rest of the screen for detecting scrolls for loading

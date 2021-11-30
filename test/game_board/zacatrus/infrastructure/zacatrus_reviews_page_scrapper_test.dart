@@ -25,7 +25,7 @@ void main() {
 
       final List<GameReview> reviews = result.getRight()!;
 
-      expect(reviews.length, 16);
+      expect(reviews.length, greaterThanOrEqualTo(17));
       GameReview firstReview = reviews.first;
       expect(firstReview.title, isNotNull);
       expect(firstReview.stars, isNotNull);

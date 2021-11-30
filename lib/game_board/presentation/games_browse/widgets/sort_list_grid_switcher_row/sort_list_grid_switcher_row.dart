@@ -7,10 +7,7 @@ import 'sort_games_widget.dart';
 class SortListGridSwitcherRow extends StatelessWidget {
   const SortListGridSwitcherRow({
     Key? key,
-    required this.onViewChange,
   }) : super(key: key);
-
-  final Function(ListGrid) onViewChange;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +21,7 @@ class SortListGridSwitcherRow extends StatelessWidget {
             const Flexible(
               child: SortGamesWidget(),
             ),
-            ListGridSwitcher(onViewChange: onViewChange),
+            ListGridSwitcher(),
           ],
         ),
       ),

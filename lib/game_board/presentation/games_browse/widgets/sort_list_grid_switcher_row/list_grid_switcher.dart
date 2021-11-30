@@ -1,45 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum ListGrid { list, grid }
 
-class ListGridSwitcher extends StatefulWidget {
+final listGridViewProvider = StateProvider((_) => ListGrid.list);
+
+class ListGridSwitcher extends ConsumerWidget {
   const ListGridSwitcher({
-    required this.onViewChange,
     Key? key,
   }) : super(key: key);
 
-  final Function(ListGrid) onViewChange;
-
-  @override
-  State<ListGridSwitcher> createState() => _ListGridSwitcherState();
-}
-
-class _ListGridSwitcherState extends State<ListGridSwitcher> {
-  ListGrid selected = ListGrid.list;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listGrid = ref.watch(listGridViewProvider);
     return Row(
       children: [
         ViewSelectionButton(
           icon: Icons.list,
           onPressed: () {
-            widget.onViewChange(ListGrid.list);
-            setState(() {
-              selected = ListGrid.list;
-            });
+            ref.read(listGridViewProvider.notifier).state = ListGrid.list;
           },
-          selected: selected == ListGrid.list,
+          selected: listGrid == ListGrid.list,
+          tooltip: "Vista en lista",
         ),
         ViewSelectionButton(
           icon: Icons.grid_view_sharp,
           onPressed: () {
-            widget.onViewChange(ListGrid.grid);
-            setState(() {
-              selected = ListGrid.grid;
-            });
+            ref.read(listGridViewProvider.notifier).state = ListGrid.grid;
           },
-          selected: selected == ListGrid.grid,
+          selected: listGrid == ListGrid.grid,
+          tooltip: "Vista en grid",
         ),
       ],
     );
@@ -47,21 +36,25 @@ class _ListGridSwitcherState extends State<ListGridSwitcher> {
 }
 
 class ViewSelectionButton extends StatelessWidget {
-  const ViewSelectionButton(
-      {Key? key,
-      required this.onPressed,
-      required this.icon,
-      required this.selected})
-      : super(key: key);
+  const ViewSelectionButton({
+    Key? key,
+    required this.onPressed,
+    required this.icon,
+    required this.selected,
+    required this.tooltip,
+  }) : super(key: key);
 
   final Function onPressed;
   final IconData icon;
   final bool selected;
+  final String tooltip;
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
       splashRadius: 24,
       padding: EdgeInsets.zero,
+      tooltip: tooltip,
       icon: Container(
         padding: const EdgeInsets.all(4),
         child: Icon(icon),

@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../../core/optional.dart';
+import '../../../../domain/image_data.dart';
 import '../../../../zacatrus/domain/details_page/images_carousel.dart';
 import '../../../core/routing/games_router_delegate.dart';
 
@@ -82,8 +83,10 @@ class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
                       }
 
                       final router = ref.read(gamesRouterDelegateProvider);
-                      router.currentConf = router.currentConf
-                          .copyWith(imageLoaded: Optional.value(item.image));
+                      router.currentConf = router.currentConf.copyWith(
+                          imageLoaded: Optional.value(ImageData(
+                              imageLink: item.image,
+                              imageAlt: item.semantics)));
                     },
                   );
                 },
@@ -130,6 +133,7 @@ class ImageOfCarousel extends StatelessWidget {
               ExtendedImage.network(
                 item.image,
                 key: ValueKey(item.image),
+                semanticLabel: item.semantics,
               ),
               if (item.video != null)
                 const Positioned.fill(
@@ -138,7 +142,7 @@ class ImageOfCarousel extends StatelessWidget {
                   child: Icon(
                     Icons.play_circle,
                     size: 72,
-                    semanticLabel: "Reproducir vídeo",
+                    semanticLabel: "Reproducir vídeo explícando el juego",
                   ),
                 ))
             ],

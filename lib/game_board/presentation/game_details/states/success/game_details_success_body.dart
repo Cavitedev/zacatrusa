@@ -24,6 +24,7 @@ class GameDetailsSuccessBody extends ConsumerWidget {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
+          // leading: BackButton(),
           title: Text(data.gameOverview.name),
         ),
         if (data.imagesCarousel != null)
