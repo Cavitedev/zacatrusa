@@ -12,15 +12,21 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+        
+      - name: Get Version of app
+        uses: NiklasLehnfeld/flutter-version-number-action@main
+        with:
+          file-path: ./pubspec.yaml
+      - uses: nick-invision/assert-action@v1
+        with:
+          expected: 0.1.0
+          actual: ${{ steps.read-version.outputs.version-number }}
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v1.5.3
         with:
           channel: 'stable'
       - name: Restore packages
         run: flutter pub get
-        
-      - name: Get Version of app
-        uses: NiklasLehnfeld/flutter-version-number-action@main
         
       - name: Build apk
         run: flutter build apk --release
