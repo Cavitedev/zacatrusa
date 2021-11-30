@@ -1,0 +1,41 @@
+name: Build apk and upload to github
+
+on:
+  push:
+    branches: [master, Automatization_Feature] #Testing in this branch
+  
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Install and set Flutter version
+        uses: subosito/flutter-action@v1.5.3
+        with:
+          channel: 'stable'
+      - name: Restore packages
+        run: flutter pub get
+        
+      - name: Build apk
+        run: flutter build apk --release
+      
+      - id: read_version
+        run: |
+          VERSION=`cat ./pubspec.yaml | grep -o 'version:[^:]*' | cut -f2 -d":" | xargs`
+          echo "::set-output name=version::$(echo $VERSION)"
+        shell: bash
+      
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@2.2.1
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/app/outputs/apk/release/app-release.apk
+          asset_name: ZacatrusApp.apk
+          release_name: "Zacatrus Android"
+          tag: ${{ steps.read_version.outputs.version }}
+          overwrite: true
+          body: "Aplicación en Android de Zacatrus"
+      

@@ -1,0 +1,25 @@
+name: Flutter_Tests
+
+on:
+  schedule:
+    - cron: '8 15 * * *'
+  pull_request:
+    branches: [master]
+  
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Install and set Flutter version
+        uses: subosito/flutter-action@v1.5.3
+        with:
+          channel: 'stable'
+      - name: Restore packages
+        run: flutter pub get
+        
+      - name: Run Tests
+        run: flutter test
