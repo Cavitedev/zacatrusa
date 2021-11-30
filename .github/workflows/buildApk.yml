@@ -23,7 +23,13 @@ jobs:
         
       - name: Build apk
         run: flutter build apk
-      - uses: actions/upload-artifact@v1
+      
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: Zacatrus
-          path: build/app/outputs/apk/release/app-release.apk
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/app/outputs/apk/release/app-release.apk
+          asset_name: Zacatrus release
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Release for android on Zacatrus"
