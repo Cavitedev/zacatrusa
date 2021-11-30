@@ -21,11 +21,11 @@ jobs:
       - name: Restore packages
         run: flutter pub get
         
+      - name: Get Version of app
+        uses: NiklasLehnfeld/flutter-version-number-action@main
+        
       - name: Build apk
         run: flutter build apk --release
-      
-      - name: Get Flutter Version
-        uses: its404/get-flutter-version@v1.0.0
       
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@2.2.1
