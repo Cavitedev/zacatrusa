@@ -12,12 +12,6 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
-        
-      - id: read-version
-        run: |
-          VERSION=`cat ./pubspec.yaml | grep -o 'version:[^:]*' | cut -f2 -d":" | xargs`
-          echo "::set-output name=version::$(echo $VERSION)"
-        shell: bash
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v1.5.3
         with:
@@ -27,6 +21,13 @@ jobs:
         
       - name: Build apk
         run: flutter build apk --release
+      
+      - name: Get Version From Pubspec Yaml 
+      - id: read-version
+        run: |
+          VERSION=`cat ./pubspec.yaml | grep -o 'version:[^:]*' | cut -f2 -d":" | xargs`
+          echo "::set-output name=version::$(echo $VERSION)"
+        shell: bash
       
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@2.2.1
