@@ -66,9 +66,10 @@ class MyApp extends ConsumerWidget {
               ref.watch(settingsFontFamilyControllerProvider),
               const TextTheme(
                 headline6: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                headline5: TextStyle(fontSize: 24),
-                headline4: TextStyle(fontSize: 28),
-                headline3: TextStyle(fontSize: 36, letterSpacing: 0.5),
+                headline5: TextStyle(fontSize: 24, color: Colors.black),
+                headline4: TextStyle(fontSize: 28, color: Colors.black),
+                headline3: TextStyle(
+                    fontSize: 36, letterSpacing: 0.5, color: Colors.black),
                 headline2: TextStyle(fontSize: 44, letterSpacing: 1),
               ))),
     );

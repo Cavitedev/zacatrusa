@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/qr_dialog.dart';
 
 import '../../../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../../../zacatrus/domain/details_page/game_overview_details.dart';
@@ -74,7 +75,16 @@ class PurchasePage extends StatelessWidget {
                         tooltip: "Compartir link",
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return QRDialog(
+                                  qrContent: overview.link,
+                                  websiteName: "Zacatrus",
+                                );
+                              });
+                        },
                         icon: const Icon(Icons.qr_code_2),
                         iconSize: 36,
                         tooltip: "Compartir link a través de QR",
