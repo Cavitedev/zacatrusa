@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../../constants/app_margins_and_sizes.dart';
@@ -57,6 +58,26 @@ class PurchasePage extends StatelessWidget {
                         child: const Text(
                           "Página del producto",
                         ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Share.share(overview.link,
+                              subject: "Zacatrus link a " + overview.name);
+                        },
+                        icon: const Icon(Icons.share),
+                        iconSize: 36,
+                        tooltip: "Compartir link",
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.qr_code_2),
+                        iconSize: 36,
+                        tooltip: "Compartir link a través de QR",
                       )
                     ],
                   )
