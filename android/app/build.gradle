@@ -42,7 +42,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.cavitedev.zacatrusa"
         minSdkVersion 21
         targetSdkVersion 31
@@ -56,8 +55,6 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing settings for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
         }
     }
@@ -76,9 +73,11 @@ android {
             android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
             android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
         } else {
+            project.logger.lifecycle('No release config, signign.properties did not contain all data')
             android.buildTypes.release.signingConfig = null
         }
     }else {
+        project.logger.lifecycle('No release config, signign.properties could not be read')
         android.buildTypes.release.signingConfig = null
     }
 
