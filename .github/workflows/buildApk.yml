@@ -39,8 +39,8 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: ZacatrusApp.apk
-          release_name: "Zacatrus Android"
+          asset_name: ZacatrusaApp.apk
+          release_name: "Zacatrusa Android"
           tag: ${{ steps.read_version.outputs.version }}
           overwrite: true
           body: "Aplicación en Android de Zacatrusa"
