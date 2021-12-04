@@ -6,7 +6,7 @@ on:
   
 
 jobs:
-  tests:
+  build_apk:
     runs-on: ubuntu-latest
     env:
      Keystore: ${{ secrets.KEYSTORE }}
