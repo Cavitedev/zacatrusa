@@ -38,10 +38,10 @@ jobs:
         uses: svenstaro/upload-release-action@2.2.1
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/app/outputs/apk/release/app-release.apk
+          file: build/app/outputs/flutter-apk/app-release.apk
           asset_name: ZacatrusApp.apk
           release_name: "Zacatrus Android"
           tag: ${{ steps.read_version.outputs.version }}
           overwrite: true
-          body: "Aplicación en Android de Zacatrus"
+          body: "Aplicación en Android de Zacatrusa"
       
