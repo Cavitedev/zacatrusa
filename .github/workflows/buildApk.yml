@@ -2,16 +2,22 @@ name: Build apk and upload to github
 
 on:
   push:
-    branches: [master, Automatization_Feature] #Testing in this branch
+    branches: [master, bugfix-android_signing] #Testing in this branch
   
 
 jobs:
   tests:
     runs-on: ubuntu-latest
-
+    env:
+     Keystore: ${{ secrets.KEYSTORE }}
+     Signing: ${{ secrets.SIGNING_PROPERTIES }}
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: Move Signing Properties to project
+        run: echo "$Signing" | base64 -d > ./android/signing.properties
+      - name: Move keystore to project
+        run: echo "$Keystore" | base64 -d > ./android/CaviKeystore.jks
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v1.5.3
         with:
