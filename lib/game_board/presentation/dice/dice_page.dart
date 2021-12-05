@@ -35,8 +35,6 @@ class _DicePageState extends State<DicePage> {
       detector = ShakeDetector.waitForStart(onPhoneShake: _rollDice);
       detector.startListening();
     }
-
-    ShakeDetector.autoStart(onPhoneShake: _rollDice);
   }
 
   @override
@@ -48,7 +46,9 @@ class _DicePageState extends State<DicePage> {
   }
 
   Future<void> _checkVibration() async {
-    canVibrate = await Vibrate.canVibrate;
+    if (Platform.isAndroid || Platform.isIOS) {
+      canVibrate = await Vibrate.canVibrate;
+    }
   }
 
   @override
