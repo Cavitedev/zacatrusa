@@ -6,7 +6,7 @@ class Dices {
   List<Dice> dices;
   Random random = Random();
 
-  DicesResult throwDice(int amount) {
+  DicesResult throwDices() {
     List<DiceResult> results =
         dices.map((dice) => dice.throwDice(random)).toList();
     return DicesResult(dicesResult: results);
