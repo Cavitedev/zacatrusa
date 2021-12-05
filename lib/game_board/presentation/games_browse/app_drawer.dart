@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../constants/app_constants.dart';
 import '../../../constants/color_x.dart';
@@ -43,7 +44,7 @@ class AppDrawer extends ConsumerWidget {
           ListTile(
             title: Text(
               "Dado",
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline5,
             ),
             leading: Text(
               "🎲",
@@ -57,8 +58,21 @@ class AppDrawer extends ConsumerWidget {
           ),
           ListTile(
             title: Text(
+              "Compartir app",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            leading: const Icon(
+              Icons.share,
+              size: 32,
+            ),
+            onTap: () {
+              Share.share(appWebsiteDownload);
+            },
+          ),
+          ListTile(
+            title: Text(
               "Ajustes",
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline5,
             ),
             leading: const Icon(
               Icons.settings,
@@ -72,7 +86,7 @@ class AppDrawer extends ConsumerWidget {
           ListTile(
             title: Text(
               "Salir",
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline5,
             ),
             leading: const Icon(
               Icons.exit_to_app,
