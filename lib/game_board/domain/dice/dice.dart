@@ -11,6 +11,10 @@ class Dices {
         dices.map((dice) => dice.throwDice(random)).toList();
     return DicesResult(dicesResult: results);
   }
+
+  int dicesWithFaces(int faces) {
+    return dices.where((dice) => dice.faces == faces).length;
+  }
 }
 
 class Dice {
@@ -23,19 +27,38 @@ class Dice {
   DiceResult throwDice(Random random) {
     return DiceResult(
       result: random.nextInt(faces) + 1,
-      faces: faces,
+      dice: this,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Dice && runtimeType == other.runtimeType && faces == other.faces;
+
+  @override
+  int get hashCode => faces.hashCode;
 }
 
 class DiceResult {
   int result;
-  int faces;
+  final Dice dice;
 
   DiceResult({
     required this.result,
-    required this.faces,
+    required this.dice,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DiceResult &&
+          runtimeType == other.runtimeType &&
+          result == other.result &&
+          dice == other.dice;
+
+  @override
+  int get hashCode => result.hashCode ^ dice.hashCode;
 }
 
 class DicesResult {

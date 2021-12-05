@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:shake/shake.dart';
 
@@ -60,32 +59,7 @@ class _DicePageState extends State<DicePage> {
             padding: const EdgeInsets.fromLTRB(
                 generalPadding, generalPadding, generalPadding, 0),
             sliver: SliverToBoxAdapter(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Amount of dices",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  const SizedBox(
-                    width: separatorPadding,
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: TextField(
-                      keyboardType: TextInputType.phone,
-                      autocorrect: false,
-                      maxLength: 1,
-                      decoration: const InputDecoration(counterText: ""),
-                      onChanged: (text) {
-                        int amount = int.parse(text);
-                        dices.dices =
-                            List.generate(amount, (index) => Dice(faces: 6));
-                      },
-                    ),
-                  )
-                ],
-              ),
+              child: _buildAmountOfDice(faces: 6, minAmount: 1),
             ),
           ),
           const SliverToBoxAdapter(
@@ -130,9 +104,16 @@ class _DicePageState extends State<DicePage> {
                 children: <Widget>[
                   const Expanded(child: SizedBox()),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: ElevatedButton(
-                        onPressed: _rollDice, child: const Text("🎲")),
+                      onPressed: _rollDice,
+                      child: Container(
+                        padding: const EdgeInsets.all(16.0),
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        child: const Text("🎲 Tirar Dados"),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -143,6 +124,41 @@ class _DicePageState extends State<DicePage> {
     );
   }
 
+  NumberArrowsField _buildAmountOfDice({
+    required int faces,
+    int minAmount = 0,
+    int maxAmount = 9,
+  }) {
+    return NumberArrowsField(
+      minAmount: minAmount,
+      maxAmount: maxAmount,
+      currentAmount: dices.dicesWithFaces(faces),
+      onAmountChange: (isIncreasing) {
+        if (isIncreasing) {
+          Dice newDice = Dice(faces: faces);
+          setState(() {
+            dices.dices.add(newDice);
+            if (dicesResult != null) {
+              dicesResult!.dicesResult
+                  .add(DiceResult(result: 0, dice: newDice));
+            }
+          });
+        } else {
+          setState(() {
+            int indexToRemoveDice =
+                dices.dices.lastIndexWhere((dice) => dice.faces == faces);
+            dices.dices.removeAt(indexToRemoveDice);
+            if (dicesResult != null) {
+              int indexToRemoveResult = dicesResult!.dicesResult.lastIndexWhere(
+                  (diceResult) => diceResult.dice.faces == faces);
+              dicesResult!.dicesResult.removeAt(indexToRemoveResult);
+            }
+          });
+        }
+      },
+    );
+  }
+
   void _rollDice() async {
     setState(() {
       dicesResult = dices.throwDices();
@@ -150,6 +166,84 @@ class _DicePageState extends State<DicePage> {
     if (canVibrate) {
       Vibrate.vibrate();
     }
+  }
+}
+
+class NumberArrowsField extends StatefulWidget {
+  const NumberArrowsField({
+    required this.minAmount,
+    required this.maxAmount,
+    required this.currentAmount,
+    required this.onAmountChange,
+    Key? key,
+  }) : super(key: key);
+
+  final int minAmount;
+  final int maxAmount;
+  final int currentAmount;
+  final Function(bool increasing) onAmountChange;
+
+  @override
+  State<NumberArrowsField> createState() => _NumberArrowsFieldState();
+}
+
+class _NumberArrowsFieldState extends State<NumberArrowsField> {
+  late int _currentAmount;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentAmount = widget.currentAmount;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          "Cantidad de dados",
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+        const SizedBox(
+          width: separatorPadding,
+        ),
+        IconButton(
+          onPressed: () {
+            if (_currentAmount == widget.minAmount) {
+              return;
+            }
+            setState(() {
+              _currentAmount--;
+            });
+            widget.onAmountChange(false);
+          },
+          icon: const Icon(Icons.chevron_left),
+          splashRadius: 16,
+          padding: const EdgeInsets.all(4),
+          tooltip: "Restar 1 dado",
+        ),
+        Text(
+          widget.currentAmount.toString(),
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+        IconButton(
+          onPressed: () {
+            if (_currentAmount == widget.maxAmount) {
+              return;
+            }
+            setState(() {
+              _currentAmount++;
+            });
+            widget.onAmountChange(true);
+          },
+          icon: const Icon(Icons.chevron_right),
+          splashRadius: 16,
+          padding: const EdgeInsets.all(4),
+          tooltip: "Añadir un dado",
+        ),
+      ],
+    );
   }
 }
 
