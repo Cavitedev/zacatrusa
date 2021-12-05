@@ -221,7 +221,7 @@ class _NumberArrowsFieldState extends State<NumberArrowsField> {
           icon: const Icon(Icons.chevron_left),
           splashRadius: 16,
           padding: const EdgeInsets.all(4),
-          tooltip: "Restar 1 dado",
+          tooltip: "Restar un dado",
         ),
         Text(
           widget.currentAmount.toString(),
