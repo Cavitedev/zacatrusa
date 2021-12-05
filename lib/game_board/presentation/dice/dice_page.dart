@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:shake/shake.dart';
 
 import '../../../constants/app_margins_and_sizes.dart';
 import '../../../constants/color_x.dart';
@@ -12,8 +15,37 @@ class DicePage extends StatefulWidget {
 }
 
 class _DicePageState extends State<DicePage> {
-  Dices dices = Dices(dices: []);
+  late Dices dices;
   DicesResult? dicesResult;
+
+  bool canVibrate = false;
+
+  late ShakeDetector detector;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkVibration();
+
+    dices = Dices(dices: [Dice(faces: 6)]);
+    _rollDice();
+
+    detector = ShakeDetector.waitForStart(onPhoneShake: _rollDice);
+
+    detector.startListening();
+
+    ShakeDetector.autoStart(onPhoneShake: _rollDice);
+  }
+
+  @override
+  void dispose() {
+    detector.stopListening();
+    super.dispose();
+  }
+
+  Future<void> _checkVibration() async {
+    canVibrate = await Vibrate.canVibrate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +100,7 @@ class _DicePageState extends State<DicePage> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Total ${dicesResult?.total ?? 0}",
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.headline4,
                 ),
               ),
             ),
@@ -76,7 +108,7 @@ class _DicePageState extends State<DicePage> {
           if (dicesResult != null)
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: generalPadding, vertical: 36),
+                  horizontal: generalPadding, vertical: 24),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 100,
@@ -100,12 +132,7 @@ class _DicePageState extends State<DicePage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            dicesResult = dices.throwDices();
-                          });
-                        },
-                        child: const Text("🎲")),
+                        onPressed: _rollDice, child: const Text("🎲")),
                   ),
                 ],
               ),
@@ -114,6 +141,15 @@ class _DicePageState extends State<DicePage> {
         ],
       ),
     );
+  }
+
+  void _rollDice() async {
+    setState(() {
+      dicesResult = dices.throwDices();
+    });
+    if (canVibrate) {
+      Vibrate.vibrate();
+    }
   }
 }
 
@@ -147,7 +183,7 @@ class DiceResultWidget extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               diceResult.result.toString(),
-              style: Theme.of(context).textTheme.headline4!.copyWith(
+              style: Theme.of(context).textTheme.headline3!.copyWith(
                   color: Theme.of(context)
                       .primaryColor
                       .textColorForThisBackground()),

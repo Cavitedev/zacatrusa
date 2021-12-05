@@ -49,6 +49,8 @@ dependencies:
   google_fonts: ^2.1.0
   share_plus: ^3.0.4
   qr_flutter: ^4.0.0
+  shake: ^2.0.0
+  flutter_vibrate: ^1.3.0
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
