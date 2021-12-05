@@ -2,11 +2,12 @@ name: Build apk and upload to github
 
 on:
   push:
-    branches: [master, bugfix-android_signing] #Testing in this branch
+    branches: [master]
   
 
 jobs:
   build_apk:
+    environment: release
     runs-on: ubuntu-latest
     env:
      Keystore: ${{ secrets.KEYSTORE }}
@@ -16,7 +17,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Move Signing Properties to project
         run: echo "$Signing" | base64 -d > ./android/signing.properties
-      - run: wc ./android/signing.properties
       - name: Move keystore to project
         run: echo "$Keystore" | base64 -d > ./android/CaviKeystore.jks
       - name: Install and set Flutter version
