@@ -65,6 +65,15 @@ class _GamesBrowseSliverAppBarState
       actions: [
         IconButton(
           onPressed: () {
+            ref.read(browserNotifierProvider.notifier).clear();
+          },
+          icon: const Icon(
+            Icons.refresh,
+          ),
+          tooltip: "Recargar juegos",
+        ),
+        IconButton(
+          onPressed: () {
             _changeIsSearchingState(true);
           },
           icon: const Icon(
