@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:shake/shake.dart';
@@ -29,16 +31,19 @@ class _DicePageState extends State<DicePage> {
     dices = Dices(dices: [Dice(faces: 6)]);
     _rollDice();
 
-    detector = ShakeDetector.waitForStart(onPhoneShake: _rollDice);
-
-    detector.startListening();
+    if (Platform.isAndroid || Platform.isIOS) {
+      detector = ShakeDetector.waitForStart(onPhoneShake: _rollDice);
+      detector.startListening();
+    }
 
     ShakeDetector.autoStart(onPhoneShake: _rollDice);
   }
 
   @override
   void dispose() {
-    detector.stopListening();
+    if (Platform.isAndroid || Platform.isIOS) {
+      detector.stopListening();
+    }
     super.dispose();
   }
 
@@ -278,6 +283,7 @@ class DiceResultWidget extends StatelessWidget {
             child: Text(
               diceResult.result.toString(),
               style: Theme.of(context).textTheme.headline3!.copyWith(
+                  height: 1,
                   color: Theme.of(context)
                       .primaryColor
                       .textColorForThisBackground()),
