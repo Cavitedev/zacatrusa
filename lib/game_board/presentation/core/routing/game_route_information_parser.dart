@@ -27,6 +27,8 @@ class GameRouteInformationParser
 
     if (location.endsWith("settings")) {
       return GamesRoutingConfiguration.settings();
+    } else if (location.endsWith("dice")) {
+      return GamesRoutingConfiguration.dice();
     } else if (location.contains("juegos-de-mesa") ||
         location.contains("catalogsearch")) {
       final ZacatrusUrlBrowserComposer composer =
@@ -48,6 +50,8 @@ class GameRouteInformationParser
               configuration.filterComposer?.buildUrl().removeDomain() ?? "");
     } else if (configuration.settings == true) {
       return const RouteInformation(location: "settings");
+    } else if (configuration.dice == true) {
+      return const RouteInformation(location: "dice");
     }
     return RouteInformation(location: configuration.detailsGameUrl!);
   }

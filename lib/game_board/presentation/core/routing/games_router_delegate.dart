@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zacatrusa/game_board/presentation/dice/dice_page.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
 import 'package:zacatrusa/settings/media_query.dart';
 
@@ -68,6 +69,8 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
           if (_currentConf.settings)
             const MaterialPage(
                 key: ValueKey("Settings"), child: SettingsPage()),
+          if (_currentConf.dice)
+            const MaterialPage(key: ValueKey("Dice"), child: DicePage()),
           if (_currentConf.imageLoaded != null)
             MaterialPage(
                 key: ValueKey("Image ${_currentConf.imageLoaded}"),
@@ -96,6 +99,11 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
       return true;
     } else if (_currentConf.settings == true) {
       _currentConf.settings = false;
+      _loadInitHomeIfNeeded();
+      notifyListeners();
+      return true;
+    } else if (_currentConf.dice == true) {
+      _currentConf.dice = false;
       _loadInitHomeIfNeeded();
       notifyListeners();
       return true;

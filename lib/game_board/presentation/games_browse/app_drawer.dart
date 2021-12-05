@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zacatrusa/constants/color_x.dart';
 
 import '../../../constants/app_constants.dart';
+import '../../../constants/color_x.dart';
 import '../core/routing/games_router_delegate.dart';
 
 class AppDrawer extends ConsumerWidget {
@@ -39,6 +39,21 @@ class AppDrawer extends ConsumerWidget {
                 ),
               ),
             ),
+          ),
+          ListTile(
+            title: Text(
+              "Dado",
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            leading: Text(
+              "🎲",
+              style: TextStyle(
+                  fontSize: 32 / MediaQuery.textScaleFactorOf(context)),
+            ),
+            onTap: () {
+              final router = ref.read(gamesRouterDelegateProvider);
+              router.currentConf = router.currentConf.copyWith(dice: true);
+            },
           ),
           ListTile(
             title: Text(

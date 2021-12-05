@@ -7,6 +7,7 @@ const double innerElementsPadding = 4;
 const double generalPadding = 12;
 const double innerTablePadding = 4;
 const double containerPadding = 8;
+const double separatorPadding = 8;
 
 const double mediumIconSize = 36;
 

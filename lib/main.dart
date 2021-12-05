@@ -55,6 +55,7 @@ class MyApp extends ConsumerWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             fillColor: Colors.black12,
             isDense: true,
+            contentPadding: EdgeInsets.fromLTRB(12, 12, 6, 12),
           ),
           dialogTheme: const DialogTheme(
               shape: RoundedRectangleBorder(
