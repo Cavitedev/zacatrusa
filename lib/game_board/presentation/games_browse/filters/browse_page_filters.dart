@@ -234,31 +234,33 @@ class _GameBrowseFiltersState extends ConsumerState<BrowsePageFilters>
           ),
           Padding(
             padding: const EdgeInsets.all(generalPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Cancelar"),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Theme.of(context).primaryColor,
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                ElevatedButton(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Wrap(
+                children: [
+                  ElevatedButton(
                     onPressed: () {
-                      ref
-                          .read(browserNotifierProvider.notifier)
-                          .changeFilters(urlComposer);
                       Navigator.pop(context);
                     },
-                    child: const Text("Aceptar"))
-              ],
+                    child: const Text("Cancelar"),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        ref
+                            .read(browserNotifierProvider.notifier)
+                            .changeFilters(urlComposer);
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Aceptar"))
+                ],
+              ),
             ),
           )
         ],
