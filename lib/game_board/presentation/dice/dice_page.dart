@@ -21,10 +21,11 @@ class _DicePageState extends State<DicePage> {
       appBar: AppBar(
         title: Text("Dado"),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Row(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
@@ -50,44 +51,43 @@ class _DicePageState extends State<DicePage> {
                 )
               ],
             ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
+            SizedBox(
               height: 10,
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 "Total ${dicesResult?.total ?? 0}",
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
-          ),
-          if (dicesResult != null)
-            SliverGrid(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 100,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
+            if (dicesResult != null)
+              Center(
+                child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 100,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                    ),
+                    itemBuilder: (context, index) {
+                      return DiceResultWidget(
+                        diceResult: dicesResult!.dicesResult[index],
+                      );
+                    },
+                    itemCount: dicesResult!.dicesResult.length),
               ),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return DiceResultWidget(
-                  diceResult: dicesResult!.dicesResult[index],
-                );
-              }, childCount: dicesResult!.dicesResult.length),
-            ),
-          SliverToBoxAdapter(
-            child: ElevatedButton(
+            ElevatedButton(
                 onPressed: () {
                   setState(() {
                     dicesResult = dices.throwDices();
                   });
                 },
-                child: const Text("🎲")),
-          )
-        ],
+                child: const Text("🎲"))
+          ],
+        ),
       ),
     );
   }
