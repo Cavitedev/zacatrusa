@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../constants/app_constants.dart';
@@ -15,92 +16,99 @@ class AppDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Drawer(
-      semanticLabel: "Navegación de $appName",
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Semantics(
-              label: "Título de la navegación",
-              onTap: () {
-                Navigator.pop(context);
-              },
-              onTapHint: "Salir de la navegación",
-              child: ExcludeSemantics(
-                child: Text(
-                  appName,
-                  style: Theme.of(context).textTheme.headline2!.copyWith(
-                      color: Theme.of(context)
-                          .primaryColor
-                          .textColorForThisBackground()),
+    return SizedBox(
+      width: ResponsiveValue(context, defaultValue: 250.0, valueWhen: [
+        const Condition.largerThan(name: MOBILE, value: 350.0)
+      ]).value,
+      child: Drawer(
+        semanticLabel: "Navegación de $appName",
+        child: ListView(
+          padding: EdgeInsets.zero,
+          primary: false,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Semantics(
+                label: "Título de la navegación",
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                onTapHint: "Salir de la navegación",
+                child: ExcludeSemantics(
+                  child: Text(
+                    appName,
+                    style: Theme.of(context).textTheme.headline2!.copyWith(
+                        color: Theme.of(context)
+                            .primaryColor
+                            .textColorForThisBackground()),
+                  ),
                 ),
               ),
             ),
-          ),
-          ListTile(
-            title: Text(
-              "Dado",
-              style: Theme.of(context).textTheme.headline5,
+            ListTile(
+              title: Text(
+                "Dado",
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              leading: Text(
+                "🎲",
+                style: TextStyle(
+                    fontSize: 32 / MediaQuery.textScaleFactorOf(context)),
+              ),
+              onTap: () {
+                final router = ref.read(gamesRouterDelegateProvider);
+                router.currentConf = router.currentConf.copyWith(dice: true);
+              },
             ),
-            leading: Text(
-              "🎲",
-              style: TextStyle(
-                  fontSize: 32 / MediaQuery.textScaleFactorOf(context)),
+            ListTile(
+              title: Text(
+                "Compartir app",
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              leading: const Icon(
+                Icons.share,
+                size: 32,
+              ),
+              onTap: () {
+                Share.share(appWebsiteDownload);
+              },
             ),
-            onTap: () {
-              final router = ref.read(gamesRouterDelegateProvider);
-              router.currentConf = router.currentConf.copyWith(dice: true);
-            },
-          ),
-          ListTile(
-            title: Text(
-              "Compartir app",
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            leading: const Icon(
-              Icons.share,
-              size: 32,
-            ),
-            onTap: () {
-              Share.share(appWebsiteDownload);
-            },
-          ),
-          ListTile(
-            title: Text(
-              "Ajustes",
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            leading: const Icon(
-              Icons.settings,
-              size: 32,
-            ),
-            onTap: () {
-              final router = ref.read(gamesRouterDelegateProvider);
-              router.currentConf = router.currentConf.copyWith(settings: true);
-            },
-          ), //
-          ListTile(
-            title: Text(
-              "Salir",
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            leading: const Icon(
-              Icons.exit_to_app,
-              size: 32,
-            ),
-            onTap: () {
-              if (Platform.isAndroid) {
-                SystemNavigator.pop();
-              } else {
-                exit(0);
-              }
-            },
-          ) // O
-        ],
+            ListTile(
+              title: Text(
+                "Ajustes",
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              leading: const Icon(
+                Icons.settings,
+                size: 32,
+              ),
+              onTap: () {
+                final router = ref.read(gamesRouterDelegateProvider);
+                router.currentConf =
+                    router.currentConf.copyWith(settings: true);
+              },
+            ), //
+            ListTile(
+              title: Text(
+                "Salir",
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              leading: const Icon(
+                Icons.exit_to_app,
+                size: 32,
+              ),
+              onTap: () {
+                if (Platform.isAndroid) {
+                  SystemNavigator.pop();
+                } else {
+                  exit(0);
+                }
+              },
+            ) // O
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:window_size/window_size.dart';
 
 import 'constants/app_constants.dart';
@@ -44,6 +46,16 @@ class MyApp extends ConsumerWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
+      builder: (context, widget) {
+        return ResponsiveWrapper.builder(
+            ClampingScrollWrapper.builder(context, widget!),
+            breakpoints: const [
+              ResponsiveBreakpoint.resize(250, name: MOBILE),
+              ResponsiveBreakpoint.resize(400, name: PHONE),
+              ResponsiveBreakpoint.resize(600, name: TABLET),
+              ResponsiveBreakpoint.resize(800, name: DESKTOP),
+            ]);
+      },
       theme: ThemeData(
           primarySwatch: ref.watch(settingsPrimaryColorControllerProvider),
           errorColor: Colors.redAccent.shade400,
@@ -55,7 +67,7 @@ class MyApp extends ConsumerWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             fillColor: Colors.black12,
             isDense: true,
-            contentPadding: EdgeInsets.fromLTRB(12, 12, 6, 12),
+            contentPadding: const EdgeInsets.fromLTRB(12, 12, 6, 12),
           ),
           dialogTheme: const DialogTheme(
               shape: RoundedRectangleBorder(
