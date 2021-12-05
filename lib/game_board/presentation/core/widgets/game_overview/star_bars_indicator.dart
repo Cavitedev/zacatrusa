@@ -31,7 +31,11 @@ class StarsBarIndicator extends StatelessWidget {
               valueWhen: [
                 Condition.largerThan(
                     name: MOBILE,
-                    value: 24.0 * MediaQuery.textScaleFactorOf(context))
+                    value: min(
+                        36.0, 24.0 * MediaQuery.textScaleFactorOf(context))),
+                 Condition.largerThan(
+                    name: PHONE,
+                    value: 24.0 * MediaQuery.textScaleFactorOf(context)),
               ]).value!,
         ),
       ),

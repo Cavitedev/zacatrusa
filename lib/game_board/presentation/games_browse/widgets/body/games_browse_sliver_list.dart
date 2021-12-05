@@ -4,6 +4,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../../core/optional.dart';
@@ -52,7 +53,11 @@ class ListGameItem extends ConsumerWidget {
                 ExtendedImage.network(
                   game.image!.imageLink!,
                   fit: BoxFit.fill,
-                  width: min(200, MediaQuery.of(context).size.width / 2.2),
+                  width: min(
+                      ResponsiveValue(context, defaultValue: 200.0, valueWhen: [
+                        const Condition.largerThan(name: PHONE, value: 250.0),
+                      ]).value!,
+                      MediaQuery.of(context).size.width / 2.2),
                 ),
               Flexible(
                 child: Semantics(
