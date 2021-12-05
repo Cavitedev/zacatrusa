@@ -23,12 +23,9 @@ class GamesBrowseSliverGrid extends StatelessWidget {
     double textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     final double mainAxisExtent =
-        MediaQuery.of(context).textScaleFactor * 85 + 200;
+        MediaQuery.of(context).textScaleFactor * 90 + 200;
 
-    double maxCrossAxis = 256;
-    if (textScaleFactor > 1.5) {
-      maxCrossAxis = 320;
-    }
+    double maxCrossAxis = 256 * textScaleFactor;
 
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class StarsBarIndicator extends StatelessWidget {
   const StarsBarIndicator({
@@ -22,7 +25,14 @@ class StarsBarIndicator extends StatelessWidget {
             color: Colors.amber,
           ),
           rating: stars,
-          itemSize: 25.0,
+          itemSize: ResponsiveValue<double>(context,
+              defaultValue:
+                  min(24.0, 24.0 * MediaQuery.textScaleFactorOf(context)),
+              valueWhen: [
+                Condition.largerThan(
+                    name: MOBILE,
+                    value: 24.0 * MediaQuery.textScaleFactorOf(context))
+              ]).value!,
         ),
       ),
     );

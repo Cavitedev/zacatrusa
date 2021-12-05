@@ -38,7 +38,10 @@ class PurchasePage extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (overview.stars != null)
-                        StarsBarIndicator(stars: overview.stars!),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                          child: StarsBarIndicator(stars: overview.stars!),
+                        ),
                       if (overview.price != null)
                         PriceText(price: overview.price!)
                     ],
