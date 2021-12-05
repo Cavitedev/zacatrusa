@@ -18,88 +18,112 @@ class _DicePageState extends State<DicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Dado"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Amount of dices",
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                const SizedBox(
-                  width: separatorPadding,
-                ),
-                SizedBox(
-                  width: 50,
-                  child: TextField(
-                    keyboardType: TextInputType.phone,
-                    autocorrect: false,
-                    maxLength: 1,
-                    decoration: const InputDecoration(counterText: ""),
-                    onChanged: (text) {
-                      int amount = int.parse(text);
-                      dices.dices =
-                          List.generate(amount, (index) => Dice(faces: 6));
-                    },
+      body: CustomScrollView(
+        physics: const PageScrollPhysics(),
+        slivers: [
+          const SliverAppBar(
+            title: Text("Dado"),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+                generalPadding, generalPadding, generalPadding, 0),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Amount of dices",
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
-                )
-              ],
+                  const SizedBox(
+                    width: separatorPadding,
+                  ),
+                  SizedBox(
+                    width: 50,
+                    child: TextField(
+                      keyboardType: TextInputType.phone,
+                      autocorrect: false,
+                      maxLength: 1,
+                      decoration: const InputDecoration(counterText: ""),
+                      onChanged: (text) {
+                        int amount = int.parse(text);
+                        dices.dices =
+                            List.generate(amount, (index) => Dice(faces: 6));
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
-            SizedBox(
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(
               height: 10,
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Total ${dicesResult?.total ?? 0}",
-                style: Theme.of(context).textTheme.headline6,
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: generalPadding),
+            sliver: SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Total ${dicesResult?.total ?? 0}",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ),
             ),
-            if (dicesResult != null)
-              Center(
-                child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 100,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                    ),
-                    itemBuilder: (context, index) {
-                      return DiceResultWidget(
-                        diceResult: dicesResult!.dicesResult[index],
-                      );
-                    },
-                    itemCount: dicesResult!.dicesResult.length),
+          ),
+          if (dicesResult != null)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: generalPadding, vertical: 36),
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 100,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return DiceResultWidget(
+                    diceResult: dicesResult!.dicesResult[index],
+                  );
+                }, childCount: dicesResult!.dicesResult.length),
               ),
-            ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    dicesResult = dices.throwDices();
-                  });
-                },
-                child: const Text("🎲"))
-          ],
-        ),
+            ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const Expanded(child: SizedBox()),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            dicesResult = dices.throwDices();
+                          });
+                        },
+                        child: const Text("🎲")),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
 }
 
 class DiceResultWidget extends StatelessWidget {
-  DiceResultWidget({
+  const DiceResultWidget({
     required this.diceResult,
     Key? key,
   }) : super(key: key);
 
-  DiceResult diceResult;
+  final DiceResult diceResult;
 
   @override
   Widget build(BuildContext context) {
