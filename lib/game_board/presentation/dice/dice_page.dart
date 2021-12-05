@@ -132,7 +132,7 @@ class _DicePageState extends State<DicePage> {
   NumberArrowsField _buildAmountOfDice({
     required int faces,
     int minAmount = 0,
-    int maxAmount = 9,
+    int maxAmount = 12,
   }) {
     return NumberArrowsField(
       minAmount: minAmount,
