@@ -49,6 +49,8 @@ class MyApp extends ConsumerWidget {
       builder: (context, widget) {
         return ResponsiveWrapper.builder(
             ClampingScrollWrapper.builder(context, widget!),
+            mediaQueryData: MediaQuery.of(context).copyWith(
+                textScaleFactor: ref.watch(settingsFontSizeControllerProvider)),
             breakpoints: const [
               ResponsiveBreakpoint.resize(250, name: MOBILE),
               ResponsiveBreakpoint.resize(400, name: PHONE),
@@ -84,6 +86,13 @@ class MyApp extends ConsumerWidget {
                 headline3: TextStyle(
                     fontSize: 36, letterSpacing: 0.5, color: Colors.black),
                 headline2: TextStyle(fontSize: 44, letterSpacing: 1),
+                bodyText1: TextStyle(height: 1),
+                bodyText2: TextStyle(height: 1),
+                caption: TextStyle(height: 1),
+                button: TextStyle(height: 1),
+                overline: TextStyle(height: 1),
+                subtitle1: TextStyle(height: 1),
+                subtitle2: TextStyle(height: 1),
               ))),
     );
   }

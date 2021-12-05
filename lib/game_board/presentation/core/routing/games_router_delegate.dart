@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zacatrusa/game_board/presentation/dice/dice_page.dart';
 import 'package:zacatrusa/game_board/zacatrus/domain/url/zacatrus_url_composer.dart';
-import 'package:zacatrusa/settings/media_query.dart';
 
 import '../../../application/browser/browser_notifier.dart';
 import '../../game_details/game_details.dart';
@@ -55,38 +54,34 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
 
   @override
   Widget build(BuildContext context) {
-    return UpdatedMediaQuery(
-      child: Navigator(
-        pages: [
+    return Navigator(
+      pages: [
+        MaterialPage(key: const ValueKey("Games Browse"), child: GamesBrowse()),
+        if (_currentConf.detailsGameUrl != null)
           MaterialPage(
-              key: const ValueKey("Games Browse"), child: GamesBrowse()),
-          if (_currentConf.detailsGameUrl != null)
-            MaterialPage(
-                key: ValueKey(_currentConf.detailsGameUrl),
-                child: GameDetails(
-                  url: _currentConf.detailsGameUrl!,
-                )),
-          if (_currentConf.settings)
-            const MaterialPage(
-                key: ValueKey("Settings"), child: SettingsPage()),
-          if (_currentConf.dice)
-            const MaterialPage(key: ValueKey("Dice"), child: DicePage()),
-          if (_currentConf.imageLoaded != null)
-            MaterialPage(
-                key: ValueKey("Image ${_currentConf.imageLoaded}"),
-                child: SlidePage(
-                  url: _currentConf.imageLoaded?.imageLink,
-                  semantics: _currentConf.imageLoaded?.imageAlt,
-                ))
-        ],
-        onPopPage: (route, result) {
-          if (!route.didPop(result)) {
-            return false;
-          }
+              key: ValueKey(_currentConf.detailsGameUrl),
+              child: GameDetails(
+                url: _currentConf.detailsGameUrl!,
+              )),
+        if (_currentConf.settings)
+          const MaterialPage(key: ValueKey("Settings"), child: SettingsPage()),
+        if (_currentConf.dice)
+          const MaterialPage(key: ValueKey("Dice"), child: DicePage()),
+        if (_currentConf.imageLoaded != null)
+          MaterialPage(
+              key: ValueKey("Image ${_currentConf.imageLoaded}"),
+              child: SlidePage(
+                url: _currentConf.imageLoaded?.imageLink,
+                semantics: _currentConf.imageLoaded?.imageAlt,
+              ))
+      ],
+      onPopPage: (route, result) {
+        if (!route.didPop(result)) {
+          return false;
+        }
 
-          return onPopRoute();
-        },
-      ),
+        return onPopRoute();
+      },
     );
   }
 

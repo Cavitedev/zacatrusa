@@ -20,12 +20,19 @@ class GamesBrowseSliverGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double textScaleFactor = MediaQuery.of(context).textScaleFactor;
+
     final double mainAxisExtent =
         MediaQuery.of(context).textScaleFactor * 85 + 200;
 
+    double maxCrossAxis = 256;
+    if (textScaleFactor > 1.5) {
+      maxCrossAxis = 320;
+    }
+
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 256,
+        maxCrossAxisExtent: maxCrossAxis,
         mainAxisExtent: mainAxisExtent,
         mainAxisSpacing: listSpacing,
         crossAxisSpacing: listSpacing,
@@ -74,24 +81,27 @@ class ListGameItem extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        GameName(game: game),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: innerElementsPadding),
+                          child: GameName(game: game),
+                        ),
                         if (game.numberOfReviews != null)
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                5, innerElementsPadding, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                             child: ReviewsNumber(
                               numberReviews: game.numberOfReviews!,
                             ),
                           ),
                         if (game.stars != null)
                           Padding(
-                              padding: const EdgeInsets.only(
-                                  top: innerElementsPadding),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: innerElementsPadding),
                               child: StarsBarIndicator(stars: game.stars!)),
                         if (game.price != null)
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top: innerElementsPadding),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: innerElementsPadding),
                             child: PriceText(price: game.price!),
                           ),
                       ],
@@ -136,7 +146,7 @@ class GameName extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: innerElementsPadding),
       child: Text(
         game.name,
-        style: Theme.of(context).textTheme.headline6,
+        style: Theme.of(context).textTheme.headline6?.copyWith(height: 1.1),
         maxLines: 2,
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,

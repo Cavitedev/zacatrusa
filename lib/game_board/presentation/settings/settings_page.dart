@@ -39,6 +39,8 @@ class SettingsPage extends ConsumerWidget {
                 1.1: "M",
                 1.2: "L",
                 1.4: "XL",
+                1.7: "XXL",
+                2: "XXXL",
               },
               onChanged: (value) {
                 ref.read(settingsControllerProvider).updateFontSize(value);

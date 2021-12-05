@@ -16,9 +16,12 @@ class AppDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double textScaleFactor = MediaQuery.textScaleFactorOf(context);
+    double iconSize = 26 * textScaleFactor;
     return SizedBox(
       width: ResponsiveValue(context, defaultValue: 250.0, valueWhen: [
-        const Condition.largerThan(name: MOBILE, value: 350.0)
+        const Condition.largerThan(name: MOBILE, value: 350.0),
+        const Condition.largerThan(name: TABLET, value: 550.0)
       ]).value,
       child: Drawer(
         semanticLabel: "Navegación de $appName",
@@ -26,80 +29,90 @@ class AppDrawer extends ConsumerWidget {
           padding: EdgeInsets.zero,
           primary: false,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
-              child: Semantics(
-                label: "Título de la navegación",
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                onTapHint: "Salir de la navegación",
-                child: ExcludeSemantics(
-                  child: Text(
-                    appName,
-                    style: Theme.of(context).textTheme.headline2!.copyWith(
-                        color: Theme.of(context)
-                            .primaryColor
-                            .textColorForThisBackground()),
+            SizedBox(
+              height: textScaleFactor > 1.5
+                  ? ResponsiveValue(context, defaultValue: 150.0, valueWhen: [
+                      const Condition.smallerThan(name: DESKTOP, value: 250.0),
+                    ]).value
+                  : 150.0,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Semantics(
+                  label: "Título de la navegación",
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  onTapHint: "Salir de la navegación",
+                  child: ExcludeSemantics(
+                    child: Text(
+                      appName,
+                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                          height: 1.2,
+                          color: Theme.of(context)
+                              .primaryColor
+                              .textColorForThisBackground()),
+                    ),
                   ),
                 ),
               ),
             ),
-            ListTile(
+            CustomDrawerListTile(
+              leading: Text("🎲",
+                  style: TextStyle(
+                      fontSize:
+                          iconSize / MediaQuery.textScaleFactorOf(context))),
               title: Text(
                 "Dado",
                 style: Theme.of(context).textTheme.headline5,
               ),
-              leading: Text(
-                "🎲",
-                style: TextStyle(
-                    fontSize: 32 / MediaQuery.textScaleFactorOf(context)),
-              ),
-              onTap: () {
+              onTapCallback: () {
                 final router = ref.read(gamesRouterDelegateProvider);
                 router.currentConf = router.currentConf.copyWith(dice: true);
               },
             ),
-            ListTile(
+            CustomDrawerListTile(
               title: Text(
                 "Compartir app",
                 style: Theme.of(context).textTheme.headline5,
               ),
-              leading: const Icon(
+              leading: Icon(
                 Icons.share,
-                size: 32,
+                color: Colors.black54,
+                size: iconSize,
               ),
-              onTap: () {
+              onTapCallback: () {
                 Share.share(appWebsiteDownload);
               },
             ),
-            ListTile(
+            CustomDrawerListTile(
               title: Text(
                 "Ajustes",
                 style: Theme.of(context).textTheme.headline5,
               ),
-              leading: const Icon(
+              leading: Icon(
                 Icons.settings,
-                size: 32,
+                color: Colors.black54,
+                size: iconSize,
               ),
-              onTap: () {
+              onTapCallback: () {
                 final router = ref.read(gamesRouterDelegateProvider);
                 router.currentConf =
                     router.currentConf.copyWith(settings: true);
               },
             ), //
-            ListTile(
+            CustomDrawerListTile(
               title: Text(
                 "Salir",
                 style: Theme.of(context).textTheme.headline5,
               ),
-              leading: const Icon(
+              leading: Icon(
                 Icons.exit_to_app,
-                size: 32,
+                color: Colors.black54,
+                size: iconSize,
               ),
-              onTap: () {
+              onTapCallback: () {
                 if (Platform.isAndroid) {
                   SystemNavigator.pop();
                 } else {
@@ -110,6 +123,45 @@ class AppDrawer extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CustomDrawerListTile extends StatelessWidget {
+  const CustomDrawerListTile({
+    required this.leading,
+    required this.title,
+    required this.onTapCallback,
+    Key? key,
+  }) : super(key: key);
+
+  final Widget leading;
+  final Widget title;
+  final Function onTapCallback;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: leading,
+            ),
+            Flexible(child: title)
+          ],
+        ),
+        Positioned.fill(
+            child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    onTapCallback();
+                  },
+                )))
+      ],
     );
   }
 }
