@@ -9,8 +9,7 @@ import 'widgets/body/games_browser_loads.dart';
 import 'widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 
 class GamesBrowse extends ConsumerWidget {
-  GamesBrowse({Key? key}) : super(key: key);
-
+  const GamesBrowse({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
