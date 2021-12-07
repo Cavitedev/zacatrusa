@@ -1,12 +1,12 @@
-import 'package:zacatrusa/game_board/domain/image_data.dart';
-
 import '../../../../core/optional.dart';
+import '../../../domain/image_data.dart';
 import '../../../zacatrus/domain/url/zacatrus_url_composer.dart';
 
 class GamesRoutingConfiguration {
   bool isSearching = false;
   ZacatrusUrlBrowserComposer? filterComposer;
-  bool settings;
+  bool settings = false;
+  bool dice = false;
   String? detailsGameUrl;
   ImageData? imageLoaded;
 
@@ -21,6 +21,8 @@ class GamesRoutingConfiguration {
 
   GamesRoutingConfiguration.settings() : settings = true;
 
+  GamesRoutingConfiguration.dice() : dice = true;
+
   // ZacatrusUrlBrowserComposer? get filterComposer => _filterComposer;
 
   bool isHome() =>
@@ -28,7 +30,7 @@ class GamesRoutingConfiguration {
 
   @override
   String toString() {
-    return 'GamesRoutingConfiguration{filterComposer: $filterComposer, settings: $settings, detailsGame: $detailsGameUrl}';
+    return 'GamesRoutingConfiguration{isSearching: $isSearching, filterComposer: $filterComposer, settings: $settings, dice: $dice, detailsGameUrl: $detailsGameUrl, imageLoaded: $imageLoaded}';
   }
 
   @override
@@ -36,21 +38,26 @@ class GamesRoutingConfiguration {
       identical(this, other) ||
       other is GamesRoutingConfiguration &&
           runtimeType == other.runtimeType &&
+          isSearching == other.isSearching &&
           filterComposer == other.filterComposer &&
           settings == other.settings &&
+          dice == other.dice &&
           detailsGameUrl == other.detailsGameUrl &&
           imageLoaded == other.imageLoaded;
 
   @override
   int get hashCode =>
+      isSearching.hashCode ^
       filterComposer.hashCode ^
       settings.hashCode ^
+      dice.hashCode ^
       detailsGameUrl.hashCode ^
       imageLoaded.hashCode;
 
   GamesRoutingConfiguration copyWith(
       {Optional<ZacatrusUrlBrowserComposer?>? filterComposer,
       bool? settings,
+      bool? dice,
       Optional<String?>? detailsGameUrl,
       Optional<ImageData?>? imageLoaded,
       bool? isSearching}) {
@@ -58,6 +65,7 @@ class GamesRoutingConfiguration {
       filterComposer:
           filterComposer == null ? this.filterComposer : filterComposer.value,
       settings: settings ?? this.settings,
+      dice: dice ?? this.dice,
       detailsGameUrl:
           detailsGameUrl == null ? this.detailsGameUrl : detailsGameUrl.value,
       imageLoaded: imageLoaded == null ? this.imageLoaded : imageLoaded.value,
@@ -68,6 +76,7 @@ class GamesRoutingConfiguration {
   GamesRoutingConfiguration._(
       {this.filterComposer,
       required this.settings,
+      this.dice = false,
       this.detailsGameUrl,
       this.imageLoaded,
       this.isSearching = false});

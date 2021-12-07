@@ -42,7 +42,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.cavitedev.zacatrusa"
         minSdkVersion 21
         targetSdkVersion 31
@@ -50,13 +49,44 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs{
+        release
+    }
+
     buildTypes {
-        release {
-            // TODO: Add your own signing settings for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+
+        debug{
             signingConfig signingConfigs.debug
         }
+
+        release {
+            signingConfig signingConfigs.release
+        }
     }
+
+
+
+    Properties props = new Properties()
+    def propFile = file('../signing.properties')
+    if (propFile.canRead()){
+        props.load(new FileInputStream(propFile))
+
+        if (props!=null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+                props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+            android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+            android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+            android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+
+        } else {
+            project.logger.lifecycle('No release config, signign.properties did not contain all data')
+            android.buildTypes.release.signingConfig = null
+        }
+    }else {
+        project.logger.lifecycle('No release config, signign.properties could not be read')
+        android.buildTypes.release.signingConfig = null
+    }
+
 }
 
 flutter {

@@ -13,6 +13,8 @@ class ReviewsNumber extends StatelessWidget {
     return Text(
       numberReviews.toString() +
           (numberReviews > 1 ? " comentarios" : " comentario"),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: Theme.of(context).textTheme.caption,
     );
   }

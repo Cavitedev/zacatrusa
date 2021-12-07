@@ -74,7 +74,7 @@ class _ImagesCarouselDisplayState extends ConsumerState<ImagesCarouselDisplay> {
                 ),
                 itemBuilder: (context, itemIndex, pageViewIndex) {
                   final item = widget.carousel.items[itemIndex];
-                  return GestureDetector(
+                  return InkWell(
                     child: ImageOfCarousel(item: item),
                     onTap: () {
                       if (item.video != null) {
@@ -132,6 +132,7 @@ class ImageOfCarousel extends StatelessWidget {
             children: [
               ExtendedImage.network(
                 item.image,
+                width: double.infinity,
                 key: ValueKey(item.image),
                 semanticLabel: item.semantics,
               ),

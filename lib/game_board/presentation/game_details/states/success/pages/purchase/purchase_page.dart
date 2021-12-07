@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zacatrusa/game_board/presentation/core/widgets/qr_dialog.dart';
 
 import '../../../../../../../constants/app_margins_and_sizes.dart';
 import '../../../../../../zacatrus/domain/details_page/game_overview_details.dart';
@@ -36,7 +38,10 @@ class PurchasePage extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (overview.stars != null)
-                        StarsBarIndicator(stars: overview.stars!),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                          child: StarsBarIndicator(stars: overview.stars!),
+                        ),
                       if (overview.price != null)
                         PriceText(price: overview.price!)
                     ],
@@ -57,6 +62,35 @@ class PurchasePage extends StatelessWidget {
                         child: const Text(
                           "Página del producto",
                         ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Share.share(overview.link,
+                              subject: "Zacatrus link a " + overview.name);
+                        },
+                        icon: const Icon(Icons.share),
+                        iconSize: 36,
+                        tooltip: "Compartir link",
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return QRDialog(
+                                  qrContent: overview.link,
+                                  websiteName: "Zacatrus",
+                                );
+                              });
+                        },
+                        icon: const Icon(Icons.qr_code_2),
+                        iconSize: 36,
+                        tooltip: "Compartir link a través de QR",
                       )
                     ],
                   )

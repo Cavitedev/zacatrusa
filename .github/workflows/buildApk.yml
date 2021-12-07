@@ -2,16 +2,23 @@ name: Build apk and upload to github
 
 on:
   push:
-    branches: [master, Automatization_Feature] #Testing in this branch
+    branches: [master]
   
 
 jobs:
-  tests:
+  build_apk:
+    environment: release
     runs-on: ubuntu-latest
-
+    env:
+     Keystore: ${{ secrets.KEYSTORE }}
+     Signing: ${{ secrets.SIGNING_PROPERTIES }}
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: Move Signing Properties to project
+        run: echo "$Signing" | base64 -d > ./android/signing.properties
+      - name: Move keystore to project
+        run: echo "$Keystore" | base64 -d > ./android/CaviKeystore.jks
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v1.5.3
         with:
@@ -32,10 +39,10 @@ jobs:
         uses: svenstaro/upload-release-action@2.2.1
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/app/outputs/apk/release/app-release.apk
-          asset_name: ZacatrusApp.apk
-          release_name: "Zacatrus Android"
+          file: build/app/outputs/flutter-apk/app.apk
+          asset_name: ZacatrusaApp.apk
+          release_name: "Zacatrusa Android"
           tag: ${{ steps.read_version.outputs.version }}
           overwrite: true
-          body: "Aplicación en Android de Zacatrus"
+          body: "Aplicación en Android de Zacatrusa"
       

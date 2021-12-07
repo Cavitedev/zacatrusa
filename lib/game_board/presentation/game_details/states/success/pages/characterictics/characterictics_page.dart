@@ -67,7 +67,7 @@ class TableLabelText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(
+      child: SelectableText(
         text,
         style: Theme.of(context).textTheme.subtitle2,
       ),
@@ -84,7 +84,9 @@ class TableDataText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(text),
+      child: SelectableText(
+        text,
+      ),
     );
   }
 }

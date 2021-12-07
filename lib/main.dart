@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:window_size/window_size.dart';
 
 import 'constants/app_constants.dart';
@@ -44,6 +46,18 @@ class MyApp extends ConsumerWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
+      builder: (context, widget) {
+        return ResponsiveWrapper.builder(
+            ClampingScrollWrapper.builder(context, widget!),
+            mediaQueryData: MediaQuery.of(context).copyWith(
+                textScaleFactor: ref.watch(settingsFontSizeControllerProvider)),
+            breakpoints: const [
+              ResponsiveBreakpoint.resize(250, name: MOBILE),
+              ResponsiveBreakpoint.resize(400, name: PHONE),
+              ResponsiveBreakpoint.resize(600, name: TABLET),
+              ResponsiveBreakpoint.resize(800, name: DESKTOP),
+            ]);
+      },
       theme: ThemeData(
           primarySwatch: ref.watch(settingsPrimaryColorControllerProvider),
           errorColor: Colors.redAccent.shade400,
@@ -55,6 +69,7 @@ class MyApp extends ConsumerWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             fillColor: Colors.black12,
             isDense: true,
+            contentPadding: const EdgeInsets.fromLTRB(12, 12, 6, 12),
           ),
           dialogTheme: const DialogTheme(
               shape: RoundedRectangleBorder(
@@ -66,10 +81,18 @@ class MyApp extends ConsumerWidget {
               ref.watch(settingsFontFamilyControllerProvider),
               const TextTheme(
                 headline6: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                headline5: TextStyle(fontSize: 24),
-                headline4: TextStyle(fontSize: 28),
-                headline3: TextStyle(fontSize: 36, letterSpacing: 0.5),
+                headline5: TextStyle(fontSize: 24, color: Colors.black),
+                headline4: TextStyle(fontSize: 28, color: Colors.black),
+                headline3: TextStyle(
+                    fontSize: 36, letterSpacing: 0.5, color: Colors.black),
                 headline2: TextStyle(fontSize: 44, letterSpacing: 1),
+                bodyText1: TextStyle(height: 1),
+                bodyText2: TextStyle(height: 1),
+                caption: TextStyle(height: 1),
+                button: TextStyle(height: 1),
+                overline: TextStyle(height: 1),
+                subtitle1: TextStyle(height: 1),
+                subtitle2: TextStyle(height: 1),
               ))),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../../constants/app_margins_and_sizes.dart';
 
@@ -133,6 +134,9 @@ class _OutlinedTextFieldState extends State<OutlinedTextField> {
                 ? helpText
                 : null,
         prefixIcon: widget.prefixIcon,
+        isDense: ResponsiveValue(context, defaultValue: true, valueWhen: [
+          const Condition.largerThan(name: PHONE, value: false)
+        ]).value,
         suffixIcon: hasText
             ? IconButton(
                 tooltip: "Limpiar el texto: ${textEditingController.text}",
