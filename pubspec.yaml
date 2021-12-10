@@ -40,12 +40,12 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   url_launcher: ^6.0.17
   carousel_slider: ^4.0.0
-  speech_to_text: ^5.2.0
+  speech_to_text: ^5.3.0
   permission_handler: ^8.3.0
   avatar_glow: ^2.0.2
   app_settings: ^4.1.1
   flash: ^2.0.3
-  shared_preferences: ^2.0.9
+  shared_preferences: ^2.0.10
   google_fonts: ^2.1.0
   share_plus: ^3.0.4
   qr_flutter: ^4.0.0
