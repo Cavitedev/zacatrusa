@@ -41,6 +41,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "Bioviva": "bioviva",
     "Blauberry": "blauberry",
     "Blue Orange": "blue_orange",
+    "Brain Picnic": "brain_picnic",
     "Bridge Bandit": "bridge_bandit",
     "Bumble3ee": "bumble3ee",
     "Burning Games": "burning_games",
