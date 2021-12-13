@@ -44,8 +44,8 @@ dependencies:
   permission_handler: ^8.3.0
   avatar_glow: ^2.0.2
   app_settings: ^4.1.1
-  flash: ^2.0.3
-  shared_preferences: ^2.0.10
+  flash: ^2.0.3+1
+  shared_preferences: ^2.0.11
   google_fonts: ^2.1.0
   share_plus: ^3.0.4
   qr_flutter: ^4.0.0
