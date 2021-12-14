@@ -9,14 +9,12 @@ import 'widgets/body/games_browser_loads.dart';
 import 'widgets/sort_list_grid_switcher_row/sort_list_grid_switcher_row.dart';
 
 class GamesBrowse extends ConsumerWidget {
-  GamesBrowse({Key? key}) : super(key: key);
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  const GamesBrowse({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      key: _scaffoldKey,
+      // key: _scaffoldKey,
       drawerEdgeDragWidth: 35,
       drawer: const AppDrawer(),
       body: RefreshIndicator(

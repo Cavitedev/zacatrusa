@@ -56,7 +56,7 @@ class GamesRouterDelegate extends RouterDelegate<GamesRoutingConfiguration>
   Widget build(BuildContext context) {
     return Navigator(
       pages: [
-        MaterialPage(key: const ValueKey("Games Browse"), child: GamesBrowse()),
+        const MaterialPage(key: ValueKey("Games Browse"), child: GamesBrowse()),
         if (_currentConf.detailsGameUrl != null)
           MaterialPage(
               key: ValueKey(_currentConf.detailsGameUrl),

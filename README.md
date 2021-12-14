@@ -1,16 +1,17 @@
-# zacatrusa
+# Zacatrusa
 
-Web scrapping of Zactrus website for mobile applications
+Apliación **no** oficial de Zacatrus con Web Scrapping para la búsqueda de juegos en otras plataformas distintas a web. Por ahora enfocado más a Android.
 
-## Getting Started
+## Descargas
 
-This project is a starting point for a Flutter application.
+Ir a la parte de "releases" de github para encontrar la última version
 
-A few resources to get you started if this is your first Flutter project:
+## Imágenes de la aplicación.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![Screenshot 2021-12-07 190234](https://user-images.githubusercontent.com/52750778/145870398-348c97b6-d4dd-4b89-be75-08ce70d31aaa.png)
+![Screenshot_2021-12-07-19-05-01-83_3688be2b2814e0546daaf4407e5de303](https://user-images.githubusercontent.com/52750778/145870399-02302b3e-9d8a-4f5f-b1ec-bf51adc63232.jpg)
+![Screenshot 2021-12-07 190137](https://user-images.githubusercontent.com/52750778/145870402-52b2da5d-763c-4b3f-bb8f-3008aae4d9a2.png)
+![Screenshot 2021-12-07 190221](https://user-images.githubusercontent.com/52750778/145870405-5c1f7ec1-fc4a-4c63-b944-53b96feddeea.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
