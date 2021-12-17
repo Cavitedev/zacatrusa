@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:shake/shake.dart';
-import 'package:zacatrusa/game_board/presentation/dice/widgets/dice_button_with_layout.dart';
-import 'package:zacatrusa/shortcuts/shortcuts.dart';
 
 import '../../../constants/app_margins_and_sizes.dart';
+import '../../../shortcuts/shortcuts.dart';
 import '../../domain/dice/dice.dart';
 import 'widgets/dice_arrows_field.dart';
+import 'widgets/dice_button_with_layout.dart';
 import 'widgets/dice_result.dart';
 
 class DicePage extends StatefulWidget {
@@ -26,6 +26,9 @@ class _DicePageState extends State<DicePage> {
   bool canVibrate = false;
 
   late ShakeDetector detector;
+
+  static const int dicesMinimumAmount = 0;
+  static const int dicesMaxAmount = 12;
 
   @override
   void initState() {
@@ -62,11 +65,22 @@ class _DicePageState extends State<DicePage> {
         LogicalKeySet(LogicalKeyboardKey.keyR): const DiceIntent(),
         LogicalKeySet(LogicalKeyboardKey.keyD): const DiceIntent(),
         LogicalKeySet(LogicalKeyboardKey.f5): const DiceIntent(),
+        LogicalKeySet(LogicalKeyboardKey.minus): const LeftIntent(),
+        LogicalKeySet(LogicalKeyboardKey.numpadSubtract): const LeftIntent(),
+        LogicalKeySet(LogicalKeyboardKey.add): const RightIntent(),
+        LogicalKeySet(LogicalKeyboardKey.numpadAdd): const RightIntent(),
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
           DiceIntent: CallbackAction<DiceIntent>(onInvoke: (DiceIntent intent) {
             _rollDice();
+          }),
+          LeftIntent: CallbackAction<LeftIntent>(onInvoke: (LeftIntent intent) {
+            _onDiceAmountChange(false);
+          }),
+          RightIntent:
+              CallbackAction<RightIntent>(onInvoke: (RightIntent intent) {
+            _onDiceAmountChange(true);
           })
         },
         child: Focus(
@@ -82,7 +96,7 @@ class _DicePageState extends State<DicePage> {
                   padding: const EdgeInsets.fromLTRB(
                       generalPadding, generalPadding, generalPadding, 0),
                   sliver: SliverToBoxAdapter(
-                    child: _buildAmountOfDice(faces: 6, minAmount: 1),
+                    child: _buildAmountOfDice(faces: 6),
                   ),
                 ),
                 const SliverToBoxAdapter(
@@ -134,37 +148,44 @@ class _DicePageState extends State<DicePage> {
 
   NumberArrowsField _buildAmountOfDice({
     required int faces,
-    int minAmount = 0,
-    int maxAmount = 12,
   }) {
     return NumberArrowsField(
-      minAmount: minAmount,
-      maxAmount: maxAmount,
       currentAmount: dices.dicesWithFaces(faces),
       onAmountChange: (isIncreasing) {
-        if (isIncreasing) {
-          Dice newDice = Dice(faces: faces);
-          setState(() {
-            dices.dices.add(newDice);
-            if (dicesResult != null) {
-              dicesResult!.dicesResult
-                  .add(DiceResult(result: 0, dice: newDice));
-            }
-          });
-        } else {
-          setState(() {
-            int indexToRemoveDice =
-                dices.dices.lastIndexWhere((dice) => dice.faces == faces);
-            dices.dices.removeAt(indexToRemoveDice);
-            if (dicesResult != null) {
-              int indexToRemoveResult = dicesResult!.dicesResult.lastIndexWhere(
-                  (diceResult) => diceResult.dice.faces == faces);
-              dicesResult!.dicesResult.removeAt(indexToRemoveResult);
-            }
-          });
-        }
+        _onDiceAmountChange(isIncreasing, faces: faces);
       },
     );
+  }
+
+  void _onDiceAmountChange(bool isIncreasing, {int faces = 6}) {
+    int _currentAmount = dices.dicesWithFaces(faces);
+    if (isIncreasing) {
+      if (_currentAmount == dicesMaxAmount) {
+        return;
+      }
+      Dice newDice = Dice(faces: faces);
+      setState(() {
+        dices.dices.add(newDice);
+        if (dicesResult != null) {
+          dicesResult!.dicesResult.add(DiceResult(result: 0, dice: newDice));
+        }
+      });
+    } else {
+      if (_currentAmount == dicesMinimumAmount) {
+        return;
+      }
+
+      setState(() {
+        int indexToRemoveDice =
+            dices.dices.lastIndexWhere((dice) => dice.faces == faces);
+        dices.dices.removeAt(indexToRemoveDice);
+        if (dicesResult != null) {
+          int indexToRemoveResult = dicesResult!.dicesResult
+              .lastIndexWhere((diceResult) => diceResult.dice.faces == faces);
+          dicesResult!.dicesResult.removeAt(indexToRemoveResult);
+        }
+      });
+    }
   }
 
   void _rollDice() async {
