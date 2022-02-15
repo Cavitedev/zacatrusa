@@ -23,7 +23,7 @@ void main() {
   });
 
   test("Filters were fetched", () {
-    expect(collapsibleFilters1.length, 8);
+    expect(collapsibleFilters1.length, 7);
   });
 
   test("Fetch Si buscas", () async {
@@ -57,7 +57,7 @@ void main() {
   });
 
   test("Fetch Num jugadores", () async {
-    dom.Element numJugadoresDiv = collapsibleFilters1[6];
+    dom.Element numJugadoresDiv = collapsibleFilters1[5];
 
     final dom.Element ol = numJugadoresDiv.getElementsByTagName("ol")[0];
 
@@ -69,7 +69,7 @@ void main() {
   });
 
   test("Fetch Mecánica", () async {
-    dom.Element mecanicaDiv = collapsibleFilters1[7];
+    dom.Element mecanicaDiv = collapsibleFilters1[6];
 
     final dom.Element ol = mecanicaDiv.getElementsByTagName("ol")[0];
     final Map<String, String> mecanicas =

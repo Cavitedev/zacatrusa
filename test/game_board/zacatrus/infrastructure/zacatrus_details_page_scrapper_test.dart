@@ -38,7 +38,6 @@ void main() {
       bool validAvailable = gameOverview.available == "Disponible" ||
           gameOverview.available == "No está disponible";
       expect(validAvailable, isTrue);
-      expect(gameOverview.stars, 4.75);
       expect(gameOverview.price, 9.95);
       expect(gameOverview.numberOfReviews, greaterThanOrEqualTo(17));
 
