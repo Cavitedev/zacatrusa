@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../../../constants/app_margins_and_sizes.dart';
@@ -29,7 +31,10 @@ class NumberArrowsField extends StatelessWidget {
           icon: const Icon(Icons.remove),
           splashRadius: 16,
           padding: const EdgeInsets.all(4),
-          tooltip: "Restar un dado",
+          tooltip: "Restar un dado" +
+              ((Platform.isWindows || Platform.isMacOS || Platform.isLinux)
+                  ? " (-)"
+                  : ""),
         ),
         Text(
           currentAmount.toString(),
@@ -40,7 +45,10 @@ class NumberArrowsField extends StatelessWidget {
           icon: const Icon(Icons.add),
           splashRadius: 16,
           padding: const EdgeInsets.all(4),
-          tooltip: "Añadir un dado",
+          tooltip: "Añadir un dado" +
+              ((Platform.isWindows || Platform.isMacOS || Platform.isLinux)
+                  ? " (+)"
+                  : ""),
         ),
       ],
     );

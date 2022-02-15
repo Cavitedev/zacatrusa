@@ -6,7 +6,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:shake/shake.dart';
 
 import '../../../constants/app_margins_and_sizes.dart';
-import '../../../shortcuts/shortcuts.dart';
+import '../../../core/shortcuts.dart';
 import '../../domain/dice/dice.dart';
 import 'widgets/dice_arrows_field.dart';
 import 'widgets/dice_button_with_layout.dart';
