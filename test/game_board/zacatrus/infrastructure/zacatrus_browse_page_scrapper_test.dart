@@ -15,11 +15,9 @@ void main() {
 
   group("Get Games Overview", () {
     test("Default object loads page", () async {
-      final ZacatrusBrowsePageScapper scrapper =
-          container.read(zacatrusBrowsePageScrapperProvider);
+      final ZacatrusBrowsePageScapper scrapper = container.read(zacatrusBrowsePageScrapperProvider);
 
-      final httpCall =
-          scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init());
+      final httpCall = scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init());
 
       final result = await httpCall.skip(1).first;
 
@@ -29,7 +27,7 @@ void main() {
       expect(listGames.length, 24);
       expect(pageDate.amount, greaterThanOrEqualTo(7196));
 
-      final GameOverview game1 = listGames.first;
+      final GameOverview game1 = listGames.firstWhere((element) => element.name == "Misión Cumplida");
 
       expect(game1.name, isNot("Error retrieving game"));
 
@@ -50,11 +48,9 @@ void main() {
     });
 
     test("Returns no games found on not matching filters", () async {
-      final ZacatrusBrowsePageScapper scrapper =
-          container.read(zacatrusBrowsePageScrapperProvider);
+      final ZacatrusBrowsePageScapper scrapper = container.read(zacatrusBrowsePageScrapperProvider);
 
-      final result =
-          scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init().copyWith(
+      final result = scrapper.getGamesOverviews(ZacatrusUrlBrowserComposer.init().copyWith(
         pageNum: const ZacatrusPageIndex(999999),
       ));
 

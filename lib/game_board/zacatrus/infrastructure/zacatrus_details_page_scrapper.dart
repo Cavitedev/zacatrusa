@@ -206,7 +206,9 @@ class ZacatrusDetailsPageScapper {
       final dom.Element table =
           doc.getElementById("product-attribute-specs-table")!;
       final dom.Element tbody = table.children[1];
-      final List<dom.Element> rowsOfTable = tbody.children;
+      
+
+      final List<dom.Element> rowsOfTable = tbody.getElementsByClassName("col data");
 
       for (final dom.Element row in rowsOfTable) {
         _updateGameSheetWithTableRow(row, sheet);
@@ -217,7 +219,7 @@ class ZacatrusDetailsPageScapper {
 
   void _updateGameSheetWithTableRow(dom.Element row, GameDataSheet sheet) {
     try {
-      final dom.Element rowContent = row.children[1];
+      final dom.Element rowContent = row;
       final String? kindOfRow = rowContent.attributes["data-th"];
       if (kindOfRow == null) {
         return;

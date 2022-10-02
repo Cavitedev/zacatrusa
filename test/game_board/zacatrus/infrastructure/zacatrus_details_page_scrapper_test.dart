@@ -38,7 +38,7 @@ void main() {
       bool validAvailable = gameOverview.available == "Disponible" ||
           gameOverview.available == "No está disponible";
       expect(validAvailable, isTrue);
-      expect(gameOverview.price, 9.95);
+      expect(gameOverview.price, 11.95);
       expect(gameOverview.numberOfReviews, greaterThanOrEqualTo(17));
 
       expect(data.gameDescription, isNotNull);
