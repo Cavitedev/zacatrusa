@@ -15,8 +15,7 @@ void main() {
 
   group("Scrap summary page", () {
     test("Scrap first game Unánimo", () async {
-      final ZacatrusDetailsPageScapper scrapper =
-          container.read(zacatrusDetailsPageScrapperProvider);
+      final ZacatrusDetailsPageScapper scrapper = container.read(zacatrusDetailsPageScrapperProvider);
 
       const link = "https://zacatrus.es/unanimo.html";
 
@@ -35,8 +34,7 @@ void main() {
       final GameOverviewDetails gameOverview = data.gameOverview;
       expect(gameOverview.name, "Unánimo");
       expect(gameOverview.link, link);
-      bool validAvailable = gameOverview.available == "Disponible" ||
-          gameOverview.available == "No está disponible";
+      bool validAvailable = gameOverview.available == "Disponible" || gameOverview.available == "No está disponible";
       expect(validAvailable, isTrue);
       expect(gameOverview.price, 11.95);
       expect(gameOverview.numberOfReviews, greaterThanOrEqualTo(17));
@@ -63,8 +61,7 @@ void main() {
       expect(data.reviewsUrl, isNotNull);
       ReviewsUrl reviewUrl = data.reviewsUrl!;
       expect(reviewUrl.numberOfReviews, greaterThanOrEqualTo(16));
-      expect(reviewUrl.url,
-          "https://zacatrus.es/review/product/listAjax/id/19636/");
+      expect(reviewUrl.url, "https://zacatrus.es/review/product/listAjax/id/19636/");
     });
   });
 }

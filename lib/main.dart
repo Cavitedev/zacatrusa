@@ -42,15 +42,11 @@ class MyApp extends ConsumerWidget {
       routeInformationParser: routeInformationParser,
       locale: const Locale('es', ''),
       supportedLocales: const [Locale('es', '')],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       builder: (context, widget) {
-        return ResponsiveWrapper.builder(
-            ClampingScrollWrapper.builder(context, widget!),
-            mediaQueryData: MediaQuery.of(context).copyWith(
-                textScaleFactor: ref.watch(settingsFontSizeControllerProvider)),
+        return ResponsiveWrapper.builder(ClampingScrollWrapper.builder(context, widget!),
+            mediaQueryData:
+                MediaQuery.of(context).copyWith(textScaleFactor: ref.watch(settingsFontSizeControllerProvider)),
             breakpoints: const [
               ResponsiveBreakpoint.resize(250, name: MOBILE),
               ResponsiveBreakpoint.resize(400, name: PHONE),
@@ -83,8 +79,7 @@ class MyApp extends ConsumerWidget {
                 headline6: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 headline5: TextStyle(fontSize: 24, color: Colors.black),
                 headline4: TextStyle(fontSize: 28, color: Colors.black),
-                headline3: TextStyle(
-                    fontSize: 36, letterSpacing: 0.5, color: Colors.black),
+                headline3: TextStyle(fontSize: 36, letterSpacing: 0.5, color: Colors.black),
                 headline2: TextStyle(fontSize: 44, letterSpacing: 1),
                 bodyText1: TextStyle(height: 1),
                 bodyText2: TextStyle(height: 1),
