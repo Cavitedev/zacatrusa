@@ -44,7 +44,7 @@ void main() {
     final Map<String, String> tematicas =
         _getParameterLinkCategories(ol, ZacatrusTematicaFilter.keyValue);
 
-    dom.Element tematicaDiv2 = collapsibleFilters2[2];
+    dom.Element tematicaDiv2 = collapsibleFilters2[3];
 
     final dom.Element ol2 = tematicaDiv2.getElementsByTagName("ol")[0];
     final Map<String, String> tematicas2 =

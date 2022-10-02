@@ -10,8 +10,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
 
   ZacatrusEditorialFilter.url({
     required String valueUrl,
-  }) : value = categoriesUrl.keys
-            .firstWhere((key) => categoriesUrl[key] == valueUrl);
+  }) : value = categoriesUrl.keys.firstWhere((key) => categoriesUrl[key] == valueUrl);
 
   static Iterable<String> get categories => categoriesUrl.keys;
 
@@ -37,6 +36,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "Átomo Games": "atomo_games",
     "Aurora": "aurora",
     "Avalon Hill": "avalon_hill",
+    "Bananagrams": "bananagrams",
     "Bezier Games": "bezier_games",
     "Bioviva": "bioviva",
     "Blauberry": "blauberry",
@@ -79,8 +79,10 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "Educa": "educa",
     "El Troquel": "el_troquel",
     "En Movimiento 360": "en_movimiento_360",
+    "Enpeudejoc Edicions": "enpeudejoc_edicions",
     "Enuntris": "enuntris",
     "Excalibur": "excalibur",
+    "Exploding Kittens": "exploding_kittens",
     "Extended Play": "extended_play",
     "Falomir": "falomir",
     "Fantasy Flight": "fantasy_flight",
@@ -114,6 +116,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "invedars": "invedars",
     "JAM": "jam",
     "Juegorama": "juegorama",
+    "Julibert": "julibert",
     "Kibo": "kibo",
     "Kodomo": "kodomo",
     "Kosmos": "kosmos",
@@ -178,6 +181,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "República Bananera": "republica_bananera",
     "Reverse Games": "reverse_games",
     "Rio Grande Games": "rio_grande_games",
+    "Road to Infamy": "road_to_infamy",
     "Rocket Lemon Games": "rocket_lemon_games",
     "Salt & Pepper Games": "salt_pepper_games",
     "Scale Games": "scale_games",
@@ -201,6 +205,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
     "Tortugames": "tortugames",
     "Tranjis": "tranjis",
     "Txarly Factory": "txarly_factory",
+    "Unexpected Games": "unexpected_games",
     "Van Ryder Games": "van_ryder_games",
     "Vedra": "vedra",
     "Viravi": "viravi",
@@ -228,9 +233,7 @@ class ZacatrusEditorialFilter implements ISingleFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ZacatrusEditorialFilter &&
-          runtimeType == other.runtimeType &&
-          value == other.value;
+      other is ZacatrusEditorialFilter && runtimeType == other.runtimeType && value == other.value;
 
   @override
   int get hashCode => value.hashCode;
