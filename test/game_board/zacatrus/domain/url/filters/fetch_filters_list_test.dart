@@ -5,6 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_categoria_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_edades_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_editorial_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_mecanica_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_num_jugadores_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_si_buscas_filter.dart';
+import 'package:zacatrusa/game_board/zacatrus/domain/url/filters/zacatrus_tematica_filter.dart';
 
 //This test that the amount of filters haven't changed
 void main() {
@@ -29,7 +36,7 @@ void main() {
     final Map<String, String> siBuscas = _getLabelLinkCategories(ol);
 
     print(siBuscas);
-    expect(siBuscas.length, 12);
+    expect(siBuscas.length, ZacatrusSiBuscasFilter.categoriesUrl.length);
   });
 
   test("Fetch categorias", () async {
@@ -39,7 +46,7 @@ void main() {
     final Map<String, String> categorias = _getLabelLinkCategories(ul);
 
     print(categorias);
-    expect(categorias.length, 5);
+    expect(categorias.length, ZacatrusCategoriaFilter.categoriesUrl.length);
   });
 
   test("Fetch temáticas", () async {
@@ -49,7 +56,7 @@ void main() {
     final Map<String, String> tematicas = _getLabelLinkCategories(ol);
 
     print(tematicas);
-    expect(tematicas.length, 43);
+    expect(tematicas.length, ZacatrusTematicaFilter.categoriesUrl.length);
   });
 
   test("Fetch edades", () async {
@@ -61,7 +68,7 @@ void main() {
         _getLabelLinkCategories(ol, isParameter: true);
 
     print(edades);
-    expect(edades.length, 7);
+    expect(edades.length, ZacatrusEdadesFilter.categoriesUrl.length);
   });
 
   test("Fetch Num jugadores", () async {
@@ -72,7 +79,7 @@ void main() {
     final Map<String, String> numJugadores = _getLabelLinkCategories(ol);
 
     print(numJugadores);
-    expect(numJugadores.length, 9);
+    expect(numJugadores.length, ZacatrusNumJugadoresFilter.categoriesUrl.length);
   });
 
   test("Fetch Mecánica", () async {
@@ -82,7 +89,7 @@ void main() {
     final Map<String, String> mecanicas = _getLabelLinkCategories(ol);
 
     print(mecanicas);
-    expect(mecanicas.length, 35);
+    expect(mecanicas.length, ZacatrusMecanicaFilter.categoriesUrl.length);
   });
 
   test("Fetch Editorial", () async {
@@ -92,7 +99,7 @@ void main() {
     final Map<String, String> editoriales = _getLabelLinkCategories(ol);
 
     print(editoriales);
-    expect(editoriales.length, 195);
+    expect(editoriales.length, ZacatrusEditorialFilter.categoriesUrl.length);
   });
 }
 
