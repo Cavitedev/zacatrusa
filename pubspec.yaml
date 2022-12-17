@@ -36,7 +36,7 @@ dependencies:
   flutter_svg: ^1.1.6
   http: ^0.13.5
   html: ^0.15.1
-  connectivity_plus: ^2.3.7
+  connectivity_plus: ^3.0.2
   flutter_rating_bar: ^4.0.1
   url_launcher: ^6.1.7
   carousel_slider: ^4.2.1
