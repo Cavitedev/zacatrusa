@@ -10,8 +10,7 @@ class ZacatrusSiBuscasFilter implements ISingleFilter {
 
   ZacatrusSiBuscasFilter.url({
     required String valueUrl,
-  }) : value = categoriesUrl.keys
-            .firstWhere((key) => categoriesUrl[key] == valueUrl);
+  }) : value = categoriesUrl.keys.firstWhere((key) => categoriesUrl[key] == valueUrl);
 
   static Iterable<String> get categories => categoriesUrl.keys;
 
@@ -21,6 +20,7 @@ class ZacatrusSiBuscasFilter implements ISingleFilter {
     "Solitario": "solitario",
     "Para 2": "para_2",
     "Experiencia": "experiencia",
+    "Experto": "experto",
     "Fiesta": "fiesta",
     "Narrativo": "narrativo",
     "Rápido": "rapido",
@@ -46,8 +46,7 @@ class ZacatrusSiBuscasFilter implements ISingleFilter {
 
   ZacatrusSiBuscasFilter.queryUrl({
     required String value,
-  }) : value = categoriesQueryUrl.keys
-            .firstWhere((key) => categoriesQueryUrl[key] == value);
+  }) : value = categoriesQueryUrl.keys.firstWhere((key) => categoriesQueryUrl[key] == value);
 
   static Map<String, String> categoriesQueryUrl = {
     "Familiares": "1623",
@@ -69,9 +68,7 @@ class ZacatrusSiBuscasFilter implements ISingleFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ZacatrusSiBuscasFilter &&
-          runtimeType == other.runtimeType &&
-          value == other.value;
+      other is ZacatrusSiBuscasFilter && runtimeType == other.runtimeType && value == other.value;
 
   @override
   int get hashCode => value.hashCode;
