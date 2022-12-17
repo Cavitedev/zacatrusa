@@ -10,8 +10,7 @@ class ZacatrusTematicaFilter implements ISingleFilter {
 
   ZacatrusTematicaFilter.url({
     required String valueUrl,
-  }) : value = categoriesUrl.keys
-            .firstWhere((key) => categoriesUrl[key] == valueUrl);
+  }) : value = categoriesUrl.keys.firstWhere((key) => categoriesUrl[key] == valueUrl);
 
   static Iterable<String> get categories => categoriesUrl.keys;
 
@@ -36,7 +35,7 @@ class ZacatrusTematicaFilter implements ISingleFilter {
     "Fantasía": "fantasia",
     "Gastronómica": "gastronomica",
     "Historia": "historia",
-    "Matemáticas": "matematicas_1",
+    "Matemáticas": "matematicas",
     "Maya": "maya",
     "Medicina": "medicina",
     "Medieval": "medieval",
@@ -49,6 +48,7 @@ class ZacatrusTematicaFilter implements ISingleFilter {
     "Piratas": "piratas",
     "Politica": "politica",
     "Postapocalíptico": "postapocaliptico",
+    "Prehistoria": "prehistoria",
     "Steampunk": "steampunk",
     "Superhéroes": "superheroes",
     "Terror": "terror",
@@ -75,8 +75,7 @@ class ZacatrusTematicaFilter implements ISingleFilter {
 
   ZacatrusTematicaFilter.queryUrl({
     required String value,
-  }) : value = categoriesQueryUrl.keys
-            .firstWhere((key) => categoriesQueryUrl[key] == value);
+  }) : value = categoriesQueryUrl.keys.firstWhere((key) => categoriesQueryUrl[key] == value);
 
   static Map<String, String> categoriesQueryUrl = {
     "Abstracto": "935",
@@ -129,9 +128,7 @@ class ZacatrusTematicaFilter implements ISingleFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ZacatrusTematicaFilter &&
-          runtimeType == other.runtimeType &&
-          value == other.value;
+      other is ZacatrusTematicaFilter && runtimeType == other.runtimeType && value == other.value;
 
   @override
   int get hashCode => value.hashCode;

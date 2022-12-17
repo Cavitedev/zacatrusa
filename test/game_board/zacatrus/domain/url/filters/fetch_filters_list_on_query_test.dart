@@ -34,7 +34,7 @@ void main() {
         _getParameterLinkCategories(ol, ZacatrusSiBuscasFilter.keyValue);
 
     print(siBuscas);
-    expect(siBuscas.length, 12);
+    expect(siBuscas.length, 13);
   });
 
   test("Fetch temáticas", () async {
@@ -76,7 +76,7 @@ void main() {
         _getParameterLinkCategories(ol, ZacatrusMecanicaFilter.keyValue);
 
     print(mecanicas);
-    expect(mecanicas.length, 35);
+    expect(mecanicas.length, 36);
   });
 }
 

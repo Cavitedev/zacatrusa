@@ -10,8 +10,7 @@ class ZacatrusMecanicaFilter implements ISingleFilter {
 
   ZacatrusMecanicaFilter.url({
     required String valueUrl,
-  }) : value = categoriesUrl.keys
-            .firstWhere((key) => categoriesUrl[key] == valueUrl);
+  }) : value = categoriesUrl.keys.firstWhere((key) => categoriesUrl[key] == valueUrl);
 
   static Iterable<String> get categories => categoriesUrl.keys;
 
@@ -31,13 +30,15 @@ class ZacatrusMecanicaFilter implements ISingleFilter {
     "Escape room": "escape_room",
     "Evolución de Civilización": "evolucion_de_civilizacion",
     "Exploración y Aventura": "exploracion_y_aventura",
+    "Flip & Write": "flip_write",
+    "Gestión de Acciones": "gestion_de_acciones",
     "Gestión de cartas": "gestion_de_cartas",
     "Gestión de recursos": "gestion_de_recursos",
     "Juegos de palabras": "juegos_de_palabras",
     "Habilidad": "habilidad",
     "LCG": "lcg",
     "Legacy": "legacy",
-    "Matemáticas": "matematicas",
+    "Matemáticas": "matematicas_1",
     "Mayorías": "mayorias",
     "Memoria": "memoria",
     "Negociación": "negociacion",
@@ -50,6 +51,7 @@ class ZacatrusMecanicaFilter implements ISingleFilter {
     "Sandbox": "sandbox",
     "Subastas": "subastas",
     "Tienta la suerte": "tienta_la_suerte",
+    "Tira y Mueve": "tira_y_mueve",
     "Wargame": "wargame"
   };
 
@@ -67,8 +69,7 @@ class ZacatrusMecanicaFilter implements ISingleFilter {
 
   ZacatrusMecanicaFilter.queryUrl({
     required String value,
-  }) : value = categoriesQueryUrl.keys
-            .firstWhere((key) => categoriesQueryUrl[key] == value);
+  }) : value = categoriesQueryUrl.keys.firstWhere((key) => categoriesQueryUrl[key] == value);
 
   static Map<String, String> categoriesQueryUrl = {
     "4X": "891",
@@ -113,9 +114,7 @@ class ZacatrusMecanicaFilter implements ISingleFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ZacatrusMecanicaFilter &&
-          runtimeType == other.runtimeType &&
-          value == other.value;
+      other is ZacatrusMecanicaFilter && runtimeType == other.runtimeType && value == other.value;
 
   @override
   int get hashCode => value.hashCode;

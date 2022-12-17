@@ -12,8 +12,7 @@ import '../../core/multiple_result.dart';
 import 'core/connectivity_helper.dart';
 import 'core/internet_feedback.dart';
 
-final Provider<Connectivity> connectivityProvider =
-    Provider<Connectivity>((_) => Connectivity());
+final Provider<Connectivity> connectivityProvider = Provider<Connectivity>((_) => Connectivity());
 
 final httpLoaderProvider = Provider((ref) {
   final loader = HttpLoader(ref: ref, client: RetryClient(http.Client()));
@@ -22,6 +21,13 @@ final httpLoaderProvider = Provider((ref) {
   });
   return loader;
 });
+
+const internetConnections = [
+  ConnectivityResult.wifi,
+  ConnectivityResult.ethernet,
+  ConnectivityResult.mobile,
+  ConnectivityResult.vpn
+];
 
 class HttpLoader {
   HttpLoader({
@@ -46,15 +52,13 @@ class HttpLoader {
       if (response.statusCode == 200) {
         yield Right(_decodeResponse(response));
       } else {
-        yield Left(StatusCodeInternetFailure(
-            url: url, statusCode: response.statusCode));
+        yield Left(StatusCodeInternetFailure(url: url, statusCode: response.statusCode));
       }
     } on SocketException {
       final Connectivity connectivity = ref.read(connectivityProvider);
-      final ConnectivityResult connectivityResult =
-          await connectivity.checkConnectivity();
+      final ConnectivityResult connectivityResult = await connectivity.checkConnectivity();
 
-      if (connectivityResult != ConnectivityResult.none) {
+      if (internetConnections.contains(connectivityResult)) {
         yield Left(NoInternetFailure(url: url));
       } else {
         yield* _retryWhenConnected(url, connectivity);
@@ -62,8 +66,7 @@ class HttpLoader {
     }
   }
 
-  Stream<Either<InternetFeedback, dom.Document>> _retryWhenConnected(
-      String url, Connectivity connectivity) async* {
+  Stream<Either<InternetFeedback, dom.Document>> _retryWhenConnected(String url, Connectivity connectivity) async* {
     yield Left(NoInternetRetryFailure(url: url));
 
     try {
@@ -75,8 +78,7 @@ class HttpLoader {
       if (response.statusCode == 200) {
         yield Right(_decodeResponse(response));
       } else {
-        yield Left(StatusCodeInternetFailure(
-            url: url, statusCode: response.statusCode));
+        yield Left(StatusCodeInternetFailure(url: url, statusCode: response.statusCode));
       }
     } on SocketException {
       yield Left(NoInternetFailure(url: url));
